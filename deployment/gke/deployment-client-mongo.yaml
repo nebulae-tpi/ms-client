@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clie-mongo
+spec:
+  ports:
+  - port: 27017
+    name: clie-mongo
+  selector:
+    app: clie-mongo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: clie-mongo-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.5Gi
+---
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: clie-mongo
+spec:
+  selector:
+    matchLabels:
+      app: clie-mongo
+  strategy:
+    type: Recreate      
+  template:
+    metadata:
+      labels:
+        app: clie-mongo
+    spec:
+      containers:
+      - image: mongo:4
+        name: clie-mongo        
+        ports:
+        - containerPort: 27017
+          name: clie-mongo
+        volumeMounts:
+        - name: clie-mongo-persistent-storage
+          mountPath: /data/db
+        resources:
+          requests:
+            cpu: "50m"
+      volumes:
+      - name: clie-mongo-persistent-storage
+        persistentVolumeClaim:
+          claimName: clie-mongo-pv-claim      

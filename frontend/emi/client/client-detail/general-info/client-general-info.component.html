@@ -1,0 +1,47 @@
+<div class="tab-content p-24" fxLayout="column" fusePerfectScrollbar>
+
+    <form name="clientGeneralInfoForm" [formGroup]="clientGeneralInfoForm" class="w-100-p"
+      fxLayout="column" class="mat-white-bg p-24 mr-24 mb-24">
+
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between  start">
+        <div class="h2">{{'CLIENT.DETAILS.GENERAL_INFO' | translate}}</div>
+        <form *ngIf="clientStateForm" name="clientStateForm" [formGroup]="clientStateForm" fxLayout="column">
+          <mat-slide-toggle formControlName="state" color="accent" (change)="onClientStateChange($event)">
+            <label *ngIf="clientStateForm.controls['state'].value">{{'CLIENT.DETAILS.ENABLED' | translate}}</label>
+            <label *ngIf="!clientStateForm.controls['state'].value">{{'CLIENT.DETAILS.DISABLED' | translate}}</label>
+          </mat-slide-toggle>
+        </form>
+      </div>
+
+      <mat-form-field class="w-100-p">
+        <input matInput name="name" formControlName="name" maxlength="15" placeholder="{{'CLIENT.DETAILS.NAME' | translate}}">
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['name'])">
+          {{'CLIENT.NAME_REQUIRED' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100-p" fxLAyout="column">
+        <textarea matInput matTextareaAutosize name="description" formControlName="description"
+          maxlength="350" placeholder="{{'CLIENT.DETAILS.DESCRIPTION' | translate}}"
+          matAutosizeMinRows="1" matAutosizeMaxRows="5" >
+        </textarea>
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['description'])">
+          {{'CLIENT.DESCRIPTION_REQUIRED' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+
+      <div class="mt-16">
+        <button mat-raised-button *ngIf="pageType === 'new'" (click)="createClient()"
+          [disabled]="clientGeneralInfoForm.invalid || clientGeneralInfoForm.pristine">
+          {{'CLIENT.CREATE' | translate}}
+        </button>
+        <button mat-raised-button *ngIf="pageType === 'edit'" (click)="updateClientGeneralInfo()"
+          [disabled]="clientGeneralInfoForm.invalid || clientGeneralInfoForm.pristine">
+          {{'CLIENT.UPDATE' | translate}}
+        </button>
+      </div>
+
+    </form>
+
+</div>

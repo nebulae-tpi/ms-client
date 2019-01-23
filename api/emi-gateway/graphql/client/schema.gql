@@ -1,0 +1,95 @@
+type CommandResponse {
+  "Response code"
+  code: Int
+  "Response message"
+  message: String
+}
+
+type ClientClient {
+  "Client ID"
+  _id: ID!
+  "User general info"
+  generalInfo: ClientGeneralInfo
+  "Client state"
+  state: Boolean!
+  "Creation timestamp"
+  creationTimestamp: BigInt!
+  "Creator user"
+  creatorUser: String!
+  "Modification timestamp"
+  modificationTimestamp: BigInt!
+  "Modifier user"
+  modifierUser: String!
+  "Business ID"
+  businessId: String!
+}
+
+type ClientGeneralInfo {
+  "Client name"
+  name: String!,
+  "Client description"
+  description: String!
+}
+
+input FilterInput {
+  "ID of the business"
+  businessId: String
+  "Name"
+  name: String
+  "State"
+  state: Boolean
+  "Creator user"
+  creatorUser: String
+  "modifier user"
+  modifierUser: String
+  "get data created after indicated timestamp"
+  creationTimestamp: BigInt
+}
+
+input PaginationInput {
+  "Page"
+  page: Int!
+  "Count"
+  count: Int!
+  "Sort, default: ASC"
+  sort: Int
+}
+
+input ClientClientInput {
+  "Client general info"
+  generalInfo: ClientClientGeneralInfoInput!
+  "Client status"
+  state: Boolean!
+  "Business ID"
+  businessId: String!
+}
+
+input ClientClientGeneralInfoInput {
+  "Client name"
+  name: String!,
+  "Client description"
+  description: String!
+}
+
+type Query {
+  "Get Clients filtered "
+  ClientClients(filterInput: FilterInput!, paginationInput: PaginationInput!): [ClientClient]
+  "Get the amount of Clients filtered "
+  ClientClientsSize(filterInput: FilterInput!): Int!
+  "Get Client by its id"
+  ClientClient(id: String!): ClientClient
+}
+
+type Mutation {
+  "Create a new Client"
+  ClientCreateClient(input: ClientClientInput!): CommandResponse
+  "Update the Client generalInfo"
+  ClientUpdateClientGeneralInfo(id:ID!, input: ClientClientGeneralInfoInput!): CommandResponse
+  "Update the Client state"
+  ClientUpdateClientState(id: ID!, newState: Boolean!): CommandResponse
+}
+
+type Subscription {
+  "This events is triggered when a Client is created or updated"
+  ClientClientUpdatedSubscription: ClientClient  
+}

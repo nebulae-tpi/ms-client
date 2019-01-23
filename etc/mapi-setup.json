@@ -1,8 +1,8 @@
 [
     {
-        "name": "msname",
+        "name": "client",
         "type": "graphql",        
-        "src": "api/apiid/graphql/msname",
+        "src": "api/emi-gateway/graphql/client",
         "preBuildCommands": []
     }
 ]
