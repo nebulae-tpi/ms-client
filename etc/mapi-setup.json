@@ -1,0 +1,8 @@
+[
+    {
+        "name": "msname",
+        "type": "graphql",        
+        "src": "api/apiid/graphql/msname",
+        "preBuildCommands": []
+    }
+]

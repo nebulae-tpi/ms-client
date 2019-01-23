@@ -1,0 +1,57 @@
+<div id="detail" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+      <!-- HEADER -->
+      <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <!-- APP TITLE -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+          <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="['../']">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+
+          <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom>
+
+            <div class="h2" *ngIf="msentitycamel && msentitycamel._id">
+              {{msentitycamel.name}}
+            </div>
+
+            <div class="h2" *ngIf="!msentitycamel || (msentitycamel && !msentitycamel._id)">
+              {{'msnameuppercase.DETAIL_HEADER_NEW' | translate}}
+            </div>
+
+            <div class="subtitle secondary-text">
+              <span>{{'msnameuppercase.DETAIL_HEADER_NAME' | translate}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- / APP TITLE -->
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card mat-white-bg">
+        <mat-tab-group>
+
+          <mat-tab label="{{'msnameuppercase.DETAILS.TABS.GENERAL_INFO' | translate}}">
+            <msname-general-info [pageType]="pageType" [msentitycamel]="msentitycamel" *ngIf="pageType">
+            </msname-general-info>
+          </mat-tab>
+
+        </mat-tab-group>
+
+        <!-- / CONTENT -->
+
+      </div>
+      <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+  </div>
