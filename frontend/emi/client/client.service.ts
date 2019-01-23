@@ -5,7 +5,7 @@ import { GatewayService } from '../../../api/gateway.service';
 import {
   getHelloWorld,
   ClientHelloWorldSubscription
-} from './gql/Client';
+} from './gql/client';
 
 @Injectable()
 export class ClientService {

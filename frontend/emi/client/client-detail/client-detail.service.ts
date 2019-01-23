@@ -8,7 +8,7 @@ import {
   ClientUpdateClientState,
   ClientClient,
   ClientClientUpdatedSubscription
-} from '../gql/Client.js';
+} from '../gql/client.js';
 
 @Injectable()
 export class ClientDetailService {

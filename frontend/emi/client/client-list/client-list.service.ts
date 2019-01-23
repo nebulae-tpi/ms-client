@@ -9,7 +9,7 @@ import {
   ClientClientsSize,
   getHelloWorld,
   ClientHelloWorldSubscription
-} from '../gql/Client';
+} from '../gql/client';
 
 @Injectable()
 export class ClientListService {
