@@ -1,5 +1,12 @@
 [
     {
+        "preBuildCommands": [
+            "npm install @types/googlemaps --save"
+        ],
+        "indexHeadAmends": [
+            "<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBktqvY5jde1Q5cHR7FwCCeiBSo4d5OOn8&libraries=places' async defer></script>"
+        ],
+        "environmentVars": {},
         "name": "client",
         "src": "frontend/emi/client",
         "groups": [
@@ -19,8 +26,8 @@
                 "id": "client",
                 "icon": "dashboard",
                 "translate": {
-                    "en": "client_en",
-                    "es": "client_es"
+                    "en": "Client",
+                    "es": "Cliente"
                 },
                 "navURL": "/client",
                 "path": "client",
@@ -29,9 +36,6 @@
                 "roles" : ["PLATFORM-ADMIN"],
                 "default" : false
             }            
-        ],
-        "preBuildCommands": [],
-        "environmentVars": {
-        }
+        ]
     }
 ]

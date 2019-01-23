@@ -55,23 +55,23 @@ import { FuseTranslationLoaderService } from '../../../../../core/services/trans
 import { KeycloakService } from 'keycloak-angular';
 import { ClientDetailService } from '../client-detail.service';
 import { DialogComponent } from '../../dialog/dialog.component';
-import { ToolbarService } from "../../../../toolbar/toolbar.service";
+import { ToolbarService } from '../../../../toolbar/toolbar.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'client-general-info',
-  templateUrl: './client-general-info.component.html',
-  styleUrls: ['./client-general-info.component.scss']
+  selector: 'client-credentials',
+  templateUrl: './client-credentials.component.html',
+  styleUrls: ['./client-credentials.component.scss']
 })
 // tslint:disable-next-line:class-name
-export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
+export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
   // Subject to unsubscribe
   private ngUnsubscribe = new Subject();
 
   @Input('pageType') pageType: string;
   @Input('client') client: any;
 
-  clientGeneralInfoForm: any;
+  clientCredentialsForm: any;
   clientStateForm: any;
 
   constructor(
@@ -90,13 +90,13 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.clientGeneralInfoForm = new FormGroup({
-      name: new FormControl(this.client ? (this.client.generalInfo || {}).name : ''),
-      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : ''),
-      address: new FormControl(this.client ? (this.client.generalInfo || {}).address : ''),
-      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : ''),
-      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : ''),
-      location: new FormControl(this.client ? (this.client.generalInfo || {}).location : '')
+    this.clientCredentialsForm = new FormGroup({
+      name: new FormControl(this.client ? (this.client.credentials || {}).name : ''),
+      phone: new FormControl(this.client ? (this.client.credentials || {}).phone : ''),
+      address: new FormControl(this.client ? (this.client.credentials || {}).address : ''),
+      city: new FormControl(this.client ? (this.client.credentials || {}).city : ''),
+      neighborhood: new FormControl(this.client ? (this.client.credentials || {}).neighborhood : ''),
+      location: new FormControl(this.client ? (this.client.credentials || {}).location : '')
     });
 
     this.clientStateForm = new FormGroup({
@@ -108,25 +108,25 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
     this.toolbarService.onSelectedBusiness$
     .pipe(
       tap(selectedBusiness => {
-        if(!selectedBusiness){
+        if (!selectedBusiness){
           this.showSnackBar('CLIENT.SELECT_BUSINESS');
         }
       }),
       filter(selectedBusiness => selectedBusiness != null && selectedBusiness.id != null),
       mergeMap(selectedBusiness => {
-        return this.showConfirmationDialog$("CLIENT.CREATE_MESSAGE", "CLIENT.CREATE_TITLE")
+        return this.showConfirmationDialog$('CLIENT.CREATE_MESSAGE', 'CLIENT.CREATE_TITLE')
         .pipe(
           mergeMap(ok => {
             this.client = {
-              generalInfo: this.clientGeneralInfoForm.getRawValue(),
+              credentials: this.clientCredentialsForm.getRawValue(),
               state: this.clientStateForm.getRawValue().state,
               businessId: selectedBusiness.id
             };
             return this.ClientDetailservice.createClientClient$(this.client);
           }),
           mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-          filter((resp: any) => !resp.errors || resp.errors.length === 0),          
-        )
+          filter((resp: any) => !resp.errors || resp.errors.length === 0),
+        );
       }),
       takeUntil(this.ngUnsubscribe)
     ).subscribe(result => {
@@ -139,19 +139,19 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateClientGeneralInfo() {
-    this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
+  updateClientCredentials() {
+    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
       .pipe(
         mergeMap(ok => {
-          const generalInfoinput = {
-            name: this.clientGeneralInfoForm.getRawValue().name,
-            phone: this.clientGeneralInfoForm.getRawValue().phone,
-            address: this.clientGeneralInfoForm.getRawValue().address,
-            city: this.clientGeneralInfoForm.getRawValue().city,
-            neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
-            location: this.clientGeneralInfoForm.getRawValue().location
+          const credentialsinput = {
+            name: this.clientCredentialsForm.getRawValue().name,
+            phone: this.clientCredentialsForm.getRawValue().phone,
+            address: this.clientCredentialsForm.getRawValue().address,
+            city: this.clientCredentialsForm.getRawValue().city,
+            neighborhood: this.clientCredentialsForm.getRawValue().neighborhood,
+            location: this.clientCredentialsForm.getRawValue().location
           };
-          return this.ClientDetailservice.updateClientClientGeneralInfo$(this.client._id, generalInfoinput);
+          return this.ClientDetailservice.updateClientClientCredentials$(this.client._id, credentialsinput);
         }),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
         filter((resp: any) => !resp.errors || resp.errors.length === 0),
@@ -169,9 +169,9 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   }
 
   onClientStateChange() {
-    this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
+    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
       .pipe(
-        mergeMap(ok => {        
+        mergeMap(ok => {
           return this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state);
         }),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
@@ -188,7 +188,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
 
   showConfirmationDialog$(dialogMessage, dialogTitle) {
     return this.dialog
-      //Opens confirm dialog
+      // Opens confirm dialog
       .open(DialogComponent, {
         data: {
           dialogMessage,
@@ -233,8 +233,8 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
               this.showMessageSnackbar('ERRORS.' + errorDetail.message.code);
             });
           } else {
-            response.errors.forEach(error => {
-              this.showMessageSnackbar('ERRORS.' + error.message.code);
+            response.errors.forEach( err => {
+              this.showMessageSnackbar('ERRORS.' + err.message.code);
             });
           }
         });
@@ -248,7 +248,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
    * @param detailMessageKey Key of the detail message to i18n
    */
   showMessageSnackbar(messageKey, detailMessageKey?) {
-    let translationData = [];
+    const translationData = [];
     if (messageKey) {
       translationData.push(messageKey);
     }

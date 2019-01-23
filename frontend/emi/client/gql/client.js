@@ -26,7 +26,11 @@ export const ClientClient = gql`
       _id
       generalInfo {
         name
-        description
+        phone
+        address
+        city
+        neighborhood
+        location
       }
       state
       creationTimestamp
@@ -43,7 +47,11 @@ export const ClientClients = gql`
       _id
       generalInfo {
         name
-        description
+        phone
+        address
+        city
+        neighborhood
+        location
       }
       state
       creationTimestamp
@@ -78,6 +86,15 @@ export const ClientUpdateClientGeneralInfo = gql `
   }
 `;
 
+export const ClientUpdateClientCredentials = gql `
+  mutation ClientUpdateClientCredentials($id: ID!, $input: ClientClientCredentialsInput!){
+    ClientUpdateClientCredentials(id: $id, input: $input){
+      code
+      message
+    }
+  }
+`;
+
 export const ClientUpdateClientState = gql `
   mutation ClientUpdateClientState($id: ID!, $newState: Boolean!){
     ClientUpdateClientState(id: $id, newState: $newState){
@@ -94,7 +111,11 @@ export const ClientClientUpdatedSubscription = gql`
       _id
       generalInfo {
         name
-        description
+        phone
+        address
+        city
+        neighborhood
+        location
       }
       state
       creationTimestamp

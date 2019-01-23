@@ -44,6 +44,10 @@
             <client-general-info [pageType]="pageType" [client]="client" *ngIf="pageType">
             </client-general-info>
           </mat-tab>
+          <mat-tab label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
+            <client-credentials [pageType]="pageType" [client]="client" *ngIf="pageType">
+            </client-credentials>
+          </mat-tab>
 
         </mat-tab-group>
 

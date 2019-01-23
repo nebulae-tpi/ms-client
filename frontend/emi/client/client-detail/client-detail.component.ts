@@ -93,6 +93,7 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
   subscribeClientUpdated(){
     this.ClientDetailservice.subscribeClientClientUpdatedSubscription$()
     .pipe(
+      tap(r => console.log(r) ),
       map(subscription => subscription.data.ClientClientUpdatedSubscription),
       takeUntil(this.ngUnsubscribe)
     )

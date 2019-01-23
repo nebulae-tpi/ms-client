@@ -17,14 +17,20 @@ export const locale = {
       ADD_NEW: 'Add new',
       DETAILS: {
         TABS: {
-          GENERAL_INFO: 'General Info'
+          GENERAL_INFO: 'General Info',
+          CREDENTIALS: 'Credentials'
         },
-        GENERAL_INFO: 'General Info',
+        GENERAL_INFO: {
+          TITLE: 'General Info',
+          NAME: 'Name',
+          PHONE: 'Phone',
+          ADDRESS: 'Address',
+          CITY: 'City',
+          NEIGHBORHOOD: 'Neighborhood',
+          LOCATION: 'Location'
+        },
         ENABLED: 'Enabled',
-        DISABLED: 'Disabled',
-        NAME: 'Name',
-        DESCRIPTION: 'Description'
-
+        DISABLED: 'Disabled'
       },
       ACTIVE: 'Active',
       CREATE: 'Create',

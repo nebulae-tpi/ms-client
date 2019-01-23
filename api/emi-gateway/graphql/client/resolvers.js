@@ -128,6 +128,27 @@ module.exports = {
                 mergeMap(response => getResponseFromBackEnd$(response))
             ).toPromise();
         },
+        ClientUpdateClientCredentials(root, args, context) {
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientUpdateClientCredentials",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN"]
+            ).pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emi-gateway.graphql.mutation.ClientUpdateClientCredentials",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, "updateClientGeneralInfo")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+            ).toPromise();
+        },
         ClientUpdateClientState(root, args, context) {
             return RoleValidator.checkPermissions$(
               context.authToken.realm_access.roles,

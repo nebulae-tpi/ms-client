@@ -7,7 +7,8 @@ import {
   ClientUpdateClientGeneralInfo,
   ClientUpdateClientState,
   ClientClient,
-  ClientClientUpdatedSubscription
+  ClientClientUpdatedSubscription,
+  ClientUpdateClientCredentials
 } from '../gql/client.js';
 
 @Injectable()
@@ -83,6 +84,23 @@ export class ClientDetailService {
           variables: {
             id: id,
             input: clientGeneralInfo
+          },
+          errorPolicy: 'all'
+        });
+      })
+    )
+  }
+
+  updateClientClientCredentials$(id: String, clientCredentials: any) {
+    return this.updateOperation$(clientCredentials)
+    .pipe(
+      mergeMap(() => {
+        return this.gateway.apollo
+        .mutate<any>({
+          mutation: ClientUpdateClientCredentials,
+          variables: {
+            id: id,
+            input: clientCredentials
           },
           errorPolicy: 'all'
         });
