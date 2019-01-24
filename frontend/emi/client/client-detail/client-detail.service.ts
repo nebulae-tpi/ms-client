@@ -8,7 +8,8 @@ import {
   ClientUpdateClientState,
   ClientClient,
   ClientClientUpdatedSubscription,
-  ClientUpdateClientCredentials
+  ClientUpdateClientCredentials,
+  updateClientLocation
 } from '../gql/client.js';
 
 @Injectable()
@@ -71,7 +72,7 @@ export class ClientDetailService {
           errorPolicy: 'all'
         });
       })
-    )
+    );
   }
 
   updateClientClientGeneralInfo$(id: String, clientGeneralInfo: any) {
@@ -88,7 +89,26 @@ export class ClientDetailService {
           errorPolicy: 'all'
         });
       })
-    )
+    );
+  }
+
+  updateClientLocation$(id: string, clientLocation: any) {
+    console.log('$$$$$ ==> ', id, clientLocation );
+    // return of({});
+    return this.updateOperation$(clientLocation)
+      .pipe(
+        mergeMap(() => {
+          return this.gateway.apollo
+            .mutate<any>({
+              mutation: updateClientLocation,
+              variables: {
+                id: id,
+                input: clientLocation
+              },
+              errorPolicy: 'all'
+            });
+        })
+      );
   }
 
   updateClientClientCredentials$(id: String, clientCredentials: any) {
@@ -105,7 +125,7 @@ export class ClientDetailService {
           errorPolicy: 'all'
         });
       })
-    )
+    );
   }
 
   updateClientClientState$(id: String, newState: boolean) {
@@ -126,8 +146,8 @@ export class ClientDetailService {
       variables: {
         id: entityId
       },
-      fetchPolicy: "network-only",
-      errorPolicy: "all"
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all'
     });
   }
 

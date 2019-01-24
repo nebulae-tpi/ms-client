@@ -212,6 +212,38 @@ class ClientCQRS {
     );
   }
 
+  updateClientLocation$({ root, args, jwt }, authToken) {
+    const client = {
+      _id: args.id,
+      latLng: args.input,
+      modifierUser: authToken.preferred_username,
+      modificationTimestamp: new Date().getTime()
+    };
+
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "updateClientLocation$",
+      PERMISSION_DENIED,
+      ["PLATFORM-ADMIN"]
+    ).pipe(
+      mergeMap(() => eventSourcing.eventStore.emitEvent$(
+        new Event({
+          eventType: "ClientLocationUpdated",
+          eventTypeVersion: 1,
+          aggregateType: "Client",
+          aggregateId: client._id,
+          data: client,
+          user: authToken.preferred_username
+        })
+      )
+      ),
+      map(() => ({ code: 200, message: `Location client with id: ${client._id} has been updated` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
 
   //#endregion
 

@@ -1,7 +1,10 @@
 export const locale = {
   lang: 'en',
   data: {
-    'CLIENT': {
+    MARKER: {
+
+    },
+    CLIENT: {
       DETAIL_HEADER_NAME: 'ENTYTY',
       DETAIL_HEADER_NEW: 'New entity',
       TITLE: 'Entity name',
@@ -18,7 +21,8 @@ export const locale = {
       DETAILS: {
         TABS: {
           GENERAL_INFO: 'General Info',
-          CREDENTIALS: 'Credentials'
+          CREDENTIALS: 'Credentials',
+          LOCATION: 'Location'
         },
         GENERAL_INFO: {
           TITLE: 'General Info',

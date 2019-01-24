@@ -4,30 +4,10 @@ import * as Rx from 'rxjs/Rx';
 
 import { MapRef } from './agmMapRef';
 
-export class PosPoint {
-  _id: string;
-  lastUpdate: number;
-  businessId: string;
-  businessName: string;
-  products: string[];
-  pos: { userName: string, userId: string, terminal: any };
+export class ClientPoint {
   location: { type: string, coordinates: { lat: number, long: number } };
-  constructor(
-    _id: string,
-    lastUpdate: number,
-    businessId: string,
-    businessName: string,
-    products: string[],
-    pos: { userName: string, userId: string, terminal: any },
-    location: { type: string, coordinates: { lat: number, long: number } }){
-      this._id = _id;
-      this.lastUpdate = lastUpdate;
-      this.businessId =  businessId;
-      this.businessName = businessName;
-      this.products = products;
-      this.pos = pos;
-      this.location = location;
-
+  constructor( location: { type: string, coordinates: { lat: number, long: number } }) {
+    this.location = location;
   }
 }
 
@@ -70,7 +50,7 @@ export class MarkerRef extends google.maps.Marker {
    * Historical route path of the client
    */
   routePath: google.maps.Polyline;
-  posPoint: PosPoint = null;
+  clientPoint: ClientPoint = null;
   lastTimeLocationReported = null;
   index = 0;
   deltaLat = 0;
@@ -83,7 +63,7 @@ export class MarkerRef extends google.maps.Marker {
   lastLocationPath: [LocationPath];
   allMap: MapRef;
 
-  constructor(posPoint: PosPoint, opts?: google.maps.MarkerOptions) {
+  constructor(clientPoint: ClientPoint, opts?: google.maps.MarkerOptions) {
     super(opts);
     // const icon = {
     //   url: "./assets/devices-location/bus.svg",
@@ -93,12 +73,12 @@ export class MarkerRef extends google.maps.Marker {
     this.setClickable(true);
     this.setLabel(' ');
     // this.setTitle('D-HUB');
-    this.setDraggable(false);
+    this.setDraggable(true);
     // this.setIcon('./assets/devices-location/tpm_bus_30_30.png');
     // this.setIcon(icon);
-    this.posPoint = posPoint;
+    this.clientPoint = clientPoint;
     this.lastTimeLocationReported = 0;
-    this.updateIcon();
+    // this.updateIcon();
   }
 
   /**
@@ -106,7 +86,7 @@ export class MarkerRef extends google.maps.Marker {
    */
 
   updateIcon() {
-    const newIconUrl = './assets/coverage-reports/pos_02.png';
+    // const newIconUrl = './assets/coverage-reports/pos_02.png';
 
     // if (
     //   ( this.client.online ) {
@@ -128,49 +108,17 @@ export class MarkerRef extends google.maps.Marker {
     // }
 
     // We only upodate the icon if it had changed.
-    if (newIconUrl !== this.iconUrl) {
-      this.iconUrl = newIconUrl;
-      const icon = {
-        url: newIconUrl,
-        anchor: new google.maps.Point(40, 40),
-        scaledSize: new google.maps.Size(40, 40)
-      };
-      this.setIcon(icon);
-    }
+    // if (newIconUrl !== this.iconUrl) {
+    //   this.iconUrl = newIconUrl;
+    //   const icon = {
+    //     url: newIconUrl,
+    //     anchor: new google.maps.Point(40, 40),
+    //     scaledSize: new google.maps.Size(40, 40)
+    //   };
+    //   this.setIcon(icon);
+    // }
   }
 
-  /**
-   *
-   * @param lng
-   * @param lat
-   * @param delay
-   * @param lastTimeLocationReported
-   * @param client
-   */
-  updateData(
-    lng: number,
-    lat: number,
-    delay: number,
-    timeLocationReported: number,
-    online: Boolean,
-    center = false,
-    showDisconnectedDevices = true
-  ) {
-    this.setVisibility(100);
-    this.index = 0;
-
-    this.deltaLat = (lat - this.getPosition().lat()) / this.numDeltas;
-    this.deltaLng = (lng - this.getPosition().lng()) / this.numDeltas;
-    this.lastLat = lat;
-    this.lastLng = lng;
-
-    if (!online && !showDisconnectedDevices) {
-      this.setVisible(showDisconnectedDevices);
-    }
-
-    this.updateIcon();
-    this.moveMarkerSmoothly(timeLocationReported, false);
-  }
 
   /**
    *

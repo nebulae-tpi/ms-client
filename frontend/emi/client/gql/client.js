@@ -32,6 +32,10 @@ export const ClientClient = gql`
         neighborhood
         location
       }
+      location{
+        lat
+        lng
+      }
       state
       creationTimestamp
       creatorUser
@@ -85,6 +89,18 @@ export const ClientUpdateClientGeneralInfo = gql `
     }
   }
 `;
+
+
+export const updateClientLocation = gql `
+  mutation ClientUpdateClientLocation($id: ID!, $input: ClientClientLocationInput){
+    ClientUpdateClientLocation(id: $id, input: $input){
+      code
+      message
+    }
+  }
+`;
+
+
 
 export const ClientUpdateClientCredentials = gql `
   mutation ClientUpdateClientCredentials($id: ID!, $input: ClientClientCredentialsInput!){

@@ -169,6 +169,10 @@ class GraphQlService {
         aggregateType: "Client",
         messageType: "emi-gateway.graphql.mutation.ClientUpdateClientState"
       },
+      {
+        aggregateType: "Client",
+        messageType: "emi-gateway.graphql.mutation.clientUpdateClientLocation"
+      },
     ];
   }
 
@@ -200,6 +204,10 @@ class GraphQlService {
       },
       "emi-gateway.graphql.mutation.ClientUpdateClientState": {
         fn: ClientCQRS.updateClientState$,
+        obj: ClientCQRS
+      },
+      "emi-gateway.graphql.mutation.clientUpdateClientLocation": {
+        fn: ClientCQRS.updateClientLocation$,
         obj: ClientCQRS
       }
     };

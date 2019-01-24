@@ -1,0 +1,20 @@
+@import "src/app/core/scss/fuse";
+
+.small-map-content, .large-map-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.small-map-content {
+  height: 400px;
+  width: 95%;
+}
+
+.large-map-content {
+  height: 700px;
+  width: 98%;
+}

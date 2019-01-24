@@ -133,6 +133,10 @@ class EventStoreService {
         fn: ClientES.handleClientStateUpdated$,
         obj: ClientES
       },
+      ClientLocationUpdated: {
+        fn: ClientES.handleClientLocationUpdated$,
+        obj: ClientES
+      }
 
     };
   }
@@ -153,6 +157,10 @@ class EventStoreService {
       {
         aggregateType: "Client",
         eventType: "ClientStateUpdated"
+      },
+      {
+        aggregateType: "Client",
+        eventType: "ClientLocationUpdated"
       },
     ]
   }

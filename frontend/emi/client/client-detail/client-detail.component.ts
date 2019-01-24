@@ -118,7 +118,7 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
       if(newclient._id == this.client._id){
         //Show message entity updated and redirect to the main page
         this.showSnackBar('CLIENT.ENTITY_UPDATED');
-        this.router.navigate(['client/']);
+        //this.router.navigate(['client/']);
       }
 
     }else{

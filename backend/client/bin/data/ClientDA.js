@@ -154,6 +154,26 @@ class ClientDA {
     );
   }
 
+  static updateClientLocation$(id, newClientLocation){
+    const collection = mongoDB.db.collection(CollectionName);
+    return defer(() =>
+      collection.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            location: newClientLocation.latLng,
+            modifierUser: newClientLocation.modifierUser,
+            modificationTimestamp: newClientLocation.modificationTimestamp
+          }
+        }, {
+          returnOriginal: false
+        }
+      )
+    ).pipe(
+      map(result => result && result.value ? result.value : undefined)
+    );
+  }
+
 }
 /**
  * @returns {ClientDA}

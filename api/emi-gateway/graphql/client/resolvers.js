@@ -170,6 +170,28 @@ module.exports = {
                 mergeMap(response => getResponseFromBackEnd$(response))
             ).toPromise();
         },
+        ClientUpdateClientLocation(root, args, context) {
+            console.log(args);
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientUpdateClientLocation",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN"]
+            ).pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emi-gateway.graphql.mutation.clientUpdateClientLocation",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, "UpdateClientLocation")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+            ).toPromise();
+        },
     },
 
     //// SUBSCRIPTIONS ///////

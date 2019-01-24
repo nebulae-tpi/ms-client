@@ -52,6 +52,15 @@ class ClientES {
         );
     }
 
+    handleClientLocationUpdated$(clientLocationUpdatedEvt){
+        console.log('handleClientLocationUpdated ===> ', clientLocationUpdatedEvt);
+        return ClientDA.updateClientLocation$(clientLocationUpdatedEvt.aid, clientLocationUpdatedEvt.data)
+        .pipe(
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result))
+        );
+
+    }
+
 }
 
 

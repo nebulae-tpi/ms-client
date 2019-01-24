@@ -10,6 +10,8 @@ type ClientClient {
   _id: ID!
   "User general info"
   generalInfo: ClientGeneralInfo
+  "Client location"
+  location: ClientClientLocation
   "Client state"
   state: Boolean!
   "Creation timestamp"
@@ -97,6 +99,16 @@ input ClientClientCredentialsInput {
 
 }
 
+type ClientClientLocation {
+  lat: Float
+  lng: Float
+}
+
+input ClientClientLocationInput {
+  lat: Float
+  lng: Float
+}
+
 type Query {
   "Get Clients filtered "
   ClientClients(filterInput: FilterInput!, paginationInput: PaginationInput!): [ClientClient]
@@ -111,6 +123,8 @@ type Mutation {
   ClientCreateClient(input: ClientClientInput!): CommandResponse
   "Update the Client generalInfo"
   ClientUpdateClientGeneralInfo(id:ID!, input: ClientClientGeneralInfoInput!): CommandResponse
+  "Update the client location"
+  ClientUpdateClientLocation(id:ID!, input: ClientClientLocationInput): CommandResponse
   "Update the Client credentials"
   ClientUpdateClientCredentials(id:ID!, input: ClientClientCredentialsInput!): CommandResponse
   "Update the Client state"
