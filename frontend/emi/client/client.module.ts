@@ -13,6 +13,7 @@ import { ClientDetailGeneralInfoComponent } from './client-detail/general-info/c
 import { ToolbarService } from '../../toolbar/toolbar.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { ClientDetailCredentialsComponent } from './client-detail/credentials/client-credentials.component';
+import { ClientLocationComponent } from './client-detail/location/client-location.component';
 
 
 const routes: Routes = [
@@ -37,7 +38,8 @@ const routes: Routes = [
     ClientListComponent,
     ClientDetailComponent,
     ClientDetailGeneralInfoComponent,
-    ClientDetailCredentialsComponent
+    ClientDetailCredentialsComponent,
+    ClientLocationComponent
   ],
   entryComponents: [DialogComponent],
   providers: [ ClientService, ClientListService, ClientDetailService, DatePipe]

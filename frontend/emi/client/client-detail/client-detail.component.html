@@ -39,7 +39,6 @@
       <!-- CONTENT CARD -->
       <div class="content-card mat-white-bg">
         <mat-tab-group>
-
           <mat-tab label="{{'CLIENT.DETAILS.TABS.GENERAL_INFO' | translate}}">
             <client-general-info [pageType]="pageType" [client]="client" *ngIf="pageType">
             </client-general-info>
@@ -47,6 +46,10 @@
           <mat-tab label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
             <client-credentials [pageType]="pageType" [client]="client" *ngIf="pageType">
             </client-credentials>
+          </mat-tab>
+          <mat-tab label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
+            <client-location [client]="client" *ngIf="pageType">
+            </client-location>
           </mat-tab>
 
         </mat-tab-group>
