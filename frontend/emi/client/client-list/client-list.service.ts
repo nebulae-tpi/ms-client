@@ -6,9 +6,7 @@ import {
 import { GatewayService } from '../../../../api/gateway.service';
 import {
   ClientClients,
-  ClientClientsSize,
-  getHelloWorld,
-  ClientHelloWorldSubscription
+  ClientClientsSize
 } from '../gql/client';
 
 @Injectable()
@@ -27,31 +25,6 @@ export class ClientListService {
   constructor(private gateway: GatewayService) {
 
   }
-
-  /**
-   * Hello World sample, please remove
-   */
-  getHelloWorld$() {
-    return this.gateway.apollo
-      .watchQuery<any>({
-        query: getHelloWorld,
-        fetchPolicy: "network-only"
-      })
-      .valueChanges.map(
-        resp => resp.data.getHelloWorldFromClient.sn
-      );
-  }
-
-  /**
-  * Hello World subscription sample, please remove
-  */
- getEventSourcingMonitorHelloWorldSubscription$(): Observable<any> {
-  return this.gateway.apollo
-    .subscribe({
-      query: ClientHelloWorldSubscription
-    })
-    .map(resp => resp.data.EventSourcingMonitorHelloWorldSubscription.sn);
-}
 
 
   /**

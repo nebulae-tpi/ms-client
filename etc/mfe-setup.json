@@ -11,19 +11,32 @@
         "src": "frontend/emi/client",
         "groups": [
             {
-              "id": "GROUP_NAME",
-              "icon": "location_searching",
-              "translate": {
-                "en": "Group Name",
-                "es": "Nombre de Grupo"
-              },
-              "priority": 1000
+            "id": "BUSINESS_UNIT_MANAGER",
+            "icon": "location_searching",
+            "translate": {
+                "en": "Business units",
+                "es": "Unidades de negocio"
+            },
+            "priority": 200
             }
           ],
+          "subgroups": [
+            {
+                "groupId": "BUSINESS_UNIT_MANAGER",
+                "id": "management",
+                "icon": "settings",
+                "translate": {
+                    "en": "Management",
+                    "es": "Gestión"
+                },
+                "priority": 2000
+            }
+        ],
         "contents": [
             {
-                "groupId": "GROUP_NAME",
                 "id": "client",
+                "groupId": "BUSINESS_UNIT_MANAGER",
+                "subgroupId": "management",                
                 "icon": "dashboard",
                 "translate": {
                     "en": "Client",
