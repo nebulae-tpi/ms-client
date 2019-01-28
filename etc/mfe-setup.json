@@ -46,7 +46,7 @@
                 "path": "client",
                 "loadChildren": "./main/content/client/client.module#ClientModule",
                 "priority": 1000,
-                "roles" : ["PLATFORM-ADMIN"],
+                "roles" : ["PLATFORM-ADMIN", "BUSINESS-OWNER"],
                 "default" : false
             }            
         ]

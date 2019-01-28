@@ -22,6 +22,15 @@ class ClientDA {
   }
 
   /**
+   * Gets a client according to the query
+   * @param {Object} filterQuery Query to filter
+   */
+  static getClientByFilter$(filterQuery) {
+    const collection = mongoDB.db.collection(CollectionName);
+    return defer(() => collection.findOne(filterQuery));
+  }
+
+  /**
    * Gets an user by its username
    */
   static getClient$(id, businessId) {
@@ -110,7 +119,7 @@ class ClientDA {
     return defer(() => collection.insertOne(client));
   }
 
-      /**
+  /**
    * modifies the general info of the indicated Client 
    * @param {*} id  Client ID
    * @param {*} ClientGeneralInfo  New general information of the Client
@@ -172,6 +181,71 @@ class ClientDA {
     ).pipe(
       map(result => result && result.value ? result.value : undefined)
     );
+  }
+
+  /**
+   * Updates the user auth
+   * @param {*} userId User ID
+   * @param {*} userAuth Object
+   * @param {*} userAuth.userKeycloakId user keycloak ID
+   * @param {*} userAuth.username username
+   */
+  static updateUserAuth$(userId, userAuth) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    return defer(()=>
+        collection.findOneAndUpdate(
+          { _id: userId },
+          {
+            $set: {auth: userAuth}
+          },{
+            returnOriginal: false
+          }
+        )
+    )
+    .pipe(
+      map(result => result && result.value ? result.value : undefined)
+    );
+  }
+
+    /**
+   * Removes the user auth
+   * @param {*} userId User ID
+   * @param {*} userAuth Object
+   * @param {*} userAuth.userKeycloakId user keycloak ID
+   * @param {*} userAuth.username username
+   */
+  static removeUserAuth$(userId, userAuth) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    return defer(()=>
+        collection.findOneAndUpdate(
+          { _id: userId },
+          {
+            $unset: {auth: ""}
+          },{
+            returnOriginal: false
+          }
+        )
+    )
+    .pipe(
+      map(result => result && result.value ? result.value : undefined)
+    )
+  }
+
+      /**
+   * Gets client by email
+   * @param {String} email User email
+   * @param {String} ignoreUserId if this value is enter, this user will be ignore in the query 
+   */
+  static getClientByEmail$(email, ignoreUserId) {
+    let query = {      
+      'generalInfo.email': email
+    };
+    if(ignoreUserId){
+      query._id = {$ne: ignoreUserId};
+    }
+    return this.getClientByFilter$(query);
   }
 
 }

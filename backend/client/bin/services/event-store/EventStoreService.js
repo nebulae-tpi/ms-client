@@ -136,8 +136,15 @@ class EventStoreService {
       ClientLocationUpdated: {
         fn: ClientES.handleClientLocationUpdated$,
         obj: ClientES
-      }
-
+      },
+      ClientAuthCreated: {
+        fn: ClientES.handleClientAuthCreated$,
+        obj: ClientES 
+      },
+      ClientAuthDeleted: {
+        fn: ClientES.handleClientAuthDeleted$,
+        obj: ClientES 
+      },
     };
   }
 
@@ -161,6 +168,14 @@ class EventStoreService {
       {
         aggregateType: "Client",
         eventType: "ClientLocationUpdated"
+      },
+      {
+        aggregateType: "Client",
+        eventType: "ClientAuthCreated"
+      },
+      {
+        aggregateType: "Client",
+        eventType: "ClientAuthDeleted"
       },
     ]
   }

@@ -5,6 +5,7 @@ const { of, interval } = require("rxjs");
 const Event = require("@nebulae/event-store").Event;
 const eventSourcing = require("../../tools/EventSourcing")();
 const ClientDA = require("../../data/ClientDA");
+const ClientValidatorHelper = require('./ClientValidatorHelper');
 const broker = require("../../tools/broker/BrokerFactory")();
 const MATERIALIZED_VIEW_TOPIC = "materialized-view-updates";
 const GraphqlResponseTools = require('../../tools/GraphqlResponseTools');
@@ -39,7 +40,7 @@ class ClientCQRS {
       "Client",
       "getClient",
       PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -63,7 +64,7 @@ class ClientCQRS {
       "Client",
       "getClientList",
       PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -91,7 +92,7 @@ class ClientCQRS {
       "Client",
       "getClientListSize",
       PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -125,17 +126,18 @@ class ClientCQRS {
       PERMISSION_DENIED,
       ["PLATFORM-ADMIN"]
     ).pipe(
-      mergeMap(() => eventSourcing.eventStore.emitEvent$(
+      mergeMap(roles => ClientValidatorHelper.checkClientCreationClientValidator$(client, authToken, roles)),
+      mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
           eventType: "ClientCreated",
           eventTypeVersion: 1,
           aggregateType: "Client",
-          aggregateId: client._id,
-          data: client,
+          aggregateId: data.client._id,
+          data: data.client,
           user: authToken.preferred_username
-        }))
+        })).pipe(mapTo(data))
       ),
-      map(() => ({ code: 200, message: `Client with id: ${client._id} has been created` })),
+      map(() => ({ code: 200, message: `Client with id: ${data.client._id} has been created` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
@@ -157,9 +159,15 @@ class ClientCQRS {
       "Client",
       "updateClientGeneralInfo$",
       PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
-      mergeMap(() => eventSourcing.eventStore.emitEvent$(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe(
+          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientValidator$(client, authToken, roles, userMongo))
+        )              
+      ),
+      mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
           eventType: "ClientGeneralInfoUpdated",
           eventTypeVersion: 1,
@@ -167,10 +175,9 @@ class ClientCQRS {
           aggregateId: client._id,
           data: client,
           user: authToken.preferred_username
-        })
-      )
+        })).pipe(mapTo(data))
       ),
-      map(() => ({ code: 200, message: `Client with id: ${client._id} has been updated` })),
+      map(() => ({ code: 200, message: `Client with id: ${data.client._id} has been updated` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
@@ -195,7 +202,11 @@ class ClientCQRS {
       PERMISSION_DENIED,
       ["PLATFORM-ADMIN"]
     ).pipe(
-      mergeMap(() => eventSourcing.eventStore.emitEvent$(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe( mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientStateValidator$(client, authToken, roles, userMongo)))
+      ),
+      mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
           eventType: "ClientStateUpdated",
           eventTypeVersion: 1,
@@ -204,8 +215,7 @@ class ClientCQRS {
           data: client,
           user: authToken.preferred_username
         })
-      )
-      ),
+      ).pipe(mapTo(data))),
       map(() => ({ code: 200, message: `Client with id: ${client._id} has been updated` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
