@@ -92,7 +92,7 @@ module.exports = {
               "ClientCreateClient",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
             )
             .pipe(
                 mergeMap(() =>
@@ -114,33 +114,12 @@ module.exports = {
               "ClientUpdateClientGeneralInfo",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
                     "emi-gateway.graphql.mutation.ClientUpdateClientGeneralInfo",
-                    { root, args, jwt: context.encodedToken },
-                    2000
-                  )
-                ),
-                catchError(err => handleError$(err, "updateClientGeneralInfo")),
-                mergeMap(response => getResponseFromBackEnd$(response))
-            ).toPromise();
-        },
-        ClientUpdateClientCredentials(root, args, context) {
-            return RoleValidator.checkPermissions$(
-              context.authToken.realm_access.roles,
-              "Client",
-              "ClientUpdateClientCredentials",
-              PERMISSION_DENIED_ERROR_CODE,
-              "Permission denied",
-              ["PLATFORM-ADMIN"]
-            ).pipe(
-                mergeMap(() =>
-                  context.broker.forwardAndGetReply$(
-                    "Client",
-                    "emi-gateway.graphql.mutation.ClientUpdateClientCredentials",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -156,7 +135,7 @@ module.exports = {
               "ClientUpdateClientState",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -178,7 +157,7 @@ module.exports = {
               "ClientUpdateClientLocation",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -191,6 +170,75 @@ module.exports = {
                 catchError(err => handleError$(err, "UpdateClientLocation")),
                 mergeMap(response => getResponseFromBackEnd$(response))
             ).toPromise();
+        },
+        ClientCreateClientAuth(root, args, context) {
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientCreateClientAuth",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+            )
+              .pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emi-gateway.graphql.mutation.ClientCreateClientAuth",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, "ClientCreateClientAuth")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+              )
+              .toPromise();
+          },
+          ClientResetClientPassword(root, args, context) {
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientResetClientPassword",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+            )
+              .pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emi-gateway.graphql.mutation.ClientResetClientPassword",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, " ClientResetClientPassword")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+              )
+              .toPromise();
+        },
+        ClientRemoveClientAuth(root, args, context) {
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientRemoveClientAuth",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+            )
+              .pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emi-gateway.graphql.mutation.ClientRemoveClientAuth",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, "ClientRemoveClientAuth")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+              )
+              .toPromise();
         },
     },
 

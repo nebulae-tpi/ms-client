@@ -13,6 +13,11 @@ export const ClientClient = gql`
         city
         neighborhood
         location
+        email
+      }
+      auth {
+        userKeycloakId
+        username
       }
       location{
         lat
@@ -38,6 +43,11 @@ export const ClientClients = gql`
         city
         neighborhood
         location
+        email
+      }
+      auth {
+        userKeycloakId
+        username
       }
       state
       creationTimestamp
@@ -102,6 +112,33 @@ export const ClientUpdateClientState = gql `
   }
 `;
 
+export const ClientCreateClientAuth = gql`
+  mutation ClientCreateClientAuth($id: ID!, $username: String!, $input: ClientAuthInput) {
+    ClientCreateClientAuth(id: $id, username: $username, input: $input) {
+      code
+      message
+    }
+  }
+`;
+
+export const ClientRemoveClientAuth = gql`
+  mutation ClientRemoveClientAuth($id: ID!) {
+    ClientRemoveClientAuth(id: $id) {
+      code
+      message
+    }
+  }
+`;
+
+export const ClientResetClientPassword = gql`
+  mutation ClientResetClientPassword($id: ID!, $input: ClientPasswordInput) {
+    ClientResetClientPassword(id: $id, input: $input) {
+      code
+      message
+    }
+  }
+`;
+
 // SUBSCRIPTION
 export const ClientClientUpdatedSubscription = gql`
   subscription{
@@ -114,6 +151,11 @@ export const ClientClientUpdatedSubscription = gql`
         city
         neighborhood
         location
+        email
+      }
+      auth {
+        userKeycloakId
+        username
       }
       state
       creationTimestamp

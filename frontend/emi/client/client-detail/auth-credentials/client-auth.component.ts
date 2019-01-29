@@ -12,7 +12,8 @@ import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
+  FormGroupDirective
 } from '@angular/forms';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -55,24 +56,24 @@ import { FuseTranslationLoaderService } from '../../../../../core/services/trans
 import { KeycloakService } from 'keycloak-angular';
 import { ClientDetailService } from '../client-detail.service';
 import { DialogComponent } from '../../dialog/dialog.component';
-import { ToolbarService } from '../../../../toolbar/toolbar.service';
+import { ToolbarService } from "../../../../toolbar/toolbar.service";
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'client-credentials',
-  templateUrl: './client-credentials.component.html',
-  styleUrls: ['./client-credentials.component.scss']
+  selector: 'client-auth',
+  templateUrl: './client-auth.component.html',
+  styleUrls: ['./client-auth.component.scss']
 })
 // tslint:disable-next-line:class-name
-export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
+export class ClientAuthComponent implements OnInit, OnDestroy {
   // Subject to unsubscribe
   private ngUnsubscribe = new Subject();
 
   @Input('pageType') pageType: string;
   @Input('client') client: any;
 
-  clientCredentialsForm: any;
-  clientStateForm: any;
+  userAuthForm: any;
+
 
   constructor(
     private translationLoader: FuseTranslationLoaderService,
@@ -90,48 +91,63 @@ export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.clientCredentialsForm = new FormGroup({
-      name: new FormControl(this.client ? (this.client.credentials || {}).name : ''),
-      phone: new FormControl(this.client ? (this.client.credentials || {}).phone : ''),
-      address: new FormControl(this.client ? (this.client.credentials || {}).address : ''),
-      city: new FormControl(this.client ? (this.client.credentials || {}).city : ''),
-      neighborhood: new FormControl(this.client ? (this.client.credentials || {}).neighborhood : ''),
-      location: new FormControl(this.client ? (this.client.credentials || {}).location : '')
-    });
-
-    this.clientStateForm = new FormGroup({
-      state: new FormControl(this.client ? this.client.state : true)
-    });
+    this.userAuthForm = this.createUserAuthForm();
   }
 
-  createClient() {
-    this.toolbarService.onSelectedBusiness$
-    .pipe(
-      tap(selectedBusiness => {
-        if (!selectedBusiness){
-          this.showSnackBar('CLIENT.SELECT_BUSINESS');
-        }
-      }),
-      filter(selectedBusiness => selectedBusiness != null && selectedBusiness.id != null),
-      mergeMap(selectedBusiness => {
-        return this.showConfirmationDialog$('CLIENT.CREATE_MESSAGE', 'CLIENT.CREATE_TITLE')
-        .pipe(
-          mergeMap(ok => {
-            this.client = {
-              credentials: this.clientCredentialsForm.getRawValue(),
-              state: this.clientStateForm.getRawValue().state,
-              businessId: selectedBusiness.id
-            };
-            return this.ClientDetailservice.createClientClient$(this.client);
-          }),
-          mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-          filter((resp: any) => !resp.errors || resp.errors.length === 0),
-        );
-      }),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(result => {
-        this.showSnackBar('CLIENT.WAIT_OPERATION');
+    /**
+   * Creates the user auth reactive form
+   */
+  createUserAuthForm() {
+    return this.formBuilder.group(
+      {
+        username: [
+        {
+          value: this.client.auth ? this.client.auth.username : '',
+          disabled: (this.pageType !== 'new' && this.client.auth && this.client.auth.username)
+        },
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z0-9._-]{8,}$')
+        ])
+      ],
+        password: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(
+              '^(?=[a-zA-Z0-9.]{8,}$)(?=.*?[a-z])(?=.*?[0-9]).*'
+            )
+          ])
+        ],
+        passwordConfirmation: ['', Validators.required],
+        temporary: [false, Validators.required]
       },
+      {
+        validator: this.checkIfMatchingPasswords(
+          'password',
+          'passwordConfirmation'
+        )
+      }
+    );
+  }
+
+  /**
+   * Create the client auth on Keycloak
+   */
+  createClientAuth(formDirective: FormGroupDirective) {
+    const data = this.userAuthForm.getRawValue();
+
+    this.makeOperation$(this.ClientDetailservice.createClientAuth$(this.client._id, data))
+    .subscribe(
+        model => {
+          this.showSnackBar('CLIENT.WAIT_OPERATION');
+          formDirective.resetForm();
+          this.client.auth = {
+            username: data.username
+          };
+          this.userAuthForm.reset();
+          this.userAuthForm = this.createUserAuthForm();
+        },
         error => {
           this.showSnackBar('CLIENT.ERROR_OPERATION');
           console.log('Error ==> ', error);
@@ -139,51 +155,58 @@ export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateClientCredentials() {
-    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
-      .pipe(
-        mergeMap(ok => {
-          const credentialsinput = {
-            name: this.clientCredentialsForm.getRawValue().name,
-            phone: this.clientCredentialsForm.getRawValue().phone,
-            address: this.clientCredentialsForm.getRawValue().address,
-            city: this.clientCredentialsForm.getRawValue().city,
-            neighborhood: this.clientCredentialsForm.getRawValue().neighborhood,
-            location: this.clientCredentialsForm.getRawValue().location
-          };
-          return this.ClientDetailservice.updateClientClientCredentials$(this.client._id, credentialsinput);
-        }),
-        mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-        filter((resp: any) => !resp.errors || resp.errors.length === 0),
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(result => {
-        this.showSnackBar('CLIENT.WAIT_OPERATION');
-      },
+  /**
+   * Remove the user auth
+   */
+  removeClientAuth() {
+
+    this.makeOperation$(this.ClientDetailservice.removeClientAuth$(this.client._id))
+    .subscribe(
+        model => {
+          this.showSnackBar('CLIENT.WAIT_OPERATION');
+          this.client.auth = null;
+          this.userAuthForm.reset();
+          this.userAuthForm = this.createUserAuthForm();
+        },
         error => {
           this.showSnackBar('CLIENT.ERROR_OPERATION');
           console.log('Error ==> ', error);
         }
-      );
-
+    );
   }
 
-  onClientStateChange() {
-    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
-      .pipe(
-        mergeMap(ok => {
-          return this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state);
-        }),
-        mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-        filter((resp: any) => !resp.errors || resp.errors.length === 0),
-        takeUntil(this.ngUnsubscribe)
-      ).subscribe(result => {
-        this.showSnackBar('CLIENT.WAIT_OPERATION');
-      },
+    /**
+   * Reset the user password
+   */
+  resetClientPassword(formDirective: FormGroupDirective) {
+    const data = this.userAuthForm.getRawValue();
+
+    this.makeOperation$(this.ClientDetailservice.resetClientPassword$(this.client._id, data))
+    .subscribe(
+        model => {
+          this.showSnackBar('CLIENT.WAIT_OPERATION');
+          //this.userAuthForm.reset();
+          formDirective.resetForm();
+          this.userAuthForm = this.createUserAuthForm();
+        },
         error => {
           this.showSnackBar('CLIENT.ERROR_OPERATION');
           console.log('Error ==> ', error);
-        });
+        }
+    );
+  }
+
+  /**
+   * Make observable operations
+   */
+  makeOperation$(observableOperation) {
+    return this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
+    .pipe(
+      mergeMap(ok => observableOperation),
+      mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
+      filter((resp: any) => !resp.errors || resp.errors.length === 0),
+      takeUntil(this.ngUnsubscribe)
+    );
   }
 
   showConfirmationDialog$(dialogMessage, dialogTitle) {
@@ -233,8 +256,8 @@ export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
               this.showMessageSnackbar('ERRORS.' + errorDetail.message.code);
             });
           } else {
-            response.errors.forEach( err => {
-              this.showMessageSnackbar('ERRORS.' + err.message.code);
+            response.errors.forEach(error => {
+              this.showMessageSnackbar('ERRORS.' + error.message.code);
             });
           }
         });
@@ -248,7 +271,7 @@ export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
    * @param detailMessageKey Key of the detail message to i18n
    */
   showMessageSnackbar(messageKey, detailMessageKey?) {
-    const translationData = [];
+    let translationData = [];
     if (messageKey) {
       translationData.push(messageKey);
     }
@@ -269,7 +292,25 @@ export class ClientDetailCredentialsComponent implements OnInit, OnDestroy {
       });
   }
 
-
+  /**
+   * Checks if the passwords match, otherwise the form will be invalid.
+   * @param passwordKey new Password
+   * @param passwordConfirmationKey Confirmation of the new password
+   */
+  checkIfMatchingPasswords(
+    passwordKey: string,
+    passwordConfirmationKey: string
+  ) {
+    return (group: FormGroup) => {
+      const passwordInput = group.controls[passwordKey],
+        passwordConfirmationInput = group.controls[passwordConfirmationKey];
+      if (passwordInput.value !== passwordConfirmationInput.value) {
+        return passwordConfirmationInput.setErrors({ notEquivalent: true });
+      } else {
+        return passwordConfirmationInput.setErrors(null);
+      }
+    };
+  }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();

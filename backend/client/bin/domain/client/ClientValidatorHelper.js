@@ -33,9 +33,11 @@ class ClientValidatorHelper {
   static checkClientCreationClientValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles})
     .pipe(
+      tap(data => console.log('000 ', data.client.businessId)),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
+      tap(val => console.log('111')),
       tap(data => { if (!data.client.businessId) this.throwCustomError$(MISSING_BUSINESS_ERROR_CODE)}),
-      //tap(data => this.checkIfUserBelongsToTheSameBusiness(data.client, data.authToken, 'Client', data.roles)),
+      tap(val => console.log('222')),
       mergeMap(data => this.checkEmailExistKeycloakOrMongo$(data.client.generalInfo.email).pipe(mapTo(data)))
     );
   }

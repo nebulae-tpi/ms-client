@@ -8,7 +8,9 @@ import {
   ClientUpdateClientState,
   ClientClient,
   ClientClientUpdatedSubscription,
-  ClientUpdateClientCredentials,
+  ClientCreateClientAuth,
+  ClientRemoveClientAuth,
+  ClientResetClientPassword,
   updateClientLocation
 } from '../gql/client.js';
 
@@ -111,23 +113,6 @@ export class ClientDetailService {
       );
   }
 
-  updateClientClientCredentials$(id: String, clientCredentials: any) {
-    return this.updateOperation$(clientCredentials)
-    .pipe(
-      mergeMap(() => {
-        return this.gateway.apollo
-        .mutate<any>({
-          mutation: ClientUpdateClientCredentials,
-          variables: {
-            id: id,
-            input: clientCredentials
-          },
-          errorPolicy: 'all'
-        });
-      })
-    );
-  }
-
   updateClientClientState$(id: String, newState: boolean) {
     return this.gateway.apollo
       .mutate<any>({
@@ -148,6 +133,68 @@ export class ClientDetailService {
       },
       fetchPolicy: 'network-only',
       errorPolicy: 'all'
+    });
+  }
+
+   /**
+   * Create auth for the client.
+   * @param clientId clientId
+   * @param userPassword Password object
+   * @param userPassword.username username
+   * @param userPassword.password new password
+   * @param userPassword.temporary Booleand that indicates if the password is temporal
+   */
+  createClientAuth$(clientId, userPassword): Observable<any> {
+    const authInput = {
+      username: userPassword.username,
+      password: userPassword.password,
+      temporary: userPassword.temporary || false
+    };
+
+    return this.gateway.apollo.mutate<any>({
+      mutation: ClientCreateClientAuth,
+      variables: {
+        id: clientId,
+        username: userPassword.username,
+        input: authInput
+      },
+      errorPolicy: 'all'
+    });
+  }
+
+  /**
+   * Removes auth credentials from user
+   * @param id Id of the client
+   */
+  removeClientAuth$(id): Observable<any> {
+    return this.gateway.apollo.mutate<any>({
+      mutation: ClientRemoveClientAuth,
+      variables: {
+        id: id
+      },
+      errorPolicy: 'all'
+    });
+  }
+
+    /**
+   * Resets the user password.
+   * @param id id of the client
+   * @param userPassword new password
+   * @param businessId Id of the business to which the user belongs
+   */
+  resetClientPassword$(id, userPassword): Observable<any> {
+    const userPasswordInput = {
+      password: userPassword.password,
+      temporary: userPassword.temporary || false
+    };
+
+    return this.gateway.apollo.mutate<any>({
+      mutation: ClientResetClientPassword,
+      variables: {
+        id: id,
+        input: userPasswordInput
+      },
+      errorPolicy: "all"
     });
   }
 

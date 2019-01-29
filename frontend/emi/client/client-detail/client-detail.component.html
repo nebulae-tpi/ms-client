@@ -44,12 +44,12 @@
             </client-general-info>
           </mat-tab>
           <mat-tab label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
-            <client-credentials [pageType]="pageType" [client]="client" *ngIf="pageType">
-            </client-credentials>
+            <client-auth [client]="client" *ngIf="pageType && pageType == 'edit'"></client-auth>
           </mat-tab>
 
           <mat-tab *ngIf="pageType && client" label="{{'CLIENT.DETAILS.TABS.LOCATION' | translate}}">
-            <client-location [client]="client" ngClass="small-map-content large-map-content" class="mat-elevation-z4"
+            <client-location [client]="client"  ngClass="small-map-content large-map-content" class="mat-elevation-z4"
+              *ngIf="pageType && pageType == 'edit'"
               [ngClass.gt-xs]="{'small-map-content': false, 'large-map-content': true}"
               [ngClass.lt-sm]="{'small-map-content': true, 'large-map-content': false}">
 

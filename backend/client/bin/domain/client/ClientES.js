@@ -58,7 +58,46 @@ class ClientES {
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result))
         );
+    }
 
+          /**
+     * updates the user state on the materialized view according to the received data from the event store.
+     * @param {*} clientAuthCreatedEvent events that indicates the new state of the user
+     */
+    handleClientAuthCreated$(clientAuthCreatedEvent) {
+        return ClientDA.updateUserAuth$(
+            clientAuthCreatedEvent.aid,
+            clientAuthCreatedEvent.data
+        )
+        .pipe(
+            mergeMap(result => {
+                return broker.send$(
+                    MATERIALIZED_VIEW_TOPIC,
+                    `ClientClientUpdatedSubscription`,
+                    result
+                );
+            })
+        );
+    }
+
+    /**
+     * Removes the user auth on the materialized view.
+     * @param {*} userAuthDeletedEvent events that indicates the user to which the auth credentials will be deleted
+     */
+    handleClientAuthDeleted$(clientAuthDeletedEvent) {
+        return ClientDA.removeUserAuth$(
+            clientAuthDeletedEvent.aid,
+            clientAuthDeletedEvent.data
+        )
+        .pipe(
+            mergeMap(result => {
+                return broker.send$(
+                    MATERIALIZED_VIEW_TOPIC,
+                    `ClientClientUpdatedSubscription`,
+                    result
+                );
+            })
+        );
     }
 
 }

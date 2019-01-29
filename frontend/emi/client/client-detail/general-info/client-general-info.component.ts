@@ -91,12 +91,12 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.clientGeneralInfoForm = new FormGroup({
-      name: new FormControl(this.client ? (this.client.generalInfo || {}).name : ''),
-      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : ''),
-      address: new FormControl(this.client ? (this.client.generalInfo || {}).address : ''),
-      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : ''),
-      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : ''),
-      location: new FormControl(this.client ? (this.client.generalInfo || {}).location : '')
+      name: new FormControl(this.client ? (this.client.generalInfo || {}).name : '', [Validators.required]),
+      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required]),
+      email: new FormControl(this.client ? (this.client.generalInfo || {}).email : '', [Validators.required]),
+      address: new FormControl(this.client ? (this.client.generalInfo || {}).address : '', [Validators.required]),
+      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : '', [Validators.required]),
+      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
     });
 
     this.clientStateForm = new FormGroup({
@@ -125,7 +125,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
             return this.ClientDetailservice.createClientClient$(this.client);
           }),
           mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-          filter((resp: any) => !resp.errors || resp.errors.length === 0),          
+          filter((resp: any) => !resp.errors || resp.errors.length === 0),
         )
       }),
       takeUntil(this.ngUnsubscribe)
@@ -149,7 +149,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
             address: this.clientGeneralInfoForm.getRawValue().address,
             city: this.clientGeneralInfoForm.getRawValue().city,
             neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
-            location: this.clientGeneralInfoForm.getRawValue().location
+            email: this.clientGeneralInfoForm.getRawValue().email
           };
           return this.ClientDetailservice.updateClientClientGeneralInfo$(this.client._id, generalInfoinput);
         }),
@@ -171,7 +171,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   onClientStateChange() {
     this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
       .pipe(
-        mergeMap(ok => {        
+        mergeMap(ok => {
           return this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state);
         }),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),

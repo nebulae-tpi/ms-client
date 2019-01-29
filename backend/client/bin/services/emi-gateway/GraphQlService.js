@@ -169,7 +169,18 @@ class GraphQlService {
         aggregateType: "Client",
         messageType: "emi-gateway.graphql.mutation.ClientUpdateClientState"
       },
-      
+      {
+        aggregateType: "Client",
+        messageType: "emi-gateway.graphql.mutation.ClientCreateClientAuth"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "emi-gateway.graphql.mutation.ClientRemoveClientAuth"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "emi-gateway.graphql.mutation.ClientResetClientPassword"
+      },
       {
         aggregateType: "Client",
         messageType: "emi-gateway.graphql.mutation.clientUpdateClientLocation"

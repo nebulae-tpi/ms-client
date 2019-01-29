@@ -14,6 +14,8 @@ type ClientClient {
   location: ClientClientLocation
   "Client state"
   state: Boolean!
+  "auth credential"
+  auth: ClientAuth
   "Creation timestamp"
   creationTimestamp: BigInt!
   "Creator user"
@@ -26,6 +28,13 @@ type ClientClient {
   businessId: String!
 }
 
+type ClientAuth {
+  "username"
+  username: String!
+  "User keycloak ID"
+  userKeycloakId: String!
+}
+
 type ClientGeneralInfo {
   "Client name"
   name: String!
@@ -35,10 +44,10 @@ type ClientGeneralInfo {
   address: String
   "Client city"
   city: String
+  "Client email"
+  email: String
   "Client neighborhood"
   neighborhood: String
-  "Client location"
-  location: String
 }
 
 input FilterInput {
@@ -83,21 +92,21 @@ input ClientClientGeneralInfoInput {
   address: String
   "Client city"
   city: String
+  "Client email"
+  email: String!
   "Client neighborhood"
   neighborhood: String
-  "Client location"
-  location: String
 }
 
-input ClientClientCredentialsInput {
-  "Client username"
-  username: String!,
-  "Client password"
-  password: String,
-  "Client roles"
-  roles: [String]
+# input ClientClientCredentialsInput {
+#   "Client username"
+#   username: String!,
+#   "Client password"
+#   password: String,
+#   "Client roles"
+#   roles: [String]
 
-}
+# }
 
 type ClientClientLocation {
   lat: Float
@@ -107,6 +116,22 @@ type ClientClientLocation {
 input ClientClientLocationInput {
   lat: Float
   lng: Float
+}
+
+input ClientPasswordInput {
+  "User password"
+  password: String!
+  "User temporary"
+  temporary: Boolean!
+}
+
+input ClientAuthInput {
+  "username"
+  username: String!
+  "User password"
+  password: String!
+  "User temporary"
+  temporary: Boolean!
 }
 
 type Query {
@@ -125,9 +150,12 @@ type Mutation {
   ClientUpdateClientGeneralInfo(id:ID!, input: ClientClientGeneralInfoInput!): CommandResponse
   "Update the client location"
   ClientUpdateClientLocation(id:ID!, input: ClientClientLocationInput): CommandResponse
-  "Update the Client credentials"
-  ClientUpdateClientCredentials(id:ID!, input: ClientClientCredentialsInput!): CommandResponse
-  "Update the Client state"
+  "Creates auth for the client"
+  ClientCreateClientAuth(id: ID!, username: String!, input: ClientAuthInput): CommandResponse
+  "Removes auth of the user (The user will be deleted from Keycloak)"
+  ClientRemoveClientAuth(id: ID!): CommandResponse
+  "Changes Client password"
+  ClientResetClientPassword(id: ID!, input: ClientPasswordInput): CommandResponse  
   ClientUpdateClientState(id: ID!, newState: Boolean!): CommandResponse
 }
 

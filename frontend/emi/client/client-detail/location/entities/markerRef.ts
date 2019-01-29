@@ -74,7 +74,7 @@ export class MarkerRef extends google.maps.Marker {
     this.setLabel(' ');
     // this.setTitle('D-HUB');
     this.setDraggable(true);
-    // this.setIcon('./assets/devices-location/tpm_bus_30_30.png');
+    // this.setIcon('./assets/devices-location/tpi_bus_30_30.png');
     // this.setIcon(icon);
     this.clientPoint = clientPoint;
     this.lastTimeLocationReported = 0;

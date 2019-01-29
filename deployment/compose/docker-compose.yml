@@ -28,7 +28,7 @@ services:
      volumes:
        - keycloak-mysql-data-client:/var/lib/mysql
   keycloak-client:
-       image: nebulaetpm/keycloak:latest
+       image: nebulaetpi/keycloak:latest
        environment:
          - MYSQL_ADDR=keycloak-mysql-client
          - MYSQL_PORT_3306_TCP_ADDR=keycloak-mysql-client

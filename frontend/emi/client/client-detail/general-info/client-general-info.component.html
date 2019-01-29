@@ -48,9 +48,9 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="location" formControlName="location" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.LOCATION' | translate}}">
-        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['location'])">
-          {{'CLIENT.LOCATION_REQUIRED' | translate}}
+        <input matInput name="email" formControlName="email" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.EMAIL' | translate}}">
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['email'])">
+          {{'CLIENT.EMAIL_REQUIRED' | translate}}
         </mat-error>
       </mat-form-field>
 

@@ -1,21 +1,22 @@
 "use strict";
 
 const uuidv4 = require("uuid/v4");
-const { of, interval } = require("rxjs");
 const Event = require("@nebulae/event-store").Event;
 const eventSourcing = require("../../tools/EventSourcing")();
 const ClientDA = require("../../data/ClientDA");
 const ClientValidatorHelper = require('./ClientValidatorHelper');
+const ClientKeycloakDA = require("../../data/ClientKeycloakDA");
 const broker = require("../../tools/broker/BrokerFactory")();
 const MATERIALIZED_VIEW_TOPIC = "materialized-view-updates";
 const GraphqlResponseTools = require('../../tools/GraphqlResponseTools');
 const RoleValidator = require("../../tools/RoleValidator");
-const { take, mergeMap, catchError, map, toArray } = require('rxjs/operators');
+const { of, interval } = require("rxjs");
+const { take, mergeMap, catchError, map, toArray, mapTo } = require('rxjs/operators');
 const {
   CustomError,
   DefaultError,
   INTERNAL_SERVER_ERROR_CODE,
-  PERMISSION_DENIED
+  PERMISSION_DENIED_ERROR_CODE
 } = require("../../tools/customError");
 
 
@@ -39,7 +40,7 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "getClient",
-      PERMISSION_DENIED,
+      PERMISSION_DENIED_ERROR_CODE,
       ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
@@ -63,7 +64,7 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "getClientList",
-      PERMISSION_DENIED,
+      PERMISSION_DENIED_ERROR_CODE,
       ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
@@ -91,7 +92,7 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "getClientListSize",
-      PERMISSION_DENIED,
+      PERMISSION_DENIED_ERROR_CODE,
       ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => {
@@ -112,19 +113,20 @@ class ClientCQRS {
   * Create a client
   */
  createClient$({ root, args, jwt }, authToken) {
+   
     const client = args ? args.input: undefined;
     client._id = uuidv4();
     client.creatorUser = authToken.preferred_username;
     client.creationTimestamp = new Date().getTime();
     client.modifierUser = authToken.preferred_username;
     client.modificationTimestamp = new Date().getTime();
-
+    console.log('createClient => ', client);
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",
       "createClient$",
-      PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => ClientValidatorHelper.checkClientCreationClientValidator$(client, authToken, roles)),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
@@ -135,9 +137,9 @@ class ClientCQRS {
           aggregateId: data.client._id,
           data: data.client,
           user: authToken.preferred_username
-        })).pipe(mapTo(data))
+        })).pipe(mapTo(data))      
       ),
-      map(() => ({ code: 200, message: `Client with id: ${data.client._id} has been created` })),
+      map(data => ({ code: 200, message: `Client with id: ${data.client._id} has been created` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
@@ -158,7 +160,7 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "updateClientGeneralInfo$",
-      PERMISSION_DENIED,
+      PERMISSION_DENIED_ERROR_CODE,
       ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => 
@@ -177,7 +179,7 @@ class ClientCQRS {
           user: authToken.preferred_username
         })).pipe(mapTo(data))
       ),
-      map(() => ({ code: 200, message: `Client with id: ${data.client._id} has been updated` })),
+      map(data => ({ code: 200, message: `Client with id: ${data.client._id} has been updated` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
@@ -199,8 +201,8 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "updateClientState$",
-      PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -234,8 +236,8 @@ class ClientCQRS {
       authToken.realm_access.roles,
       "Client",
       "updateClientLocation$",
-      PERMISSION_DENIED,
-      ["PLATFORM-ADMIN"]
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
     ).pipe(
       mergeMap(() => eventSourcing.eventStore.emitEvent$(
         new Event({
@@ -249,6 +251,159 @@ class ClientCQRS {
       )
       ),
       map(() => ({ code: 200, message: `Location client with id: ${client._id} has been updated` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
+    /**
+   * Create the client auth
+   */
+  createClientAuth$({ root, args, jwt }, authToken) {
+    console.log('createClientAuth');
+    const client = {
+      _id: args.id,
+      authInput: args.input,
+      modifierUser: authToken.preferred_username,
+      modificationTimestamp: new Date().getTime()
+    };
+
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "createClientAuth$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+    ).pipe(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe( 
+          //Validate the data
+          mergeMap(userMongo => ClientValidatorHelper.checkClientCreateClientAuthValidator$(client, authToken, roles, userMongo)),
+          // Creates the user on Keycloak
+          mergeMap(data => ClientKeycloakDA.createUser$(data.userMongo, data.client.authInput)
+          .pipe(
+            //Assignes a password to the user
+            mergeMap(userKeycloak => {
+              const password = {
+                temporary: data.client.authInput.temporary || false,
+                value: data.client.authInput.password
+              }
+              return ClientKeycloakDA.resetUserPassword$(userKeycloak.id, password)
+              .pipe(
+                //Adds CLIENT role
+                mergeMap(reset => ClientKeycloakDA.addRolesToTheUser$(userKeycloak.id, ['SATELLITE'])),
+                mapTo(userKeycloak)
+              )
+            })
+          ))          
+        )
+      ),
+      mergeMap(userKeycloak => eventSourcing.eventStore.emitEvent$(
+        new Event({
+          eventType: "ClientAuthCreated",
+          eventTypeVersion: 1,
+          aggregateType: "Client",
+          aggregateId: client._id,
+          data: {
+            userKeycloakId: userKeycloak.id,
+            username: userKeycloak.username
+          },
+          user: authToken.preferred_username
+        })
+      )
+      ),
+      map(() => ({ code: 200, message: `Auth credential of the client with id: ${client._id} has been updated` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
+  /**
+   * Reset client password
+   */
+  resetClientPassword$({ root, args, jwt }, authToken) {
+    const client = {
+      _id: args.id,
+      passwordInput: args.input,
+      modifierUser: authToken.preferred_username,
+      modificationTimestamp: new Date().getTime()
+    };
+
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "resetClientPassword$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+    ).pipe(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe( mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientAuthValidator$(client, authToken, roles, userMongo)))
+      ),
+      mergeMap(() => eventSourcing.eventStore.emitEvent$(
+        new Event({
+          eventType: "ClientAuthPasswordUpdated",
+          eventTypeVersion: 1,
+          aggregateType: "Client",
+          aggregateId: client._id,
+          data: {},
+          user: authToken.preferred_username
+        }))
+      ),
+      map(() => ({ code: 200, message: `Password of the client with id: ${client._id} has been changed` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
+    /**
+   * Removes the client auth
+   */
+  removeClientAuth$({ root, args, jwt }, authToken) {
+    const client = {
+      _id: args.id,
+      modifierUser: authToken.preferred_username,
+      modificationTimestamp: new Date().getTime()
+    };
+
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "removeClientAuth$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+    ).pipe(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe( 
+          mergeMap(userMongo => ClientValidatorHelper.checkClientRemoveClientAuthValidator$(client, authToken, roles, userMongo)),
+          mergeMap(data => ClientKeycloakDA.removeUser$(data.userMongo.auth.userKeycloakId)
+            .pipe(
+              mapTo(data),
+              // If there was an error, check if the user does not exist
+              catchError(error => {
+                return ClientValidatorHelper.checkIfUserWasDeletedOnKeycloak$(userMongo.auth.userKeycloakId);
+              })
+            )
+          ),
+        )
+      ),
+      mergeMap(data => eventSourcing.eventStore.emitEvent$(
+        new Event({
+          eventType: "ClientAuthDeleted",
+          eventTypeVersion: 1,
+          aggregateType: "Client",
+          aggregateId: client._id,
+          data: {
+            userKeycloakId: data.userMongo.auth.userKeycloakId,
+            username: data.userMongo.auth.username
+          },
+          user: authToken.preferred_username
+        })
+      )
+      ),
+      map(() => ({ code: 200, message: `Auth credential of the client with id: ${client._id} has been deleted` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
