@@ -12,7 +12,6 @@ export const ClientClient = gql`
         address
         city
         neighborhood
-        location
         email
       }
       auth {
@@ -42,7 +41,6 @@ export const ClientClients = gql`
         address
         city
         neighborhood
-        location
         email
       }
       auth {
@@ -150,7 +148,6 @@ export const ClientClientUpdatedSubscription = gql`
         address
         city
         neighborhood
-        location
         email
       }
       auth {

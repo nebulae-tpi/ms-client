@@ -56,7 +56,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   PLATFORM_ADMIN = 'PLATFORM-ADMIN';
   productOpstions: string[];
   subscriptions: Subscription[] = [];
-  DEFAULT_LOCATION = { lat: 6.1701312, long: -75.6058417 };
+  DEFAULT_LOCATION = { lat: 6.2231197, long: -75.5798886 };
 
   constructor(
     private clientDetailService: ClientDetailService,
@@ -70,8 +70,6 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    console.log('THIS:CLIENT ===> ', this.client);
     this.initMap(); // initialize the map element
     this.isPlatformAdmin = this.keycloakService.getUserRoles(true).includes(this.PLATFORM_ADMIN);
     this.initObservables();
@@ -197,8 +195,15 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
     const saveControlDiv = document.createElement('div');
     const clearControlDiv = document.createElement('div');
-    this.CreategenericControl(saveControlDiv, divStyle, 'CLICK_TO_SAVE', textStyle, 'SAVE', this.map, this.saveLocation.bind(this));
-    this.CreategenericControl(clearControlDiv, divStyle, 'CLICK_TO_CLEAR', textStyle, 'CLEAR', this.map, this.clearLocation.bind(this));
+
+    this.CreategenericControl(saveControlDiv, divStyle,
+      this.translationLoader.getTranslate().instant('MAP.CLICK_TO_SAVE'), textStyle,
+      this.translationLoader.getTranslate().instant('MAP.SAVE'), this.map, this.saveLocation.bind(this)
+    );
+    this.CreategenericControl(clearControlDiv, divStyle,
+      this.translationLoader.getTranslate().instant('MAP.CLICK_TO_CLEAR'), textStyle,
+      this.translationLoader.getTranslate().instant('MAP.CLEAR'), this.map, this.clearLocation.bind(this)
+    );
 
     saveControlDiv['index'] = 1;
     clearControlDiv['index'] = 2;
@@ -240,7 +245,8 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
       this.translateService.onLangChange
       .pipe(
         map(lang => lang.translations.MARKER.INFOWINDOW),
-        mergeMap(translations => this.updateMarkerInfoWindowContent$(translations) )
+        map(() => this.initMap())
+        // mergeMap(translations => this.updatebuttonLabels$(translations) )
       )
       .subscribe(() => { }, err => console.error(err), () => { })
     );
@@ -264,28 +270,36 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
     );
   }
 
+  // updatebuttonLabels$(translations){
+  //   console.log(this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT]);
+  //   this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].forEach(e => {
+  //     console.log('');
+  //   });
+  //   return of({});
+  // }
+
   // onSelectBusinessEvent(business: any){
   //   this.selectedBusiness = business;
   // }
 
-  updateMarkerInfoWindowContent$(translations: any) {
-    return from(this.markers)
-      .pipe(
-        tap(),
-        map((marker) => ({
-          marker: marker,
-          infoWindowContent: MarkerRefOriginalInfoWindowContent
-            .replace('$$POS_DETAILS$$', translations.POS_DETAILS)
-            .replace('$$POS_ID$$', translations.POS_ID)
-            // .replace('$$BUSINESS_ID$$', translations.BUSISNESS_ID)
-            .replace('$$BUSINESS_NAME$$', translations.BUSINESS_NAME)
-            .replace('$$USER_NAME$$', translations.USER_NAME)
-            .replace('$$LAST_UPDATE$$', translations.LAST_UPDATE)
-            // .replace('{LAST_UPDATE}', this.datePipe.transform(new Date(marker.posPoint.lastUpdate), 'dd-MM-yyyy HH:mm'))
-        })),
-        map(({ marker, infoWindowContent }) => marker.infoWindow.setContent(infoWindowContent))
-      );
-  }
+  // updateMarkerInfoWindowContent$(translations: any) {
+  //   return from(this.markers)
+  //     .pipe(
+  //       tap(),
+  //       map((marker) => ({
+  //         marker: marker,
+  //         infoWindowContent: MarkerRefOriginalInfoWindowContent
+  //           .replace('$$POS_DETAILS$$', translations.POS_DETAILS)
+  //           .replace('$$POS_ID$$', translations.POS_ID)
+  //           // .replace('$$BUSINESS_ID$$', translations.BUSISNESS_ID)
+  //           .replace('$$BUSINESS_NAME$$', translations.BUSINESS_NAME)
+  //           .replace('$$USER_NAME$$', translations.USER_NAME)
+  //           .replace('$$LAST_UPDATE$$', translations.LAST_UPDATE)
+  //           // .replace('{LAST_UPDATE}', this.datePipe.transform(new Date(marker.posPoint.lastUpdate), 'dd-MM-yyyy HH:mm'))
+  //       })),
+  //       map(({ marker, infoWindowContent }) => marker.infoWindow.setContent(infoWindowContent))
+  //     );
+  // }
 
   clearLocation(){
     this.markers.forEach(m => m.setMap(null));

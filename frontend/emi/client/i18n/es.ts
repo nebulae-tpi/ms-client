@@ -1,6 +1,12 @@
 export const locale = {
   lang: 'es',
   data: {
+    MAP: {
+      CLICK_TO_SAVE: 'Click para guadar',
+      SAVE: 'Guardar',
+      CLICK_TO_CLEAR: 'click para cancelar',
+      CLEAR: 'Limpiar'
+    },
     MARKER: {
 
     },

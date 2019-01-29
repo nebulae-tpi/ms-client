@@ -43,8 +43,8 @@
             <client-general-info [pageType]="pageType" [client]="client" *ngIf="pageType">
             </client-general-info>
           </mat-tab>
-          <mat-tab label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
-            <client-auth [client]="client" *ngIf="pageType && pageType == 'edit'"></client-auth>
+          <mat-tab *ngIf="pageType && pageType == 'edit'" label="{{'CLIENT.DETAILS.TABS.CREDENTIALS' | translate}}">
+            <client-auth [client]="client"></client-auth>
           </mat-tab>
 
           <mat-tab *ngIf="pageType && client" label="{{'CLIENT.DETAILS.TABS.LOCATION' | translate}}">
