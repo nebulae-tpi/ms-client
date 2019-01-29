@@ -56,6 +56,23 @@ spec:
         # RESET LOCK INITIALIZE BACKED
         - name: LOCKVERSION
           value: "initial_lock"
+          # KEYCLOAK BACKEND
+        - name: KEYCLOAK_BACKEND_BASE_URL
+          value: "https://tpi-dev.nebulae.com.co/auth"
+        - name: KEYCLOAK_BACKEND_USER
+          valueFrom:
+            secretKeyRef:
+              name: keycloak
+              key: keycloak_backend_user
+        - name: KEYCLOAK_BACKEND_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak
+              key: keycloak_backend_password        
+        - name: KEYCLOAK_BACKEND_CLIENT_ID
+          value: "admin-cli"
+        - name: KEYCLOAK_BACKEND_REALM_NAME
+          value: "TPI"        
         
       volumes:
       - name: google-application-credentials
