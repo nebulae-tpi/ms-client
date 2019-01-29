@@ -18,7 +18,6 @@ import {
 export class ClientDetailService {
 
   lastOperation = null;
-
   client = null;
 
   constructor(private gateway: GatewayService) {
