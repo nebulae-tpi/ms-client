@@ -48,6 +48,8 @@ type ClientGeneralInfo {
   email: String
   "Client neighborhood"
   neighborhood: String
+  "Referrer driver document id"
+  referrerDriverDocumentId: String
 }
 
 input FilterInput {
@@ -96,6 +98,8 @@ input ClientClientGeneralInfoInput {
   email: String!
   "Client neighborhood"
   neighborhood: String
+  "Referrer driver document id"
+  referrerDriverDocumentId: String
 }
 
 # input ClientClientCredentialsInput {

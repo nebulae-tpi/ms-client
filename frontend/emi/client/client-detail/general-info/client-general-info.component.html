@@ -52,10 +52,17 @@
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['email'])">
           {{'CLIENT.EMAIL_REQUIRED' | translate}}
         </mat-error>
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('email', ['email'])">
+          {{'CLIENT.EMAIL_FORMAT' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+        <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
       </mat-form-field>
 
 
-      <div class="mt-16">
+      <div fxFlex="100" class="mt-16">
         <button mat-raised-button *ngIf="pageType === 'new'" (click)="createClient()"
           [disabled]="clientGeneralInfoForm.invalid || clientGeneralInfoForm.pristine">
           {{'CLIENT.CREATE' | translate}}

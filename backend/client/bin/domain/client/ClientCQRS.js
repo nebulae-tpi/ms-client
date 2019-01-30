@@ -166,8 +166,13 @@ class ClientCQRS {
         ClientDA.getClient$(client._id)
         .pipe(
           mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientValidator$(client, authToken, roles, userMongo)),
-          mergeMap(data => ClientKeycloakDA.updateUserGeneralInfo$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data)))
-        )              
+          mergeMap(data => {
+            if(data.userMongo && data.userMongo.auth && data.userMongo.auth.userKeycloakId){
+              return ClientKeycloakDA.updateUserGeneralInfo$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data));
+            }
+            return of(data)
+          })
+          )            
       ),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
@@ -209,7 +214,12 @@ class ClientCQRS {
         .pipe( 
           mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientStateValidator$(client, authToken, roles, userMongo)),
           // Update the state of the user on Keycloak
-          mergeMap(data => ClientKeycloakDA.updateUserState$(data.userMongo.auth.userKeycloakId, data.client.state).pipe(mapTo(data)))
+          mergeMap(data => {
+            if(data.userMongo && data.userMongo.auth && data.userMongo.auth.userKeycloakId){
+              return ClientKeycloakDA.updateUserState$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data));
+            }
+            return of(data)
+          })
         )
       ),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(

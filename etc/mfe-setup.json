@@ -39,8 +39,8 @@
                 "subgroupId": "management",                
                 "icon": "dashboard",
                 "translate": {
-                    "en": "Client",
-                    "es": "Cliente"
+                    "en": "Clients",
+                    "es": "Clientes"
                 },
                 "navURL": "/client",
                 "path": "client",

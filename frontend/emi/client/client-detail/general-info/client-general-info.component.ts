@@ -97,6 +97,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       address: new FormControl(this.client ? (this.client.generalInfo || {}).address : '', [Validators.required]),
       city: new FormControl(this.client ? (this.client.generalInfo || {}).city : '', [Validators.required]),
       neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
+      referrerDriverDocumentId: new FormControl(this.client ? (this.client.generalInfo || {}).referrerDriverDocumentId : ''),
     });
 
     this.clientStateForm = new FormGroup({
@@ -149,7 +150,8 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
             address: this.clientGeneralInfoForm.getRawValue().address,
             city: this.clientGeneralInfoForm.getRawValue().city,
             neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
-            email: this.clientGeneralInfoForm.getRawValue().email
+            email: this.clientGeneralInfoForm.getRawValue().email,
+            referrerDriverDocumentId: this.clientGeneralInfoForm.getRawValue().referrerDriverDocumentId,
           };
           return this.ClientDetailservice.updateClientClientGeneralInfo$(this.client._id, generalInfoinput);
         }),

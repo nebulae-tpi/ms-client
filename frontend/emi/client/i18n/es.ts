@@ -38,7 +38,8 @@ export const locale = {
           CITY: 'Ciudad',
           NEIGHBORHOOD: 'Barrio',
           LOCATION: 'Ubicación',
-          EMAIL: 'Email'
+          EMAIL: 'Email',
+          REFERRER_DRIVER_DOCUMENT_ID: 'Documento identificación referido'
         },
         ENABLED: 'Activo',
         DISABLED: 'Desactivado',
@@ -77,7 +78,8 @@ export const locale = {
       WAIT_OPERATION: 'Operación en proceso, en caso de no recibir respuesta, verificar si los cambios realizados fueron aplicados exitosamente.',
       SELECT_BUSINESS: 'Debe seleccionar una unidad de negocio antes de realizar la creación.',
       ERROR_OPERATION: 'Error realizando operación',
-      RESET_PASSWORD: 'Cambiar contraseña'
+      RESET_PASSWORD: 'Cambiar contraseña',
+      EMAIL_FORMAT: 'Formato de email inválido'
     },
     ERRORS: {
       1: 'Error interno de servidor',

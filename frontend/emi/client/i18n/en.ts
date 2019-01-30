@@ -38,7 +38,8 @@ export const locale = {
           CITY: 'City',
           NEIGHBORHOOD: 'Neighborhood',
           LOCATION: 'Location',
-          EMAIL: 'Email'
+          EMAIL: 'Email',
+          REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id'
         },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',
@@ -77,7 +78,8 @@ export const locale = {
       WAIT_OPERATION: 'Operation in process, in case of not receiving an answer, verify if the changes made were applied successfully.',
       SELECT_BUSINESS: 'You must select a business unit before performing the creation.',
       ERROR_OPERATION: 'Error performing operation',
-      RESET_PASSWORD: 'Change password'
+      RESET_PASSWORD: 'Change password',
+      EMAIL_FORMAT: 'Invalid email format'
     },
     ERRORS: {
       1: 'Internal server error',

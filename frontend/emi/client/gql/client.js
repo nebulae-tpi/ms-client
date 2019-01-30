@@ -13,6 +13,7 @@ export const ClientClient = gql`
         city
         neighborhood
         email
+        referrerDriverDocumentId
       }
       auth {
         userKeycloakId
@@ -42,6 +43,7 @@ export const ClientClients = gql`
         city
         neighborhood
         email
+        referrerDriverDocumentId
       }
       auth {
         userKeycloakId
@@ -149,6 +151,7 @@ export const ClientClientUpdatedSubscription = gql`
         city
         neighborhood
         email
+        referrerDriverDocumentId
       }
       auth {
         userKeycloakId
