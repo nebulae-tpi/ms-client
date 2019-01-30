@@ -94,7 +94,6 @@ describe('MQTT BROKER', function () {
                     return done(new Error(error));
                 },
                 () => {
-                    console.log('asdas')
                     return done();
                 }
             );

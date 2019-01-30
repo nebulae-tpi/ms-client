@@ -34,7 +34,7 @@ module.exports = {
 
     Query: {
         ClientClients(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClients', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClients', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -50,7 +50,7 @@ module.exports = {
             ).toPromise();
         },
         ClientClientsSize(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClientsSize', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClientsSize', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -66,7 +66,7 @@ module.exports = {
             ).toPromise();
         },
         ClientClient(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClient', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClient', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -150,7 +150,6 @@ module.exports = {
             ).toPromise();
         },
         ClientUpdateClientLocation(root, args, context) {
-            console.log(args);
             return RoleValidator.checkPermissions$(
               context.authToken.realm_access.roles,
               "Client",

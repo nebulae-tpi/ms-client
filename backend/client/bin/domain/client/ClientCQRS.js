@@ -120,7 +120,6 @@ class ClientCQRS {
     client.creationTimestamp = new Date().getTime();
     client.modifierUser = authToken.preferred_username;
     client.modificationTimestamp = new Date().getTime();
-    console.log('createClient => ', client);
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",
@@ -166,7 +165,8 @@ class ClientCQRS {
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
         .pipe(
-          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientValidator$(client, authToken, roles, userMongo))
+          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientValidator$(client, authToken, roles, userMongo)),
+          mergeMap(data => ClientKeycloakDA.updateUserGeneralInfo$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data)))
         )              
       ),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
@@ -206,7 +206,11 @@ class ClientCQRS {
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
-        .pipe( mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientStateValidator$(client, authToken, roles, userMongo)))
+        .pipe( 
+          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientStateValidator$(client, authToken, roles, userMongo)),
+          // Update the state of the user on Keycloak
+          mergeMap(data => ClientKeycloakDA.updateUserState$(data.userMongo.auth.userKeycloakId, data.client.state).pipe(mapTo(data)))
+        )
       ),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
@@ -260,7 +264,6 @@ class ClientCQRS {
    * Create the client auth
    */
   createClientAuth$({ root, args, jwt }, authToken) {
-    console.log('createClientAuth');
     const client = {
       _id: args.id,
       authInput: args.input,

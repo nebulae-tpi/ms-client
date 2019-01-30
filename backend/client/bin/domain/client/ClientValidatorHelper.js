@@ -33,11 +33,8 @@ class ClientValidatorHelper {
   static checkClientCreationClientValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles})
     .pipe(
-      tap(data => console.log('000 ', data.client.businessId)),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
-      tap(val => console.log('111')),
       tap(data => { if (!data.client.businessId) this.throwCustomError$(MISSING_BUSINESS_ERROR_CODE)}),
-      tap(val => console.log('222')),
       mergeMap(data => this.checkEmailExistKeycloakOrMongo$(data.client.generalInfo.email).pipe(mapTo(data)))
     );
   }
@@ -84,7 +81,6 @@ class ClientValidatorHelper {
   static checkClientCreateClientAuthValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
-      tap(data => console.log('Data =======> ', data)),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => { if (!data.authInput || !data.authInput.username.trim().match(userNameRegex)) this.throwCustomError$(INVALID_USERNAME_FORMAT_ERROR_CODE)}),
       tap(data => { if (!data.userMongo) this.throwCustomError$(USER_NOT_FOUND_ERROR_CODE)}),
@@ -138,7 +134,7 @@ class ClientValidatorHelper {
 
 
   static checkIfUserIsTheSameUserLogged(user, authToken) {
-    if (user._id == authToken.sub) {
+    if (user && user.auth && user.auth.userKeycloakId == authToken.sub) {
       return this.throwCustomError$(USER_UPDATE_OWN_INFO_ERROR_CODE);
     }
   }

@@ -13,7 +13,7 @@ spec:
         app: client
     spec:      
       containers:
-      - image: nebulaetpi/client.backend.client:0.0.4
+      - image: nebulaetpi/client.backend.client:0.0.5
         name: client
         volumeMounts:
         - name: google-application-credentials
