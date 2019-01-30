@@ -35,7 +35,7 @@ export const locale = {
           NAME: 'Nombre',
           PHONE: 'Teléfono',
           ADDRESS: 'Dirección',
-          CITY: 'Cuidad',
+          CITY: 'Ciudad',
           NEIGHBORHOOD: 'Barrio',
           LOCATION: 'Ubicación',
           EMAIL: 'Email'
@@ -52,7 +52,7 @@ export const locale = {
         NEW_PASSWORD_REQUIRED: 'Nueva contraseña requerida',
         INVALID_USERNAME_FORMAT: 'El nombre de usuario debe contener como mínimo 8 caracteres y solo puede estar compuesto por números, letras, puntos y guiones.',
         INVALID_PASSWORD: 'Contraseña inválida',
-        PASSWORD_CONFIRMATION_REQUIRED: 'COnfirmación de contraseña requerida',
+        PASSWORD_CONFIRMATION_REQUIRED: 'Confirmación de contraseña requerida',
         NOT_EQUIVALENT_PASSWORD: 'La contraseña de verificación no coincide.',
         REMOVE_USER_AUTH: 'Eliminar credenciales de usuario',
         EMAIL_REQUIRED: 'Email requerido',

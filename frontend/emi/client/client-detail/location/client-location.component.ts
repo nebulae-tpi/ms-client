@@ -12,8 +12,8 @@ import { MatSnackBar } from '@angular/material';
 import { MapRef } from './entities/agmMapRef';
 // import { MarkerCluster } from './entities/markerCluster';
 import { MarkerRef, ClientPoint, MarkerRefOriginalInfoWindowContent } from './entities/markerRef';
-import { of, concat, from, forkJoin, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, startWith, tap, map, mergeMap, toArray, filter, mapTo, defaultIfEmpty } from 'rxjs/operators';
+import { of, concat, from, forkJoin, Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, startWith, tap, map, mergeMap, toArray, filter, mapTo, defaultIfEmpty, takeUntil } from 'rxjs/operators';
 import { ClientDetailService } from '../client-detail.service';
 
 @Component({
@@ -24,6 +24,9 @@ import { ClientDetailService } from '../client-detail.service';
   animations: fuseAnimations,
 })
 export class ClientLocationComponent implements OnInit, OnDestroy {
+  // Subject to unsubscribe
+  private ngUnsubscribe = new Subject();
+
   isPlatformAdmin = false;
   filterForm: FormGroup = new FormGroup({
     businessId: new FormControl(),
@@ -55,7 +58,6 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   businessVsProducts: any[];
   PLATFORM_ADMIN = 'PLATFORM-ADMIN';
   productOpstions: string[];
-  subscriptions: Subscription[] = [];
   DEFAULT_LOCATION = { lat: 6.2231197, long: -75.5798886 };
 
   constructor(
@@ -141,7 +143,8 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   initMap() {
@@ -168,7 +171,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
     of(this.client.location)
       .pipe(
-        tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
+        // tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
         map(cl => cl != null ? ({ lat: cl.lat, long: cl.lng }) : this.DEFAULT_LOCATION),
         map(latLng => {
           this.map = new MapRef(this.gmapElement.nativeElement, {
@@ -185,9 +188,10 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
             coordinates: { ...coordinates }
           }
         }])
-        )
+        ),
+        takeUntil(this.ngUnsubscribe)
       )
-      .subscribe(o => console.log(o), e => console.log(e), () => console.log('COMPLETED!!! ', this.map));
+      .subscribe(o => {}, e => console.log(e), () => console.log('COMPLETED!!! ', this.map));
 
 
 
@@ -217,7 +221,11 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
    */
   addMarkerToMap(marker: MarkerRef) {
     marker.inizialiteEvents();
-    marker.clickEvent.subscribe(event => {
+    marker.clickEvent
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+    .subscribe(event => {
       this.onMarkerClick(marker, event);
     });
     this.markers.push(marker);
@@ -241,17 +249,15 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
   initObservables(){
 
-    this.subscriptions.push(
       this.translateService.onLangChange
       .pipe(
         map(lang => lang.translations.MARKER.INFOWINDOW),
-        map(() => this.initMap())
-        // mergeMap(translations => this.updatebuttonLabels$(translations) )
+        map(() => this.initMap()),
+        takeUntil(this.ngUnsubscribe)
       )
-      .subscribe(() => { }, err => console.error(err), () => { })
-    );
+      .subscribe(() => { }, err => console.error(err), () => { });
 
-    this.subscriptions.push(
+
       this.map.clickEvent
         .pipe(
           filter(() => this.markers.length === 0 ),
@@ -264,10 +270,10 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
                 }
               }
             }]
-          ))
+          )),
+          takeUntil(this.ngUnsubscribe)
         )
-      .subscribe()
-    );
+      .subscribe();
   }
 
   // updatebuttonLabels$(translations){
@@ -310,11 +316,10 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
     return of(this.markers)
     .pipe(
       map(() => (this.markers && this.markers[0]) ? this.markers[0] : null  ),
-      tap(r => console.log('MARCADOR QUE PASA', r) ),
       map((marker: MarkerRef | any)  =>  marker != null ? ({ lat: marker.getPosition().lat(), lng: marker.getPosition().lng() }) : null),
 
-      mergeMap( coordinates => this.clientDetailService.updateClientLocation$(this.client._id, coordinates ) )
-
+      mergeMap( coordinates => this.clientDetailService.updateClientLocation$(this.client._id, coordinates ) ),
+      takeUntil(this.ngUnsubscribe)
     )
     .subscribe();
   }
