@@ -118,7 +118,7 @@ class GraphQlService {
    return of(msg).pipe(mergeMap(
     ({ response, correlationId, replyTo }) =>
       replyTo
-        ? broker.send$(replyTo, "emi-gateway.graphql.Query.response", response, {
+        ? broker.send$(replyTo, "emigateway.graphql.Query.response", response, {
             correlationId
           })
         : of(undefined)
@@ -147,43 +147,43 @@ class GraphQlService {
     return [
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.query.ClientClients"
+        messageType: "emigateway.graphql.query.ClientClients"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.query.ClientClientsSize"
+        messageType: "emigateway.graphql.query.ClientClientsSize"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.query.ClientClient"
+        messageType: "emigateway.graphql.query.ClientClient"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientCreateClient"
+        messageType: "emigateway.graphql.mutation.ClientCreateClient"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientUpdateClientGeneralInfo"
+        messageType: "emigateway.graphql.mutation.ClientUpdateClientGeneralInfo"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientUpdateClientState"
+        messageType: "emigateway.graphql.mutation.ClientUpdateClientState"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientCreateClientAuth"
+        messageType: "emigateway.graphql.mutation.ClientCreateClientAuth"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientRemoveClientAuth"
+        messageType: "emigateway.graphql.mutation.ClientRemoveClientAuth"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.ClientResetClientPassword"
+        messageType: "emigateway.graphql.mutation.ClientResetClientPassword"
       },
       {
         aggregateType: "Client",
-        messageType: "emi-gateway.graphql.mutation.clientUpdateClientLocation"
+        messageType: "emigateway.graphql.mutation.clientUpdateClientLocation"
       },
     ];
   }
@@ -194,43 +194,43 @@ class GraphQlService {
    */
   generateFunctionMap() {    
     return {
-      "emi-gateway.graphql.query.ClientClients": {
+      "emigateway.graphql.query.ClientClients": {
         fn: ClientCQRS.getClientList$,
         obj: ClientCQRS
       },
-      "emi-gateway.graphql.query.ClientClientsSize": {
+      "emigateway.graphql.query.ClientClientsSize": {
         fn: ClientCQRS.getClientListSize$,
         obj: ClientCQRS
       },
-      "emi-gateway.graphql.query.ClientClient": {
+      "emigateway.graphql.query.ClientClient": {
         fn: ClientCQRS.getClient$,
         obj: ClientCQRS
       },
-      "emi-gateway.graphql.mutation.ClientCreateClient": {
+      "emigateway.graphql.mutation.ClientCreateClient": {
         fn: ClientCQRS.createClient$,
         obj: ClientCQRS
       }, 
-      "emi-gateway.graphql.mutation.ClientUpdateClientGeneralInfo": {
+      "emigateway.graphql.mutation.ClientUpdateClientGeneralInfo": {
         fn: ClientCQRS.updateClientGeneralInfo$,
         obj: ClientCQRS
       },
-      "emi-gateway.graphql.mutation.ClientUpdateClientState": {
+      "emigateway.graphql.mutation.ClientUpdateClientState": {
         fn: ClientCQRS.updateClientState$,
         obj: ClientCQRS
       },
-      'emi-gateway.graphql.mutation.ClientCreateClientAuth': {
+      'emigateway.graphql.mutation.ClientCreateClientAuth': {
         fn: ClientCQRS.createClientAuth$,
         obj: ClientCQRS
       },
-      'emi-gateway.graphql.mutation.ClientRemoveClientAuth': {
+      'emigateway.graphql.mutation.ClientRemoveClientAuth': {
         fn: ClientCQRS.removeClientAuth$,
         obj: ClientCQRS
       },
-      'emi-gateway.graphql.mutation.ClientResetClientPassword': {
+      'emigateway.graphql.mutation.ClientResetClientPassword': {
         fn: ClientCQRS.resetClientPassword$,
         obj: ClientCQRS
       },
-      "emi-gateway.graphql.mutation.clientUpdateClientLocation": {
+      "emigateway.graphql.mutation.clientUpdateClientLocation": {
         fn: ClientCQRS.updateClientLocation$,
         obj: ClientCQRS
       }

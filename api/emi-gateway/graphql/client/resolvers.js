@@ -40,7 +40,7 @@ module.exports = {
                     broker
                     .forwardAndGetReply$(
                         "Client",
-                        "emi-gateway.graphql.query.ClientClients",
+                        "emigateway.graphql.query.ClientClients",
                         { root, args, jwt: context.encodedToken },
                         2000
                     )
@@ -56,7 +56,7 @@ module.exports = {
                     broker
                     .forwardAndGetReply$(
                         "Client",
-                        "emi-gateway.graphql.query.ClientClientsSize",
+                        "emigateway.graphql.query.ClientClientsSize",
                         { root, args, jwt: context.encodedToken },
                         2000
                     )
@@ -72,7 +72,7 @@ module.exports = {
                     broker
                     .forwardAndGetReply$(
                         "Client",
-                        "emi-gateway.graphql.query.ClientClient",
+                        "emigateway.graphql.query.ClientClient",
                         { root, args, jwt: context.encodedToken },
                         2000
                     )
@@ -98,7 +98,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientCreateClient",
+                    "emigateway.graphql.mutation.ClientCreateClient",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -119,7 +119,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientUpdateClientGeneralInfo",
+                    "emigateway.graphql.mutation.ClientUpdateClientGeneralInfo",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -140,7 +140,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientUpdateClientState",
+                    "emigateway.graphql.mutation.ClientUpdateClientState",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -161,7 +161,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.clientUpdateClientLocation",
+                    "emigateway.graphql.mutation.clientUpdateClientLocation",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -183,7 +183,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientCreateClientAuth",
+                    "emigateway.graphql.mutation.ClientCreateClientAuth",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -206,7 +206,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientResetClientPassword",
+                    "emigateway.graphql.mutation.ClientResetClientPassword",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
@@ -229,7 +229,7 @@ module.exports = {
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
                     "Client",
-                    "emi-gateway.graphql.mutation.ClientRemoveClientAuth",
+                    "emigateway.graphql.mutation.ClientRemoveClientAuth",
                     { root, args, jwt: context.encodedToken },
                     2000
                   )
