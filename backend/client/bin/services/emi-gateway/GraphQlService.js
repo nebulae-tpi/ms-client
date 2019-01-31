@@ -238,6 +238,7 @@ class GraphQlService {
   }
 }
 
+
 /**
  * @returns {GraphQlService}
  */
