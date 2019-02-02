@@ -33,7 +33,7 @@ export const ClientClient = gql`
 `;
 
 export const ClientClients = gql`
-  query ClientClients($filterInput: FilterInput!, $paginationInput: PaginationInput!) {
+  query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: PaginationInput!) {
     ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
       _id
       generalInfo {
@@ -59,7 +59,7 @@ export const ClientClients = gql`
 `;
 
 export const ClientClientsSize = gql`
-  query ClientClientsSize($filterInput: FilterInput!) {
+  query ClientClientsSize($filterInput: ClientClientFilterInput!) {
     ClientClientsSize(filterInput: $filterInput)
   }
 `;

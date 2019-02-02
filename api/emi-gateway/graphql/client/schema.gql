@@ -52,7 +52,7 @@ type ClientGeneralInfo {
   referrerDriverDocumentId: String
 }
 
-input FilterInput {
+input ClientClientFilterInput {
   "ID of the business"
   businessId: String
   "Name"
@@ -140,9 +140,9 @@ input ClientAuthInput {
 
 type Query {
   "Get Clients filtered "
-  ClientClients(filterInput: FilterInput!, paginationInput: PaginationInput!): [ClientClient]
+  ClientClients(filterInput: ClientClientFilterInput!, paginationInput: PaginationInput!): [ClientClient]
   "Get the amount of Clients filtered "
-  ClientClientsSize(filterInput: FilterInput!): Int!
+  ClientClientsSize(filterInput: ClientClientFilterInput!): Int!
   "Get Client by its id"
   ClientClient(id: String!): ClientClient
 }
