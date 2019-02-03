@@ -67,7 +67,7 @@ input ClientClientFilterInput {
   creationTimestamp: BigInt
 }
 
-input PaginationInput {
+input ClientClientPaginationInput {
   "Page"
   page: Int!
   "Count"
@@ -140,7 +140,7 @@ input ClientAuthInput {
 
 type Query {
   "Get Clients filtered "
-  ClientClients(filterInput: ClientClientFilterInput!, paginationInput: PaginationInput!): [ClientClient]
+  ClientClients(filterInput: ClientClientFilterInput!, paginationInput: ClientClientPaginationInput!): [ClientClient]
   "Get the amount of Clients filtered "
   ClientClientsSize(filterInput: ClientClientFilterInput!): Int!
   "Get Client by its id"

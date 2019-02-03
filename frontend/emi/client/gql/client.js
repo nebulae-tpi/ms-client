@@ -33,7 +33,7 @@ export const ClientClient = gql`
 `;
 
 export const ClientClients = gql`
-  query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: PaginationInput!) {
+  query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: ClientClientPaginationInput!) {
     ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
       _id
       generalInfo {
