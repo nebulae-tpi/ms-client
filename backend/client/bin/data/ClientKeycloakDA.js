@@ -92,6 +92,7 @@ class ClientKeycloakDA {
   static createUser$(user, authInput) { 
     const attributes = {};
     attributes["businessId"] = user.businessId;
+    attributes["clientId"] = user._id;
     
 
     const userKeycloak = {
