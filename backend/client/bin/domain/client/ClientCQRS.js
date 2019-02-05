@@ -168,11 +168,14 @@ class ClientCQRS {
           mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientValidator$(client, authToken, roles, userMongo)),
           mergeMap(data => {
             if(data.userMongo && data.userMongo.auth && data.userMongo.auth.userKeycloakId){
-              return ClientKeycloakDA.updateUserGeneralInfo$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data));
+              return ClientKeycloakDA.updateUserGeneralInfo$(data.userMongo.auth.userKeycloakId, data.client.generalInfo)
+              .pipe(
+                mapTo(data)
+              );
             }
             return of(data)
           })
-          )            
+        )            
       ),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({

@@ -5,6 +5,8 @@ const { tap, mergeMap, catchError, map, mapTo } = require('rxjs/operators');
 const broker = require("../../tools/broker/BrokerFactory")();
 const ClientDA = require('../../data/ClientDA');
 const MATERIALIZED_VIEW_TOPIC = "emi-gateway-materialized-view-updates";
+const eventSourcing = require("../../tools/EventSourcing")();
+const Event = require("@nebulae/event-store").Event;
 
 /**
  * Singleton instance
@@ -25,7 +27,8 @@ class ClientES {
         const client = clientCreatedEvent.data;
         return ClientDA.createClient$(client)
         .pipe(
-            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result.ops[0]))
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result.ops[0]).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
     }
 
@@ -37,7 +40,8 @@ class ClientES {
         const clientGeneralInfo = clientGeneralInfoUpdatedEvent.data;
         return ClientDA.updateClientGeneralInfo$(clientGeneralInfoUpdatedEvent.aid, clientGeneralInfo)
         .pipe(
-            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result))
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
     }
 
@@ -55,8 +59,24 @@ class ClientES {
     handleClientLocationUpdated$(clientLocationUpdatedEvt){
         return ClientDA.updateClientLocation$(clientLocationUpdatedEvt.aid, clientLocationUpdatedEvt.data)
         .pipe(
-            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result))
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
+    }
+
+    emitClientSatelliteEvent$(client){
+        const userData = {
+            ...client
+        };
+        return eventSourcing.eventStore.emitEvent$(
+            new Event({
+            eventType: "ClientSatelliteEnabled",
+            eventTypeVersion: 1,
+            aggregateType: "Client",
+            aggregateId: client._id,
+            data: userData,
+            user: 'SYSTEM'
+        }))
     }
 
           /**
