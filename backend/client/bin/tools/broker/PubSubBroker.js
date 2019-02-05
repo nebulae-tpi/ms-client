@@ -117,6 +117,7 @@ class PubSubBroker {
             Rx.from(topics).pipe(
                 filter(topicName => Object.keys(this.listeningTopics).indexOf(topicName) === -1),
                 mergeMap(topicName => {
+                    
                     const subscriptionName = `${topicName}_client`;
                     return this.getSubscription$(topicName, subscriptionName).pipe(
                         map(subsription => {
