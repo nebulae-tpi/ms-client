@@ -97,6 +97,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       address: new FormControl(this.client ? (this.client.generalInfo || {}).address : '', [Validators.required]),
       city: new FormControl(this.client ? (this.client.generalInfo || {}).city : '', [Validators.required]),
       neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
+      zone: new FormControl(this.client ? (this.client.generalInfo || {}).zone : '', [Validators.required]),
       referrerDriverDocumentId: new FormControl(this.client ? (this.client.generalInfo || {}).referrerDriverDocumentId : ''),
     });
 
@@ -150,6 +151,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
             address: this.clientGeneralInfoForm.getRawValue().address,
             city: this.clientGeneralInfoForm.getRawValue().city,
             neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
+            zone: this.clientGeneralInfoForm.getRawValue().zone,
             email: this.clientGeneralInfoForm.getRawValue().email,
             referrerDriverDocumentId: this.clientGeneralInfoForm.getRawValue().referrerDriverDocumentId,
           };

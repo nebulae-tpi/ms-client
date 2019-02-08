@@ -12,6 +12,7 @@ export const ClientClient = gql`
         address
         city
         neighborhood
+        zone
         email
         referrerDriverDocumentId
       }
@@ -42,6 +43,7 @@ export const ClientClients = gql`
         address
         city
         neighborhood
+        zone
         email
         referrerDriverDocumentId
       }
@@ -150,6 +152,7 @@ export const ClientClientUpdatedSubscription = gql`
         address
         city
         neighborhood
+        zone
         email
         referrerDriverDocumentId
       }

@@ -52,7 +52,8 @@ class ClientES {
     handleClientStateUpdated$(ClientStateUpdatedEvent) {          
         return ClientDA.updateClientState$(ClientStateUpdatedEvent.aid, ClientStateUpdatedEvent.data)
         .pipe(
-            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result))
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result)),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
     }
 
@@ -64,22 +65,7 @@ class ClientES {
         );
     }
 
-    emitClientSatelliteEvent$(client){
-        const userData = {
-            ...client
-        };
-        return eventSourcing.eventStore.emitEvent$(
-            new Event({
-            eventType: "ClientSatelliteEnabled",
-            eventTypeVersion: 1,
-            aggregateType: "Client",
-            aggregateId: client._id,
-            data: userData,
-            user: 'SYSTEM'
-        }))
-    }
-
-          /**
+    /**
      * updates the user state on the materialized view according to the received data from the event store.
      * @param {*} clientAuthCreatedEvent events that indicates the new state of the user
      */
@@ -89,13 +75,8 @@ class ClientES {
             clientAuthCreatedEvent.data
         )
         .pipe(
-            mergeMap(result => {
-                return broker.send$(
-                    MATERIALIZED_VIEW_TOPIC,
-                    `ClientClientUpdatedSubscription`,
-                    result
-                );
-            })
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
     }
 
@@ -109,14 +90,25 @@ class ClientES {
             clientAuthDeletedEvent.data
         )
         .pipe(
-            mergeMap(result => {
-                return broker.send$(
-                    MATERIALIZED_VIEW_TOPIC,
-                    `ClientClientUpdatedSubscription`,
-                    result
-                );
-            })
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
         );
+    }
+
+    emitClientSatelliteEvent$(client){
+        const userData = {
+            ...client
+        };
+
+        return eventSourcing.eventStore.emitEvent$(
+            new Event({
+            eventType: "ClientSatelliteEnabled",
+            eventTypeVersion: 1,
+            aggregateType: "Client",
+            aggregateId: client._id,
+            data: userData,
+            user: 'SYSTEM'
+        }))
     }
 
 }

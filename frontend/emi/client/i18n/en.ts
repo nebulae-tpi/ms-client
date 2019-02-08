@@ -37,6 +37,7 @@ export const locale = {
           ADDRESS: 'Address',
           CITY: 'City',
           NEIGHBORHOOD: 'Neighborhood',
+          ZONE: 'Zone',
           LOCATION: 'Location',
           EMAIL: 'Email',
           REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id'
@@ -62,6 +63,7 @@ export const locale = {
         ADDRESS_REQUIRED: 'Required address',
         PHONE_REQUIRED: 'Required phone',
         NAME_REQUIRED: 'Required name',
+        ZONE_REQUIRED: 'Required zone',
       },
       ACTIVE: 'Active',
       CREATE: 'Create',

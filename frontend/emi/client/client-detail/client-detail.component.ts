@@ -85,7 +85,7 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe)
     )
     .subscribe((client: any) => {
-      this.client = client;
+      this.client = JSON.parse(JSON.stringify(client));
       this.pageType = (client && client._id) ? 'edit' : 'new'
     }, e => console.log(e));
   }

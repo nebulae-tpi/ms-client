@@ -37,6 +37,7 @@ export const locale = {
           ADDRESS: 'Dirección',
           CITY: 'Ciudad',
           NEIGHBORHOOD: 'Barrio',
+          ZONE: 'Zona',
           LOCATION: 'Ubicación',
           EMAIL: 'Email',
           REFERRER_DRIVER_DOCUMENT_ID: 'Documento identificación referido'
@@ -57,6 +58,7 @@ export const locale = {
         NOT_EQUIVALENT_PASSWORD: 'La contraseña de verificación no coincide.',
         REMOVE_USER_AUTH: 'Eliminar credenciales de usuario',
         EMAIL_REQUIRED: 'Email requerido',
+        ZONE_REQUIRED: 'Zona requerida',
       },
       NEIGHBORHOOD_REQUIRED: 'Barrio requerido',
       CITY_REQUIRED: 'Ciudad requerida',
