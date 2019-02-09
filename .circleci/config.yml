@@ -227,7 +227,7 @@ workflows:
             - build-frontend
             - build-api
             - build-backend
-      -hold:
+      - hold:
           type: approval
       - build-frontend:
           context: TPI_PROD
