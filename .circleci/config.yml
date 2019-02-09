@@ -240,12 +240,14 @@ workflows:
           name: build-api-prod
           requires:
             - prepare
+            - hold
       - build-backend:
           context: TPI_PROD
           name: build-backend-prod
           requires:
             - prepare
             - build-mbinit      
+            - hold
       - deploy-prod:
           context: TPI_PROD
           mame: deploy-prod-prod
