@@ -250,7 +250,7 @@ workflows:
             - hold
       - deploy-prod:
           context: TPI_PROD
-          mame: deploy-prod-prod
+          name: deploy-prod-prod
           requires:
             - build-frontend-prod
             - build-api-prod
