@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material';
 import { MapRef } from './entities/agmMapRef';
 // import { MarkerCluster } from './entities/markerCluster';
 import { MarkerRef, ClientPoint, MarkerRefOriginalInfoWindowContent } from './entities/markerRef';
-import { of, concat, from, forkJoin, Observable, Subject } from 'rxjs';
+import { of, concat, from, forkJoin, Observable, Subject, defer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, tap, map, mergeMap, toArray, filter, mapTo, defaultIfEmpty, takeUntil } from 'rxjs/operators';
 import { ClientDetailService } from '../client-detail.service';
 
@@ -58,7 +58,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   businessVsProducts: any[];
   PLATFORM_ADMIN = 'PLATFORM-ADMIN';
   productOpstions: string[];
-  DEFAULT_LOCATION = { lat: 6.2231197, long: -75.5798886 };
+  DEFAULT_LOCATION = { lat: 3.4240684, long: -76.5359473 };
 
   constructor(
     private clientDetailService: ClientDetailService,
@@ -74,7 +74,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initMap(); // initialize the map element
     this.isPlatformAdmin = this.keycloakService.getUserRoles(true).includes(this.PLATFORM_ADMIN);
-    this.initObservables();
+
 
     // concat(
     //   // update the [isPLATFORM-ADMIN] variable
@@ -171,9 +171,13 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
     of(this.client.location)
       .pipe(
-        // tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
-        map(cl => cl != null ? ({ lat: cl.lat, long: cl.lng }) : this.DEFAULT_LOCATION),
-        map(latLng => {
+        tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
+        mergeMap(cl =>  cl != null
+            ? of({ lat: cl.lat, long: cl.lng })
+            : defer(() => this.requestBrowserLocation$())
+        ),
+        tap(r => console.log('RESULTADO DE LA RESPUESTA  DEL COORDS ', r)),
+        map( (latLng: any) => {
           this.map = new MapRef(this.gmapElement.nativeElement, {
             center: new google.maps.LatLng(latLng.lat, latLng.long),
             zoom: 15,
@@ -191,28 +195,31 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
         ),
         takeUntil(this.ngUnsubscribe)
       )
-      .subscribe(o => {}, e => console.log(e), () => console.log('COMPLETED!!! ', this.map));
+      .subscribe(o => {
+
+        this.initObservables();
+
+        const saveControlDiv = document.createElement('div');
+        const clearControlDiv = document.createElement('div');
+
+        this.CreategenericControl(saveControlDiv, divStyle,
+          this.translationLoader.getTranslate().instant('MAP.CLICK_TO_SAVE'), textStyle,
+          this.translationLoader.getTranslate().instant('MAP.SAVE'), this.map, this.saveLocation.bind(this)
+        );
+        this.CreategenericControl(clearControlDiv, divStyle,
+          this.translationLoader.getTranslate().instant('MAP.CLICK_TO_CLEAR'), textStyle,
+          this.translationLoader.getTranslate().instant('MAP.CLEAR'), this.map, this.clearLocation.bind(this)
+        );
+
+        saveControlDiv['index'] = 1;
+        clearControlDiv['index'] = 2;
+        this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(saveControlDiv);
+        this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(clearControlDiv);
 
 
+      },
+      e => console.log(e), () => console.log('COMPLETED!!! ', this.map));
 
-
-
-    const saveControlDiv = document.createElement('div');
-    const clearControlDiv = document.createElement('div');
-
-    this.CreategenericControl(saveControlDiv, divStyle,
-      this.translationLoader.getTranslate().instant('MAP.CLICK_TO_SAVE'), textStyle,
-      this.translationLoader.getTranslate().instant('MAP.SAVE'), this.map, this.saveLocation.bind(this)
-    );
-    this.CreategenericControl(clearControlDiv, divStyle,
-      this.translationLoader.getTranslate().instant('MAP.CLICK_TO_CLEAR'), textStyle,
-      this.translationLoader.getTranslate().instant('MAP.CLEAR'), this.map, this.clearLocation.bind(this)
-    );
-
-    saveControlDiv['index'] = 1;
-    clearControlDiv['index'] = 2;
-    this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(saveControlDiv);
-    this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(clearControlDiv);
   }
 
    /**
@@ -274,6 +281,38 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
           takeUntil(this.ngUnsubscribe)
         )
       .subscribe();
+  }
+
+  requestBrowserLocation$() {
+    return new Promise((resolve, reject) => {
+      if (window.navigator && window.navigator.geolocation) {
+
+        window.navigator.geolocation.getCurrentPosition(
+          position => {
+            console.log(position);
+            resolve({ lat: position.coords.latitude, long: position.coords.longitude });
+          },
+          error => {
+            switch (error.code) {
+              case 1:
+                console.log('Permission Denied');
+                break;
+              case 2:
+                console.log('Position Unavailable');
+                break;
+              case 3:
+                console.log('Timeout');
+                break;
+            }
+            resolve(this.DEFAULT_LOCATION);
+          }
+        );
+      }
+    });
+
+
+    // };
+
   }
 
   // updatebuttonLabels$(translations){
