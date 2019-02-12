@@ -118,9 +118,14 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       mergeMap(selectedBusiness => {
         return this.showConfirmationDialog$("CLIENT.CREATE_MESSAGE", "CLIENT.CREATE_TITLE")
         .pipe(
-          mergeMap(ok => {
+          map(() => this.clientGeneralInfoForm.getRawValue()),
+          map(generalInfoRawValue => ({
+            ...generalInfoRawValue,
+            name: generalInfoRawValue.name.toUpperCase()
+          })),
+          mergeMap(generalInfoData => {
             this.client = {
-              generalInfo: this.clientGeneralInfoForm.getRawValue(),
+              generalInfo: generalInfoData,
               state: this.clientStateForm.getRawValue().state,
               businessId: selectedBusiness.id
             };
@@ -146,7 +151,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       .pipe(
         mergeMap(ok => {
           const generalInfoinput = {
-            name: this.clientGeneralInfoForm.getRawValue().name,
+            name: this.clientGeneralInfoForm.getRawValue().name.toUpperCase(),
             phone: this.clientGeneralInfoForm.getRawValue().phone,
             address: this.clientGeneralInfoForm.getRawValue().address,
             city: this.clientGeneralInfoForm.getRawValue().city,
@@ -175,9 +180,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   onClientStateChange() {
     this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
       .pipe(
-        mergeMap(ok => {
-          return this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state);
-        }),
+        mergeMap(ok => this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state)),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
         filter((resp: any) => !resp.errors || resp.errors.length === 0),
         takeUntil(this.ngUnsubscribe)
@@ -229,7 +232,6 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
    */
   showSnackBarError(response) {
     if (response.errors) {
-
       if (Array.isArray(response.errors)) {
         response.errors.forEach(error => {
           if (Array.isArray(error)) {
