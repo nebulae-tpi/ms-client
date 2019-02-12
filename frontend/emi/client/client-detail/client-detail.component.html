@@ -47,6 +47,10 @@
             <client-auth [client]="client"></client-auth>
           </mat-tab>
 
+          <mat-tab *ngIf="pageType && pageType == 'edit'" label="{{'CLIENT.DETAILS.TABS.SATELLITE' | translate}}">
+            <client-satellite [client]="client"></client-satellite>
+          </mat-tab>
+
           <mat-tab *ngIf="pageType && client" label="{{'CLIENT.DETAILS.TABS.LOCATION' | translate}}">
             <client-location [client]="client"  ngClass="small-map-content large-map-content" class="mat-elevation-z4"
               *ngIf="pageType && pageType == 'edit'"

@@ -139,6 +139,32 @@ class ClientKeycloakDA {
     );
   }
 
+      /**
+   * Updates the user info on Keycloak
+   * @param {*} userKeycloakId User ID
+   * @param {*} satelliteInfo info to change on the user
+   */
+  static updateUserSatelliteInfo$(userKeycloakId, generalInfo) {
+    //const attributes = {};
+    //attributes["businessId"] = user.businessId;
+
+    const userKeycloak = {
+      id: userKeycloakId,
+      //username: user.auth.username,
+      firstName: generalInfo.name,
+      lastName: generalInfo.lastname,
+      //attributes: attributes,
+      email: generalInfo.email
+    };
+
+    return defer(() =>
+      KeycloakDA.keycloakClient.users.update(
+        process.env.KEYCLOAK_BACKEND_REALM_NAME,
+        userKeycloak
+      )
+    );
+  }
+
     /**
    * Updates the state of the user on Keycloak
    * @param {*} userKeycloakId User keycloak ID

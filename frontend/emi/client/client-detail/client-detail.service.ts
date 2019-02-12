@@ -5,6 +5,7 @@ import { GatewayService } from '../../../../api/gateway.service';
 import {
   ClientCreateClient,
   ClientUpdateClientGeneralInfo,
+  ClientUpdateClientSatelliteInfo,
   ClientUpdateClientState,
   ClientClient,
   ClientClientUpdatedSubscription,
@@ -86,6 +87,23 @@ export class ClientDetailService {
           variables: {
             id: id,
             input: clientGeneralInfo
+          },
+          errorPolicy: 'all'
+        });
+      })
+    );
+  }
+
+  updateClientClientSatelliteInfo$(id: String, clientClientSatelliteInfo: any) {
+    return this.updateOperation$(clientClientSatelliteInfo)
+    .pipe(
+      mergeMap(() => {
+        return this.gateway.apollo
+        .mutate<any>({
+          mutation: ClientUpdateClientSatelliteInfo,
+          variables: {
+            id: id,
+            input: clientClientSatelliteInfo
           },
           errorPolicy: 'all'
         });

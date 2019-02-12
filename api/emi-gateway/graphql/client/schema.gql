@@ -10,6 +10,8 @@ type ClientClient {
   _id: ID!
   "User general info"
   generalInfo: ClientGeneralInfo
+  "User satellite info"
+  satelliteInfo: ClientClientSatellite
   "Client location"
   location: ClientClientLocation
   "Client state"
@@ -40,8 +42,10 @@ type ClientGeneralInfo {
   name: String!
   "Client phone"
   phone: BigInt
-  "Client address"
-  address: String
+  "Client address 1"
+  addressLine1: String!
+  "Client address 2"
+  addressLine2: String
   "Client city"
   city: String
   "Client email"
@@ -50,8 +54,21 @@ type ClientGeneralInfo {
   neighborhood: String
   "Client zone."
   zone: String
+  "Location notes"
+  notes: String
+}
+
+type ClientClientSatellite {
   "Referrer driver document id"
-  referrerDriverDocumentId: String
+  referrerDriverDocumentId: String!,
+  "Tipping type"
+  tipType: String
+  "Tip given to the client. Eg. satellites"
+  tip: Int
+  "Minimum broadcasting radius"
+  offerMinDistance: Int
+  "Maximum broadcasting radius"
+  offerMaxDistance: Int
 }
 
 input ClientClientFilterInput {
@@ -92,8 +109,10 @@ input ClientClientGeneralInfoInput {
   name: String!,
   "Client phone"
   phone: BigInt
-  "Client address"
-  address: String
+  "Client address 1"
+  addressLine1: String
+  "Client address 2"
+  addressLine2: String
   "Client city"
   city: String
   "Client email"
@@ -102,8 +121,21 @@ input ClientClientGeneralInfoInput {
   neighborhood: String
   "Client zone"
   zone: String
+  "Location notes"
+  notes: String
+}
+
+input ClientClientSatelliteInfoInput {
   "Referrer driver document id"
-  referrerDriverDocumentId: String
+  referrerDriverDocumentId: String,
+  "Tipping type"
+  tipType: String!
+  "Tip given to the client. Eg. satellites"
+  tip: Int!
+  "custom offer min distance in radious"
+  offerMinDistance: Int
+  "custom offer max distance in radious"
+  offerMaxDistance: Int
 }
 
 # input ClientClientCredentialsInput {
@@ -156,6 +188,8 @@ type Mutation {
   ClientCreateClient(input: ClientClientInput!): CommandResponse
   "Update the Client generalInfo"
   ClientUpdateClientGeneralInfo(id:ID!, input: ClientClientGeneralInfoInput!): CommandResponse
+  "Update the Client generalInfo"
+  ClientUpdateClientSatelliteInfo(id:ID!, input: ClientClientSatelliteInfoInput!): CommandResponse
   "Update the client location"
   ClientUpdateClientLocation(id:ID!, input: ClientClientLocationInput): CommandResponse
   "Creates auth for the client"

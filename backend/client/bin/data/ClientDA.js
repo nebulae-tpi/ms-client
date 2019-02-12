@@ -61,7 +61,7 @@ class ClientDA {
     }
 
     if (filter.creationTimestamp) {
-      query.creationTimestamp = filter.creationTimestamp;
+      query.creationTimestamp = {$gte: filter.creationTimestamp};
     }
 
     if (filter.creatorUser) {
@@ -96,7 +96,7 @@ class ClientDA {
     }
 
     if (filter.creationTimestamp) {
-      query.creationTimestamp = filter.creationTimestamp;
+      query.creationTimestamp = {$gte: filter.creationTimestamp};
     }
 
     if (filter.creatorUser) {
@@ -132,6 +132,28 @@ class ClientDA {
           { _id: id },
           {
             $set: {generalInfo: ClientGeneralInfo.generalInfo, modifierUser: ClientGeneralInfo.modifierUser, modificationTimestamp: ClientGeneralInfo.modificationTimestamp}
+          },{
+            returnOriginal: false
+          }
+        )
+    ).pipe(
+      map(result => result && result.value ? result.value : undefined)
+    );
+  }
+
+    /**
+   * modifies the satellite info of the indicated Client 
+   * @param {*} id  Client ID
+   * @param {*} ClientSatelliteInfo  New general information of the Client
+   */
+  static updateClientSatelliteInfo$(id, ClientSatelliteInfo) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    return defer(()=>
+        collection.findOneAndUpdate(
+          { _id: id },
+          {
+            $set: {satelliteInfo: ClientSatelliteInfo.satelliteInfo, modifierUser: ClientSatelliteInfo.modifierUser, modificationTimestamp: ClientSatelliteInfo.modificationTimestamp}
           },{
             returnOriginal: false
           }

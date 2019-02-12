@@ -1,0 +1,55 @@
+<div class="tab-content p-24" fxLayout="column" fusePerfectScrollbar>
+
+    <form name="clientSatelliteForm" [formGroup]="clientSatelliteForm" fxFlex="100" fxLayout="column" class="mat-white-bg p-24 mr-24 mb-24">
+
+      <h2>Comisiones</h2>
+
+      <div fxLayout="row wrap">
+        <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+          <input matInput name="offerMinDistance" type="number" formControlName="offerMinDistance" placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MIN_DISTANCE' | translate}}">
+        </mat-form-field>
+  
+        <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+          <input matInput name="offerMaxDistance" type="number" formControlName="offerMaxDistance" placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
+        </mat-form-field>
+  
+        <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+          <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40" placeholder="{{'CLIENT.DETAILS.SATELLITE.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
+        </mat-form-field>
+      </div>
+
+
+
+      <h2>Configuración de oferta</h2>
+
+      <div fxLayout="row wrap">
+
+        <mat-form-field>
+          <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
+            <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
+              {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field fxFlex.gt-xs="10" fxFlex="10" fxLayout="column" class="pr-8 pl-8">
+          <input matInput name="tip" formControlName="tip" maxlength="8" placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}"
+          currencyMask [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">
+          <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tip'])">
+            {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+
+      <div fxFlex="100" class="mt-16">
+        <button mat-raised-button (click)="updateClientSatelliteInfo()"
+          [disabled]="clientSatelliteForm.invalid || clientSatelliteForm.pristine">
+          {{'CLIENT.UPDATE' | translate}}
+        </button>
+      </div>
+
+    </form>
+
+</div>

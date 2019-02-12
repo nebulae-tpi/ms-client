@@ -27,10 +27,14 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="address" formControlName="address" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS' | translate}}">
-        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['address'])">
+        <input matInput name="addressLine1" formControlName="addressLine1" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE1' | translate}}">
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['addressLine1'])">
           {{'CLIENT.ADDRESS_REQUIRED' | translate}}
         </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+        <input matInput name="addressLine2" formControlName="addressLine2" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE2' | translate}}">
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
@@ -55,6 +59,13 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+        <input matInput name="notes" formControlName="notes" maxlength="50" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NOTES' | translate}}">
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['notes'])">
+          {{'CLIENT.ZONE_REQUIRED' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
         <input matInput name="email" formControlName="email" maxlength="40" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.EMAIL' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['email'])">
           {{'CLIENT.EMAIL_REQUIRED' | translate}}
@@ -63,11 +74,6 @@
           {{'CLIENT.EMAIL_FORMAT' | translate}}
         </mat-error>
       </mat-form-field>
-
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
-      </mat-form-field>
-
 
       <div fxFlex="100" class="mt-16">
         <button mat-raised-button *ngIf="pageType === 'new'" (click)="createClient()"

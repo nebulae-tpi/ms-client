@@ -28,19 +28,22 @@ export const locale = {
         TABS: {
           GENERAL_INFO: 'General Info',
           CREDENTIALS: 'Credentials',
+          SATELLITE: 'Satellite',
           LOCATION: 'Location'
         },
         GENERAL_INFO: {
           TITLE: 'General Info',
           NAME: 'Name',
           PHONE: 'Phone',
-          ADDRESS: 'Address',
+          ADDRESS_LINE1: 'Address 1',
+          ADDRESS_LINE2: 'Address 2',
           CITY: 'City',
           NEIGHBORHOOD: 'Neighborhood',
           ZONE: 'Zone',
           LOCATION: 'Location',
           EMAIL: 'Email',
-          REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id'
+          REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id',
+          NOTES: 'Place references'
         },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',

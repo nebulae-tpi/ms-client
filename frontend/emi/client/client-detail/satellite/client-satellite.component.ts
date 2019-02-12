@@ -59,19 +59,21 @@ import { ToolbarService } from "../../../../toolbar/toolbar.service";
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'client-general-info',
-  templateUrl: './client-general-info.component.html',
-  styleUrls: ['./client-general-info.component.scss']
+  selector: 'client-satellite',
+  templateUrl: './client-satellite.component.html',
+  styleUrls: ['./client-satellite.component.scss']
 })
 // tslint:disable-next-line:class-name
-export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
+export class ClientSatelliteComponent implements OnInit, OnDestroy {
   // Subject to unsubscribe
   private ngUnsubscribe = new Subject();
 
   @Input('pageType') pageType: string;
   @Input('client') client: any;
 
-  clientGeneralInfoForm: any;
+  tipTypeList = ['CASH', 'VIRTUAL_WALLET'];
+
+  clientSatelliteForm: any;
   clientStateForm: any;
 
   constructor(
@@ -90,74 +92,28 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.clientGeneralInfoForm = new FormGroup({
-      name: new FormControl(this.client ? (this.client.generalInfo || {}).name : '', [Validators.required]),
-      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required]),
-      email: new FormControl(this.client ? (this.client.generalInfo || {}).email : '', [Validators.required]),
-      addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : '', [Validators.required]),
-      addressLine2: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine2 : ''),
-      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : '', [Validators.required]),
-      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
-      zone: new FormControl(this.client ? (this.client.generalInfo || {}).zone : '', [Validators.required]),
-      notes: new FormControl(this.client ? (this.client.generalInfo || {}).notes : ''),
+    this.clientSatelliteForm = new FormGroup({
+      referrerDriverDocumentId: new FormControl(this.client ? (this.client.satelliteInfo || {}).referrerDriverDocumentId : ''),
+      tip: new FormControl(this.client ? (this.client.satelliteInfo || {}).tip : '', [Validators.required]),
+      tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
+      offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
+      offerMaxDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMaxDistance : ''),
     });
 
-    this.clientStateForm = new FormGroup({
-      state: new FormControl(this.client ? this.client.state : true)
-    });
   }
 
-  createClient() {
-    this.toolbarService.onSelectedBusiness$
-    .pipe(
-      tap(selectedBusiness => {
-        if(!selectedBusiness){
-          this.showSnackBar('CLIENT.SELECT_BUSINESS');
-        }
-      }),
-      filter(selectedBusiness => selectedBusiness != null && selectedBusiness.id != null),
-      mergeMap(selectedBusiness => {
-        return this.showConfirmationDialog$("CLIENT.CREATE_MESSAGE", "CLIENT.CREATE_TITLE")
-        .pipe(
-          mergeMap(ok => {
-            this.client = {
-              generalInfo: this.clientGeneralInfoForm.getRawValue(),
-              state: this.clientStateForm.getRawValue().state,
-              businessId: selectedBusiness.id
-            };
-            return this.ClientDetailservice.createClientClient$(this.client);
-          }),
-          mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
-          filter((resp: any) => !resp.errors || resp.errors.length === 0),
-        )
-      }),
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(result => {
-        this.showSnackBar('CLIENT.WAIT_OPERATION');
-      },
-        error => {
-          this.showSnackBar('CLIENT.ERROR_OPERATION');
-          console.log('Error ==> ', error);
-        }
-    );
-  }
-
-  updateClientGeneralInfo() {
+  updateClientSatelliteInfo() {
     this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
       .pipe(
         mergeMap(ok => {
-          const generalInfoinput = {
-            name: this.clientGeneralInfoForm.getRawValue().name,
-            phone: this.clientGeneralInfoForm.getRawValue().phone,
-            addressLine1: this.clientGeneralInfoForm.getRawValue().addressLine1,
-            addressLine2: this.clientGeneralInfoForm.getRawValue().addressLine2,
-            city: this.clientGeneralInfoForm.getRawValue().city,
-            neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
-            zone: this.clientGeneralInfoForm.getRawValue().zone,
-            email: this.clientGeneralInfoForm.getRawValue().email,
-            notes: this.clientGeneralInfoForm.getRawValue().notes,
+          const clientClientSatelliteInput = {
+            tip: this.clientSatelliteForm.getRawValue().tip,
+            tipType: this.clientSatelliteForm.getRawValue().tipType,
+            referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
+            offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
+            offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
           };
-          return this.ClientDetailservice.updateClientClientGeneralInfo$(this.client._id, generalInfoinput);
+          return this.ClientDetailservice.updateClientClientSatelliteInfo$(this.client._id, clientClientSatelliteInput);
         }),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
         filter((resp: any) => !resp.errors || resp.errors.length === 0),

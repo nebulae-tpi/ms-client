@@ -127,6 +127,27 @@ module.exports = {
                 catchError(err => handleError$(err, "updateClientGeneralInfo")),
                 mergeMap(response => getResponseFromBackEnd$(response))
             ).toPromise();
+        },        
+        ClientUpdateClientSatelliteInfo(root, args, context) {
+            return RoleValidator.checkPermissions$(
+              context.authToken.realm_access.roles,
+              "Client",
+              "ClientUpdateClientSatelliteInfo",
+              PERMISSION_DENIED_ERROR_CODE,
+              "Permission denied",
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+            ).pipe(
+                mergeMap(() =>
+                  context.broker.forwardAndGetReply$(
+                    "Client",
+                    "emigateway.graphql.mutation.ClientUpdateClientSatelliteInfo",
+                    { root, args, jwt: context.encodedToken },
+                    2000
+                  )
+                ),
+                catchError(err => handleError$(err, "updateClientSatelliteInfo")),
+                mergeMap(response => getResponseFromBackEnd$(response))
+            ).toPromise();
         },
         ClientUpdateClientState(root, args, context) {
             return RoleValidator.checkPermissions$(

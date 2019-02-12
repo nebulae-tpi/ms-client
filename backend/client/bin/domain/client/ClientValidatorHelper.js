@@ -56,6 +56,21 @@ class ClientValidatorHelper {
     );
   }
 
+    /**
+   * Validates if the user can be updated checking if the info is valid and the username and email have not been used
+   * @param {*} client 
+   * @param {*} authToken 
+   * @param {*} roles 
+   */
+  static checkClientUpdateClientSatelliteValidator$(client, authToken, roles, userMongo) {
+    return of({client, authToken, roles, userMongo: userMongo})
+    .pipe(
+      tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
+      tap(data => this.checkIfUserIsTheSameUserLogged(data.client, authToken)),
+      tap(data => this.checkIfUserBelongsToTheSameBusiness(data.userMongo, data.authToken, 'Client', data.roles)),
+    );
+  }
+
 
   /**
    * Validates if the user can update its state

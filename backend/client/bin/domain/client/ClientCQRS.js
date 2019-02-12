@@ -193,6 +193,46 @@ class ClientCQRS {
     );
   }
 
+      /**
+   * Edit the client state
+   */
+  updateClientSatelliteInfo$({ root, args, jwt }, authToken) {
+    const client = {
+      _id: args.id,
+      satelliteInfo: args.input,
+      modifierUser: authToken.preferred_username,
+      modificationTimestamp: new Date().getTime()
+    };
+
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "updateClientSatelliteInfo$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+    ).pipe(
+      mergeMap(roles => 
+        ClientDA.getClient$(client._id)
+        .pipe(
+          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientSatelliteValidator$(client, authToken, roles, userMongo)),
+        )      
+      ),
+      mergeMap(data => eventSourcing.eventStore.emitEvent$(
+        new Event({
+          eventType: "ClientSatelliteInfoUpdated",
+          eventTypeVersion: 1,
+          aggregateType: "Client",
+          aggregateId: client._id,
+          data: client,
+          user: authToken.preferred_username
+        })).pipe(mapTo(data))
+      ),
+      map(data => ({ code: 200, message: `Client with id: ${data.client._id} has been updated` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
 
   /**
    * Edit the client state

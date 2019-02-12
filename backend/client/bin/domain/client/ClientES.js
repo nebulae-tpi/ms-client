@@ -28,7 +28,7 @@ class ClientES {
         return ClientDA.createClient$(client)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result.ops[0]).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => this.emitClientSatelliteEvent$(result.ops[0]))
         );
     }
 
@@ -39,6 +39,20 @@ class ClientES {
     handleClientGeneralInfoUpdated$(clientGeneralInfoUpdatedEvent) {  
         const clientGeneralInfo = clientGeneralInfoUpdatedEvent.data;
         return ClientDA.updateClientGeneralInfo$(clientGeneralInfoUpdatedEvent.aid, clientGeneralInfo)
+        .pipe(
+            mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
+            mergeMap(result => this.emitClientSatelliteEvent$(result))
+        );
+    }
+
+        /**
+     * Update the satellite info on the materialized view according to the received data from the event store.
+     * @param {*} clientSatelliteInfoUpdatedEvent client info updated event
+     */
+    handleClientSatelliteInfoUpdated$(clientSatelliteInfoUpdatedEvent) {  
+        console.log('handleClientSatelliteInfoUpdated => ', clientSatelliteInfoUpdatedEvent);
+        const clientSatelliteInfo = clientSatelliteInfoUpdatedEvent.data;
+        return ClientDA.updateClientSatelliteInfo$(clientSatelliteInfoUpdatedEvent.aid, clientSatelliteInfo)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
             mergeMap(result => this.emitClientSatelliteEvent$(result))
@@ -96,6 +110,7 @@ class ClientES {
     }
 
     emitClientSatelliteEvent$(client){
+        console.log('emitClientSatelliteEvent => ', client);
         const userData = {
             ...client
         };

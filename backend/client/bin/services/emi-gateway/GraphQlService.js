@@ -167,6 +167,10 @@ class GraphQlService {
       },
       {
         aggregateType: "Client",
+        messageType: "emigateway.graphql.mutation.ClientUpdateClientSatelliteInfo"
+      },
+      {
+        aggregateType: "Client",
         messageType: "emigateway.graphql.mutation.ClientUpdateClientState"
       },
       {
@@ -212,6 +216,10 @@ class GraphQlService {
       }, 
       "emigateway.graphql.mutation.ClientUpdateClientGeneralInfo": {
         fn: ClientCQRS.updateClientGeneralInfo$,
+        obj: ClientCQRS
+      },
+      "emigateway.graphql.mutation.ClientUpdateClientSatelliteInfo": {
+        fn: ClientCQRS.updateClientSatelliteInfo$,
         obj: ClientCQRS
       },
       "emigateway.graphql.mutation.ClientUpdateClientState": {

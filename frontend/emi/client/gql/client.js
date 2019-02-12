@@ -9,12 +9,20 @@ export const ClientClient = gql`
       generalInfo {
         name
         phone
-        address
+        addressLine1
+        addressLine2
         city
         neighborhood
         zone
         email
+        notes
+      }
+      satelliteInfo{
         referrerDriverDocumentId
+        tipType
+        tip
+        offerMinDistance
+        offerMaxDistance
       }
       auth {
         userKeycloakId
@@ -40,12 +48,20 @@ export const ClientClients = gql`
       generalInfo {
         name
         phone
-        address
+        addressLine1
+        addressLine1
         city
         neighborhood
         zone
-        email
+        email        
+        notes
+      }
+      satelliteInfo{
         referrerDriverDocumentId
+        tipType
+        tip
+        offerMinDistance
+        offerMaxDistance
       }
       auth {
         userKeycloakId
@@ -78,6 +94,15 @@ export const ClientCreateClient = gql `
 export const ClientUpdateClientGeneralInfo = gql `
   mutation ClientUpdateClientGeneralInfo($id: ID!, $input: ClientClientGeneralInfoInput!){
     ClientUpdateClientGeneralInfo(id: $id, input: $input){
+      code
+      message
+    }
+  }
+`;
+
+export const ClientUpdateClientSatelliteInfo = gql `
+  mutation ClientUpdateClientSatelliteInfo($id: ID!, $input: ClientClientSatelliteInfoInput!){
+    ClientUpdateClientSatelliteInfo(id: $id, input: $input){
       code
       message
     }
@@ -149,12 +174,20 @@ export const ClientClientUpdatedSubscription = gql`
       generalInfo {
         name
         phone
-        address
+        addressLine1
+        addressLine2
         city
         neighborhood
         zone
         email
+        notes
+      }
+      satelliteInfo{
         referrerDriverDocumentId
+        tipType
+        tip
+        offerMinDistance
+        offerMaxDistance
       }
       auth {
         userKeycloakId

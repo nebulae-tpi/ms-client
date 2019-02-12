@@ -1,7 +1,8 @@
 [
     {
         "preBuildCommands": [
-            "npm install @types/googlemaps --save"
+            "npm install @types/googlemaps --save",
+            "npm install ng2-currency-mask"
         ],
         "environmentVars": {},
         "name": "client",

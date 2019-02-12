@@ -264,7 +264,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
           businessId: selectedBusiness ? selectedBusiness.id: null,
           name: filter.name,
           creatorUser: filter.creatorUser,
-          creationTimestamp: filter.creationTimestamp ? filter.creationTimestamp.valueOf() : null
+          creationTimestamp: filter.creationTimestamp ? filter.creationTimestamp.startOf('day').valueOf() : null
         };
         const paginationInput = {
           page: paginator.pagination.page,

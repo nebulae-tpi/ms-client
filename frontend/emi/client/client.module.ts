@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { DatePipe } from '@angular/common';
 import { FuseWidgetModule } from '../../../core/components/widget/widget.module';
-
+import { CurrencyMaskModule } from "ng2-currency-mask";
 import { ClientService } from './client.service';
 import { ClientListService } from './client-list/client-list.service';
 import { ClientListComponent } from './client-list/client-list.component';
@@ -14,6 +14,7 @@ import { ToolbarService } from '../../toolbar/toolbar.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { ClientLocationComponent } from './client-detail/location/client-location.component';
 import { ClientAuthComponent } from './client-detail/auth-credentials/client-auth.component';
+import { ClientSatelliteComponent } from './client-detail/satellite/client-satellite.component';
 
 
 const routes: Routes = [
@@ -33,7 +34,8 @@ const routes: Routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseWidgetModule
+    FuseWidgetModule,
+    CurrencyMaskModule
   ],
   declarations: [
     DialogComponent,
@@ -41,6 +43,7 @@ const routes: Routes = [
     ClientDetailComponent,
     ClientDetailGeneralInfoComponent,
     ClientAuthComponent,
+    ClientSatelliteComponent,
     ClientLocationComponent
   ],
   entryComponents: [DialogComponent],
