@@ -20,7 +20,7 @@ const {
 } = require("../../tools/customError");
 
 const context = "Client";
-const userNameRegex = /^[a-zA-Z0-9._-]{8,}$/;
+const userNameRegex = /^[a-zA-Z0-9._@-]{8,}$/;
 
 class ClientValidatorHelper {
 

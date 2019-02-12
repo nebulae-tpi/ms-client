@@ -90,7 +90,7 @@ export const locale = {
       21002: 'Permission denied',
       21010: 'User missing data',
       21011: 'The username is already used',
-      21012: 'invalid username, the username must contain at least 8 charactersand be composed by numbers, letters, periods and hyphens.',
+      21012: 'invalid username, the username must contain at least 8 characters.',
       21014: 'The email is already used',
       21015: 'Permission denied, it is not possible to update your own users information',
       21016: 'Permission denied, you dont have the permission to update an user that belongs to another business unit',

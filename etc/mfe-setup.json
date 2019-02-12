@@ -3,9 +3,6 @@
         "preBuildCommands": [
             "npm install @types/googlemaps --save"
         ],
-        "indexHeadAmends": [
-            "<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyByGMKwZIYXqcPONjNSX-KHJ9kbP5tBu5I&libraries=places' async defer></script>"
-        ],
         "environmentVars": {},
         "name": "client",
         "src": "frontend/emi/client",
