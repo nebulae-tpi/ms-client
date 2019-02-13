@@ -46,8 +46,8 @@ export const locale = {
           NOTES: 'Referencia del Lugar'
         },
         SATELLITE: {
-          OFFER_MIN_DISTANCE: 'Mínimo Radio de Difusión',
-          OFFER_MAX_DISTANCE: 'Máximo Radio de Difusión',
+          OFFER_MIN_DISTANCE: 'Mínimo Radio de Difusión (En metros)',
+          OFFER_MAX_DISTANCE: 'Máximo Radio de Difusión (En metros)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Documento de Identificación del conductor referido',
           TIP_TYPE: 'Tipo de Propina',
           TIP_TYPES: {

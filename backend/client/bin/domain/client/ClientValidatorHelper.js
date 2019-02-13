@@ -181,7 +181,7 @@ class ClientValidatorHelper {
         if (keycloakResult && keycloakResult.length > 0 && (!userKeycloakId || userKeycloakId != keycloakResult[0].id)) {
           return this.throwCustomError$(EMAIL_ALREADY_USED_ERROR_CODE);
         }
-         if (mongoResult && mongoResult.length > 0 && (!userKeycloakId || userKeycloakId != mongoResult._id)) {
+        if (mongoResult && (!userMongo || userMongo._id != mongoResult._id)) {
           return this.throwCustomError$(EMAIL_ALREADY_USED_ERROR_CODE);
         }
         return of(email);
