@@ -60,7 +60,7 @@ type ClientGeneralInfo {
 
 type ClientClientSatelliteInfo {
   "Referrer driver document id"
-  referrerDriverDocumentId: String!,
+  referrerDriverDocumentId: String,
   "Tipping type"
   tipType: String
   "Tip given to the client. Eg. satellites"
