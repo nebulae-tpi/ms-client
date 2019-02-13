@@ -11,7 +11,7 @@ type ClientClient {
   "User general info"
   generalInfo: ClientGeneralInfo
   "User satellite info"
-  satelliteInfo: ClientClientSatellite
+  satelliteInfo: ClientClientSatelliteInfo
   "Client location"
   location: ClientClientLocation
   "Client state"
@@ -58,7 +58,7 @@ type ClientGeneralInfo {
   notes: String
 }
 
-type ClientClientSatellite {
+type ClientClientSatelliteInfo {
   "Referrer driver document id"
   referrerDriverDocumentId: String!,
   "Tipping type"

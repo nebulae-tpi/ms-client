@@ -1,6 +1,6 @@
 'use strict'
 
-const {} = require("rxjs");
+const {of} = require("rxjs");
 const { tap, mergeMap, catchError, map, mapTo } = require('rxjs/operators');
 const broker = require("../../tools/broker/BrokerFactory")();
 const ClientDA = require('../../data/ClientDA');
@@ -28,7 +28,7 @@ class ClientES {
         return ClientDA.createClient$(client)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result.ops[0]).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result.ops[0]))
+            //mergeMap(result => this.emitClientSatelliteEvent$(result.ops[0]))
         );
     }
 
@@ -41,7 +41,13 @@ class ClientES {
         return ClientDA.updateClientGeneralInfo$(clientGeneralInfoUpdatedEvent.aid, clientGeneralInfo)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => {
+                if(result.satelliteInfo){
+                    return this.emitClientSatelliteEvent$(result)
+                }else{
+                    return of(result);
+                }
+            })
         );
     }
 
@@ -67,7 +73,13 @@ class ClientES {
         return ClientDA.updateClientState$(ClientStateUpdatedEvent.aid, ClientStateUpdatedEvent.data)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result)),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => {
+                if(result.satelliteInfo){
+                    return this.emitClientSatelliteEvent$(result)
+                }else{
+                    return of(result);
+                }
+            })
         );
     }
 
@@ -75,7 +87,13 @@ class ClientES {
         return ClientDA.updateClientLocation$(clientLocationUpdatedEvt.aid, clientLocationUpdatedEvt.data)
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => {
+                if(result.satelliteInfo){
+                    return this.emitClientSatelliteEvent$(result)
+                }else{
+                    return of(result);
+                }
+            })
         );
     }
 
@@ -90,7 +108,13 @@ class ClientES {
         )
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => {
+                if(result.satelliteInfo){
+                    return this.emitClientSatelliteEvent$(result)
+                }else{
+                    return of(result);
+                }
+            })
         );
     }
 
@@ -105,7 +129,13 @@ class ClientES {
         )
         .pipe(
             mergeMap(result => broker.send$(MATERIALIZED_VIEW_TOPIC, `ClientClientUpdatedSubscription`, result).pipe(mapTo(result))),
-            mergeMap(result => this.emitClientSatelliteEvent$(result))
+            mergeMap(result => {
+                if(result.satelliteInfo){
+                    return this.emitClientSatelliteEvent$(result)
+                }else{
+                    return of(result);
+                }
+            })
         );
     }
 

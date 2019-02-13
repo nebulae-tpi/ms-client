@@ -249,7 +249,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * If a change is detect in the filter or the paginator then the table will be refreshed according to the values emmited
+   * If a change is detect in the filter or the paginator then the table will be refreshed according to the values emmited.
    */
   refreshTableSubscription() {
     combineLatest(
