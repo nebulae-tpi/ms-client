@@ -246,12 +246,12 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   onMarkerClick(marker: MarkerRef, event) {
     this.selectedMarker = marker;
     this.markers.forEach(m => {
-      m.infoWindow.close();
+      // m.infoWindow.close();
       m.setAnimation(null);
     });
     marker.setAnimation(google.maps.Animation.BOUNCE);
     marker.setAnimation(null);
-    marker.infoWindow.open(this.map, marker);
+    // marker.infoWindow.open(this.map, marker);
   }
 
   initObservables(){
