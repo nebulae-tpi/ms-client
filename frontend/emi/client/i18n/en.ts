@@ -45,6 +45,19 @@ export const locale = {
           REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id',
           NOTES: 'Place references'
         },
+        SATELLITE: {
+          OFFER_MIN_DISTANCE: 'Offer min distance (In meters)',
+          OFFER_MAX_DISTANCE: 'Offer max distance (In meters)',
+          REFERRER_DRIVER_DOCUMENT_ID: 'Referrer driver document id',
+          TIP_TYPE: 'Tip type',
+          TIP_TYPES: {
+            'CASH': 'Cash',
+            'VIRTUAL_WALLET': 'Virtual wallet'
+          },
+          REQUIRED_TIP_TYPE: 'Required tip type',
+          REQUIRED_TIP: 'Required tip',
+          TIP: 'Tip',
+        },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',
         USERNAME: 'Username',

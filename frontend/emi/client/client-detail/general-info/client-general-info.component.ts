@@ -180,6 +180,9 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   }
 
   onClientStateChange() {
+    if (this.pageType === 'new') {
+      return;
+    }
     this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
       .pipe(
         mergeMap(ok => this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state)),

@@ -30,6 +30,9 @@
               {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
+            {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
+          </mat-error>
         </mat-form-field>
   
         <mat-form-field fxFlex.gt-xs="10" fxFlex="10" fxLayout="column" class="pr-8 pl-8">

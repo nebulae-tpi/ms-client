@@ -54,6 +54,7 @@ export const locale = {
             'CASH': 'Efectivo',
             'VIRTUAL_WALLET': 'Billetera virtual'
           },
+          REQUIRED_TIP_TYPE: 'Tipo propina requerida',
           REQUIRED_TIP: 'Propina requerida',
           TIP: 'Propina',
         },
