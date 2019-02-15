@@ -123,7 +123,8 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
           map(() => this.clientGeneralInfoForm.getRawValue()),
           map(generalInfoRawValue => ({
             ...generalInfoRawValue,
-            name: generalInfoRawValue.name.toUpperCase()
+            name: generalInfoRawValue.name.toUpperCase(),
+            email: generalInfoRawValue.email.toLowerCase()
           })),
           mergeMap(generalInfoData => {
             this.client = {
@@ -160,7 +161,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
             city: this.clientGeneralInfoForm.getRawValue().city,
             neighborhood: this.clientGeneralInfoForm.getRawValue().neighborhood,
             zone: this.clientGeneralInfoForm.getRawValue().zone,
-            email: this.clientGeneralInfoForm.getRawValue().email,
+            email: this.clientGeneralInfoForm.getRawValue().email.toLowerCase(),
             notes: this.clientGeneralInfoForm.getRawValue().notes,
           };
           return this.ClientDetailservice.updateClientClientGeneralInfo$(this.client._id, generalInfoinput);

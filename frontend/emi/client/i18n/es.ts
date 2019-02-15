@@ -49,14 +49,14 @@ export const locale = {
           OFFER_MIN_DISTANCE: 'Mínimo Radio de Difusión (En metros)',
           OFFER_MAX_DISTANCE: 'Máximo Radio de Difusión (En metros)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Documento de Identificación del conductor referido',
-          TIP_TYPE: 'Tipo de Propina',
+          TIP_TYPE: 'Tipo de acuerdo empresarial',
           TIP_TYPES: {
             'CASH': 'Efectivo',
             'VIRTUAL_WALLET': 'Billetera virtual'
           },
-          REQUIRED_TIP_TYPE: 'Tipo propina requerida',
+          REQUIRED_TIP_TYPE: 'Tipo acuerdo empresarial requerido',
           REQUIRED_TIP: 'Propina requerida',
-          TIP: 'Propina',
+          TIP: 'Valor ($) de acuerdo empresarial',
         },
         ENABLED: 'Activo',
         DISABLED: 'Desactivado',

@@ -169,25 +169,39 @@ class ClientValidatorHelper {
 
 
   static checkEmailExistKeycloakOrMongo$(email, userMongo) {
-    return of(email)
+    const emailLowercase = email.toLowerCase();
+    return of(emailLowercase)
     .pipe(
-      mergeMap(email => 
+      mergeMap(emailLowercase => 
         forkJoin(
-          ClientKeycloakDA.getUser$(null, email),
-          ClientDA.getClientByEmail$(email)
+          ClientKeycloakDA.getUser$(null, emailLowercase),
+          ClientDA.getClientByEmail$(emailLowercase)
       )),
       mergeMap(([keycloakResult, mongoResult]) => {
+        const userKeycloak = this.searchUserKeycloakByEmail(keycloakResult, emailLowercase);
         const userKeycloakId = userMongo && userMongo.auth && userMongo.auth.userKeycloakId ? userMongo.auth.userKeycloakId: undefined;
-        if (keycloakResult && keycloakResult.length > 0 && (!userKeycloakId || userKeycloakId != keycloakResult[0].id)) {
+        if (userKeycloak && (!userKeycloakId || userKeycloakId != userKeycloak.id)) {
           return this.throwCustomError$(EMAIL_ALREADY_USED_ERROR_CODE);
         }
         if (mongoResult && (!userMongo || userMongo._id != mongoResult._id)) {
           return this.throwCustomError$(EMAIL_ALREADY_USED_ERROR_CODE);
         }
-        return of(email);
+        return of(emailLowercase);
       })
     );
 
+  }
+
+    /**
+   * Get the userkeycloak with the specified email
+   * @param {*} keycloakResult 
+   * @param {*} email 
+   */
+  static searchUserKeycloakByEmail(keycloakResult, email){
+    if (keycloakResult && keycloakResult.length > 0) {
+      return keycloakResult.find(userKeycloak => userKeycloak.email == email);
+    }
+    return null;
   }
 
   static checkUsernameExistKeycloak$(user, username) {
