@@ -92,7 +92,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.clientGeneralInfoForm = new FormGroup({
       name: new FormControl(this.client ? (this.client.generalInfo || {}).name : '', [Validators.required]),
-      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required]),
+      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required, Validators.max(999999999999999)]),
       email: new FormControl(this.client ? (this.client.generalInfo || {}).email : '', [Validators.required]),
       addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : '', [Validators.required]),
       addressLine2: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine2 : ''),
@@ -111,10 +111,11 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
     this.toolbarService.onSelectedBusiness$
     .pipe(
       tap(selectedBusiness => {
-        if(!selectedBusiness){
+        if(selectedBusiness == null || selectedBusiness.id == null) {
           this.showSnackBar('CLIENT.SELECT_BUSINESS');
         }
       }),
+      take(1),
       filter(selectedBusiness => selectedBusiness != null && selectedBusiness.id != null),
       mergeMap(selectedBusiness => {
         return this.showConfirmationDialog$("CLIENT.CREATE_MESSAGE", "CLIENT.CREATE_TITLE")

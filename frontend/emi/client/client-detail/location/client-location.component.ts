@@ -286,7 +286,9 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   requestBrowserLocation$() {
     return new Promise((resolve, reject) => {
       if (window.navigator && window.navigator.geolocation) {
-
+        const options = {
+          timeout: 5000
+        };
         window.navigator.geolocation.getCurrentPosition(
           position => {
             console.log(position);
@@ -305,7 +307,8 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
                 break;
             }
             resolve(this.DEFAULT_LOCATION);
-          }
+          },
+          options
         );
       }
     });

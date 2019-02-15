@@ -20,9 +20,12 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput type="number" name="phone" formControlName="phone" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.PHONE' | translate}}">
+        <input matInput type="number" name="phone" formControlName="phone" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.PHONE' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['phone'])">
           {{'CLIENT.PHONE_REQUIRED' | translate}}
+        </mat-error>
+        <mat-error *ngIf="clientGeneralInfoForm.hasError('max', ['phone'])">
+          {{'CLIENT.PHONE_MAX_LENGTH' | translate}}
         </mat-error>
       </mat-form-field>
 
@@ -38,21 +41,21 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="city" formControlName="city" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.CITY' | translate}}">
+        <input matInput name="city" formControlName="city" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.CITY' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['city'])">
           {{'CLIENT.CITY_REQUIRED' | translate}}
         </mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="neighborhood" formControlName="neighborhood" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NEIGHBORHOOD' | translate}}">
+        <input matInput name="neighborhood" formControlName="neighborhood" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NEIGHBORHOOD' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['neighborhood'])">
           {{'CLIENT.NEIGHBORHOOD_REQUIRED' | translate}}
         </mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="zone" formControlName="zone" maxlength="15" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ZONE' | translate}}">
+        <input matInput name="zone" formControlName="zone" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ZONE' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['zone'])">
           {{'CLIENT.ZONE_REQUIRED' | translate}}
         </mat-error>
@@ -61,7 +64,7 @@
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
         <input matInput name="notes" formControlName="notes" maxlength="50" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NOTES' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['notes'])">
-          {{'CLIENT.ZONE_REQUIRED' | translate}}
+          {{'CLIENT.NOTES_REQUIRED' | translate}}
         </mat-error>
       </mat-form-field>
 
