@@ -178,7 +178,6 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
           console.log('Error ==> ', error);
         }
       );
-
   }
 
   onClientStateChange() {

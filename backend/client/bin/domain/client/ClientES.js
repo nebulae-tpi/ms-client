@@ -32,7 +32,7 @@ class ClientES {
         );
     }
 
-        /**
+    /**
      * Update the general info on the materialized view according to the received data from the event store.
      * @param {*} clientGeneralInfoUpdatedEvent client created event
      */
