@@ -46,6 +46,8 @@ export const locale = {
           NOTES: 'Place references'
         },
         SATELLITE: {
+          BUSINESS_AGREEMENT: 'Business agreement',
+          OFFER_CONFIGURATION: 'Offer configuration',
           OFFER_MIN_DISTANCE: 'Offer Min Distance (In meters)',
           OFFER_MAX_DISTANCE: 'Offer Max Distance (In meters)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Referrer Driver Document Id',
@@ -56,7 +58,7 @@ export const locale = {
           },
           REQUIRED_TIP_TYPE: 'Business Agreement type required',
           REQUIRED_TIP: 'Business Agreement Required',
-          TIP: 'Value ($) of business agreement',
+          TIP: 'Value ($) Business Agreement',
         },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',

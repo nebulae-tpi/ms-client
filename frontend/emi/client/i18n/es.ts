@@ -46,6 +46,8 @@ export const locale = {
           NOTES: 'Referencia del Lugar'
         },
         SATELLITE: {
+          BUSINESS_AGREEMENT: 'Acuerdo empresarial',
+          OFFER_CONFIGURATION: 'Configuración de oferta',
           OFFER_MIN_DISTANCE: 'Mínimo Radio de Difusión (En metros)',
           OFFER_MAX_DISTANCE: 'Máximo Radio de Difusión (En metros)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Documento de Identificación del conductor referido',
@@ -54,9 +56,9 @@ export const locale = {
             'CASH': 'Efectivo',
             'VIRTUAL_WALLET': 'Billetera virtual'
           },
-          REQUIRED_TIP_TYPE: 'Tipo acuerdo empresarial requerido',
-          REQUIRED_TIP: 'Propina requerida',
-          TIP: 'Valor ($) de acuerdo empresarial',
+          REQUIRED_TIP_TYPE: 'Tipo Acuerdo Empresarial Requerido',
+          REQUIRED_TIP: 'Valor requerido',
+          TIP: 'Valor ($) Acuerdo Empresarial',
         },
         ENABLED: 'Activo',
         DISABLED: 'Desactivado',
