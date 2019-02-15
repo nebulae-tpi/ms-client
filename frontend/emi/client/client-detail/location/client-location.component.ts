@@ -171,7 +171,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
     of(this.client.location)
       .pipe(
-        tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
+        //tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
         mergeMap(cl =>  cl != null
             ? of({ lat: cl.lat, long: cl.lng })
             : defer(() => this.requestBrowserLocation$())

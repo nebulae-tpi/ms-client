@@ -112,7 +112,7 @@ export class ClientDetailService {
   }
 
   updateClientLocation$(id: string, clientLocation: any) {
-    console.log('$$$$$ ==> ', id, clientLocation );
+    //console.log('$$$$$ ==> ', id, clientLocation );
     // return of({});
     return this.updateOperation$(clientLocation)
       .pipe(

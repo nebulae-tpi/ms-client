@@ -109,8 +109,8 @@ class ClientCQRS {
     );
   }
 
-    /**
-  * Create a client
+  /**
+  * Create a client.
   */
  createClient$({ root, args, jwt }, authToken) {
    
