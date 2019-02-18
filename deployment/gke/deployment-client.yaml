@@ -13,7 +13,7 @@ spec:
         app: client
     spec:      
       containers:
-      - image: nebulaetpi/client.backend.client:0.0.19
+      - image: DOCKERHUB/client.backend.client:0.0.19
         name: client
         volumeMounts:
         - name: google-application-credentials
@@ -62,7 +62,11 @@ spec:
           value: "initial_lock"
           # KEYCLOAK BACKEND
         - name: KEYCLOAK_BACKEND_BASE_URL
-          value: "https://tpi-dev.nebulae.com.co/auth"
+          valueFrom:
+            configMapKeyRef:
+              name: environment-variables
+              key: keycloak-backend-base-url
+          #value: "https://tpi-dev.nebulae.com.co/auth"
         - name: KEYCLOAK_BACKEND_USER
           valueFrom:
             secretKeyRef:
