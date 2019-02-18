@@ -400,8 +400,8 @@ class ClientCQRS {
           // Reset user password on Keycloak
           mergeMap(data => {
             const password = {
-              temporary: data.driver.passwordInput.temporary || false,
-              value: data.driver.passwordInput.password
+              temporary: data.client.passwordInput.temporary || false,
+              value: data.client.passwordInput.password
             }
             return ClientKeycloakDA.resetUserPassword$(data.userMongo.auth.userKeycloakId, password);
           })

@@ -175,7 +175,7 @@ input ClientAuthInput {
 }
 
 type Query {
-  "Get Clients filtered."
+  "Get Clients filtered"
   ClientClients(filterInput: ClientClientFilterInput!, paginationInput: ClientClientPaginationInput!): [ClientClient]
   "Get the amount of Clients filtered "
   ClientClientsSize(filterInput: ClientClientFilterInput!): Int!
