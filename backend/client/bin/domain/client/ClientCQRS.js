@@ -259,7 +259,7 @@ class ClientCQRS {
           // Update the state of the user on Keycloak
           mergeMap(data => {
             if(data.userMongo && data.userMongo.auth && data.userMongo.auth.userKeycloakId){
-              return ClientKeycloakDA.updateUserState$(data.userMongo.auth.userKeycloakId, data.client.generalInfo).pipe(mapTo(data));
+              return ClientKeycloakDA.updateUserState$(data.userMongo.auth.userKeycloakId, data.client.state).pipe(mapTo(data));
             }
             return of(data)
           })
@@ -395,7 +395,17 @@ class ClientCQRS {
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
-        .pipe( mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientAuthValidator$(client, authToken, roles, userMongo)))
+        .pipe( 
+          mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientAuthValidator$(client, authToken, roles, userMongo)),
+          // Reset user password on Keycloak
+          mergeMap(data => {
+            const password = {
+              temporary: data.driver.passwordInput.temporary || false,
+              value: data.driver.passwordInput.password
+            }
+            return ClientKeycloakDA.resetUserPassword$(data.userMongo.auth.userKeycloakId, password);
+          })
+        )
       ),
       mergeMap(() => eventSourcing.eventStore.emitEvent$(
         new Event({
