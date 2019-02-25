@@ -126,7 +126,7 @@ input ClientClientGeneralInfoInput {
 }
 
 input ClientClientSatelliteInfoInput {
-  "Referrer driver document id."
+  "Referrer driver document id"
   referrerDriverDocumentId: String,
   "Tipping type"
   tipType: String!

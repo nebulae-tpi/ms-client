@@ -1,5 +1,6 @@
 const ClientDA = require("../../data/ClientDA");
 const ClientKeycloakDA = require("../../data/ClientKeycloakDA");
+const TokenKeycloakDA = require("../../data/TokenKeycloakDA");
 const { of, interval, forkJoin, throwError } = require("rxjs");
 const { take, mergeMap, catchError, map, toArray, tap, mapTo } = require('rxjs/operators');
 const { 
@@ -9,6 +10,7 @@ const {
   USERNAME_ALREADY_USED_CODE,
   EMAIL_ALREADY_USED_ERROR_CODE,
   PERMISSION_DENIED_ERROR_CODE,
+  INVALID_TOKEN_ERROR_CODE,
   INVALID_USERNAME_FORMAT_ERROR_CODE,
   MISSING_BUSINESS_ERROR_CODE,
   USER_UPDATE_OWN_INFO_ERROR_CODE,
@@ -33,6 +35,7 @@ class ClientValidatorHelper {
   static checkClientCreationClientValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => { if (!data.client.businessId) this.throwCustomError$(MISSING_BUSINESS_ERROR_CODE)}),
       mergeMap(data => this.checkEmailExistKeycloakOrMongo$(data.client.generalInfo.email).pipe(mapTo(data)))
@@ -49,6 +52,7 @@ class ClientValidatorHelper {
   static checkClientUpdateClientValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => this.checkIfUserIsTheSameUserLogged(data.client, authToken)),
       tap(data => this.checkIfUserBelongsToTheSameBusiness(data.userMongo, data.authToken, 'Client', data.roles)),
@@ -81,6 +85,7 @@ class ClientValidatorHelper {
   static checkClientUpdateClientStateValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => this.checkIfUserIsTheSameUserLogged(data.client, authToken, 'Client')),
       tap(data => this.checkIfUserBelongsToTheSameBusiness(data.userMongo, data.authToken, 'Client', data.roles)),
@@ -96,6 +101,7 @@ class ClientValidatorHelper {
   static checkClientCreateClientAuthValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => { if (!data.authInput || !data.authInput.username.trim().match(userNameRegex)) this.throwCustomError$(INVALID_USERNAME_FORMAT_ERROR_CODE)}),
       tap(data => { if (!data.userMongo) this.throwCustomError$(USER_NOT_FOUND_ERROR_CODE)}),
@@ -115,6 +121,7 @@ class ClientValidatorHelper {
   static checkClientUpdateClientAuthValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => { if (!data.userMongo) this.throwCustomError$(USER_NOT_FOUND_ERROR_CODE)}),
       tap(data => this.checkIfUserBelongsToTheSameBusiness(data.userMongo, data.authToken, 'Client', data.roles)),
@@ -126,6 +133,7 @@ class ClientValidatorHelper {
   static checkClientRemoveClientAuthValidator$(client, authToken, roles, userMongo) {
     return of({client, authToken, roles, userMongo: userMongo})
     .pipe(
+      mergeMap(data => this.checkTokenValidity$().pipe(mapTo(data))),
       tap(data => { if (!data.client) this.throwCustomError$(USER_MISSING_DATA_ERROR_CODE)}),
       tap(data => { if (!data.userMongo) this.throwCustomError$(USER_NOT_FOUND_ERROR_CODE)}),
       tap(data => { if (!data.userMongo.auth || !data.userMongo.auth.username) this.throwCustomError$(USER_DOES_NOT_HAVE_AUTH_CREDENTIALS_ERROR_CODE)}),
@@ -167,6 +175,19 @@ class ClientValidatorHelper {
     }
   }
 
+
+  /**
+   * Check token validity
+   */
+  static checkTokenValidity$(){
+    return TokenKeycloakDA.checkTokenValidity$()
+    .pipe(
+      catchError(error => {
+        console.log('An error ocurred checking keycloak token validity: ', error);
+        return this.throwCustomError$(INVALID_TOKEN_ERROR_CODE);
+      })
+    );
+  }
 
   static checkEmailExistKeycloakOrMongo$(email, userMongo) {
     const emailLowercase = email.toLowerCase();
@@ -212,7 +233,7 @@ class ClientValidatorHelper {
            return this.throwCustomError$(USERNAME_ALREADY_USED_CODE);
          }
          return of(user);
-       }
+      }
      )
     );
   }

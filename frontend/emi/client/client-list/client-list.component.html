@@ -165,10 +165,10 @@
 
           <!-- Name Column -->
           <ng-container cdkColumnDef="name">
-            <mat-header-cell *cdkHeaderCellDef>{{
+            <mat-header-cell *cdkHeaderCellDef fxFlex="80" fxFlex.gt-xs="18">{{
               "CLIENT.NAME" | translate
             }}</mat-header-cell>
-            <mat-cell *cdkCellDef="let element">
+            <mat-cell *cdkCellDef="let element" fxFlex="80" fxFlex.gt-xs="18">
               <p class="text-truncate">
                 {{ element.generalInfo.name }}
               </p>
@@ -177,10 +177,10 @@
 
           <!-- Active Column -->
           <ng-container cdkColumnDef="state">
-            <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs>{{
+            <mat-header-cell *cdkHeaderCellDef fxFlex="20" fxFlex.gt-xs="8">{{
               "CLIENT.ACTIVE" | translate
               }}</mat-header-cell>
-            <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
+            <mat-cell *cdkCellDef="let element" fxFlex="20" fxFlex.gt-xs="8">
               <mat-icon *ngIf="element.state" class="active-icon mat-green-600-bg s-16">check</mat-icon>
               <mat-icon *ngIf="!element.state" class="active-icon mat-red-500-bg s-16">close</mat-icon>
             </mat-cell>
@@ -188,10 +188,10 @@
 
           <!-- Creation timestamp Column -->
           <ng-container cdkColumnDef="creationTimestamp">
-              <mat-header-cell *cdkHeaderCellDef>{{
+              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.CREATION_TIMESTAMP" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element">
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
                 <p class="text-truncate">
                   {{ element.creationTimestamp | date: "dd/MM/y HH:mm:ss" }}
                 </p>
@@ -200,20 +200,20 @@
 
           <!-- Creator user Column -->
           <ng-container cdkColumnDef="creatorUser">
-              <mat-header-cell *cdkHeaderCellDef>{{
+              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.CREATOR_USER" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element">
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
                 <p class="text-truncate">{{  element.creatorUser }}</p>
               </mat-cell>
           </ng-container>
 
           <!-- Last modification timestamp Column -->
           <ng-container cdkColumnDef="modificationTimestamp">
-              <mat-header-cell *cdkHeaderCellDef>{{
+              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.LAST_MODIFICATION_TIMESTAMP" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element">
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
                 <p class="text-truncate">
                   {{ element.modificationTimestamp | date: "dd/MM/y HH:mm:ss" }}
                 </p>
@@ -222,10 +222,10 @@
 
           <!-- Modifier user Column -->
           <ng-container cdkColumnDef="modifierUser">
-              <mat-header-cell *cdkHeaderCellDef>{{
+              <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.MODIFIER_USER" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element">
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
                 <p class="text-truncate">{{  element.modifierUser }}</p>
               </mat-cell>
           </ng-container>  
@@ -235,7 +235,7 @@
 
           <mat-row
             *cdkRowDef="let row; columns: displayedColumns"
-            class="selectedElement"
+            class="item"
             (click)="selectclientRow(row)"
             [ngClass]="{
               highlight:

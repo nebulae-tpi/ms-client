@@ -1,8 +1,7 @@
 <div class="tab-content p-24" fxLayout="column" fusePerfectScrollbar>
 
-
     <form name="userAuthForm" [formGroup]="userAuthForm" #formDirective="ngForm" class="user w-100-p" fxLayout="column" class="mat-white-bg p-24 mr-24 mb-24">
-        <div fxLayout="row">
+        <div fxLayout="row wrap" class="mb-20">
           <div fxFlex="80" *ngIf="client.auth && client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.RESET_AUTH' | translate}}</div>
           <div fxFlex="80" *ngIf="!client.auth || !client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.CREATE_AUTH' | translate}}</div>
           <button mat-raised-button *ngIf="client.auth && client.auth.username" type="button" (click)="removeClientAuth()">{{'CLIENT.DETAILS.REMOVE_USER_AUTH' | translate}}</button>

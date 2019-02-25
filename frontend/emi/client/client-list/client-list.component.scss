@@ -5,36 +5,36 @@
 
     .center {
 
-        .header {
+        // .header {
 
-            .search-wrapper {
-                @include mat-elevation(7);
+        //     .search-wrapper {
+        //         @include mat-elevation(7);
 
-                .sidenav-toggle {
-                    margin: 0;
-                    width: 56px;
-                    height: 56px;
-                    background: #FFF;
-                    border-radius: 0;
-                    border-right: 1px solid rgba(0, 0, 0, .12);
-                }
+        //         .sidenav-toggle {
+        //             margin: 0;
+        //             width: 56px;
+        //             height: 56px;
+        //             background: #FFF;
+        //             border-radius: 0;
+        //             border-right: 1px solid rgba(0, 0, 0, .12);
+        //         }
 
-                .search {
-                    width: 100%;
-                    height: 56px;
-                    line-height: 56px;
-                    padding: 18px;
+        //         .search {
+        //             width: 100%;
+        //             height: 56px;
+        //             line-height: 56px;
+        //             padding: 18px;
 
-                    input {
-                        height: 56px;
-                        padding-left: 16px;
-                        color: rgba(0, 0, 0, 0.54);
-                        border: none;
-                        outline: none;
-                    }
-                }
-            }
-        }
+        //             input {
+        //                 height: 56px;
+        //                 padding-left: 16px;
+        //                 color: rgba(0, 0, 0, 0.54);
+        //                 border: none;
+        //                 outline: none;
+        //             }
+        //         }
+        //     }
+        // }
 
         .content-card {
 
@@ -91,7 +91,7 @@
     .item {
         position: relative;
         cursor: pointer;
-        height: 84px;
+        height: 40px;
     }
 
     .mat-cell {

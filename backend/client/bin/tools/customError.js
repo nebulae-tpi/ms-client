@@ -2,6 +2,7 @@
 // please use the prefix assigned to this micorservice
 const INTERNAL_SERVER_ERROR_CODE = {code: 1, description: 'Internal server error'};
 const PERMISSION_DENIED_ERROR_CODE = {code: 2, description: 'Permission denied'};
+const INVALID_TOKEN_ERROR_CODE = {code: 3, description: 'The token has been invalidated'};
 const USER_MISSING_DATA_ERROR_CODE = {code: 21010, description: 'User missing data'};
 const USERNAME_ALREADY_USED_CODE = {code: 21011, description: 'Username already used'};
 const INVALID_USERNAME_FORMAT_ERROR_CODE = {code: 21012, description: 'Invalid username format'};
@@ -71,5 +72,7 @@ class CustomError extends Error {
     USER_CREDENTIAL_EXIST_ERROR_CODE,
     USER_NOT_FOUND_ERROR_CODE,
     USER_DOES_NOT_HAVE_AUTH_CREDENTIALS_ERROR_CODE,
-    USER_WAS_NOT_DELETED
+    USER_WAS_NOT_DELETED,
+    USER_WAS_NOT_DELETED,
+    INVALID_TOKEN_ERROR_CODE
   } 

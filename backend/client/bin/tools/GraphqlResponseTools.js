@@ -38,6 +38,11 @@ const handleError$ = (err) => {
             const isCustomError = err instanceof CustomError;
             if (!isCustomError) {
                 err = new DefaultError(err);
+            }else{
+                //This kind of errors must restart the backend due that the keycloak token has been invalidated
+                if(err.code === 3) {
+                    process.exit(1);
+                }
             }
             exception.result = {
                 code: err.code,
