@@ -228,14 +228,27 @@ class ClientValidatorHelper {
   static checkUsernameExistKeycloak$(user, username) {
     return ClientKeycloakDA.getUser$(username)
     .pipe(
-      mergeMap(userFound => {
-        if(userFound && userFound.length > 0){
+      mergeMap(keycloakResult => {
+        const userKeycloak = this.searchUserKeycloakByUsername(keycloakResult, username);
+        if(userKeycloak){
            return this.throwCustomError$(USERNAME_ALREADY_USED_CODE);
          }
          return of(user);
       }
      )
     );
+  }
+
+      /**
+   * Searches user keycloak by username
+   * @param {*} keycloakResult 
+   * @param {*} username 
+   */
+  static searchUserKeycloakByUsername(keycloakResult, username) {
+    if (keycloakResult && keycloakResult.length > 0) {
+      return keycloakResult.find(userKeycloak => userKeycloak.username.toLowerCase() == username.toLowerCase());
+    }
+    return null;
   }
 
   static checkUserEmailExistKeycloak$(user, email) {
