@@ -191,7 +191,7 @@
               <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.CREATION_TIMESTAMP" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">
                 <p class="text-truncate">
                   {{ element.creationTimestamp | date: "dd/MM/y HH:mm:ss" }}
                 </p>
@@ -203,7 +203,7 @@
               <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.CREATOR_USER" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">
                 <p class="text-truncate">{{  element.creatorUser }}</p>
               </mat-cell>
           </ng-container>
@@ -213,7 +213,7 @@
               <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.LAST_MODIFICATION_TIMESTAMP" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">
                 <p class="text-truncate">
                   {{ element.modificationTimestamp | date: "dd/MM/y HH:mm:ss" }}
                 </p>
@@ -225,7 +225,7 @@
               <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">{{
                 "CLIENT.MODIFIER_USER" | translate
               }}</mat-header-cell>
-              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs>
+              <mat-cell *cdkCellDef="let element" fxHide fxShow.gt-xs fxFlex="20" fxFlex.gt-xs="16">
                 <p class="text-truncate">{{  element.modifierUser }}</p>
               </mat-cell>
           </ng-container>  
