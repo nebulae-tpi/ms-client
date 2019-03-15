@@ -46,6 +46,20 @@ class ClientDA {
     return defer(() => collection.findOne(query));
   }
 
+  /**
+   * Get client info by its username
+   * @param {*} username 
+   */
+  static getClientByUsername$(username) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    const query = {
+      'auth.username': username
+    };
+
+    return defer(() => collection.findOne(query));
+  }
+
   static getClientList$(filter, pagination) {
     const collection = mongoDB.db.collection(CollectionName);
 

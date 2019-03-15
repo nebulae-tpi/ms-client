@@ -139,6 +139,25 @@ class ClientKeycloakDA {
     );
   }
 
+  /**
+   * Updates the user attributes on Keycloak
+   * @param {*} userKeycloakId User ID
+   * @param {*} attributes User attributes
+   */
+  static updateUserAttributes$(userKeycloakId, attributes) {
+    const userKeycloak = {
+      id: userKeycloakId,
+      attributes: attributes
+    };
+
+    return defer(() =>
+      KeycloakDA.keycloakClient.users.update(
+        process.env.KEYCLOAK_BACKEND_REALM_NAME,
+        userKeycloak
+      )
+    );
+  }
+
       /**
    * Updates the user info on Keycloak
    * @param {*} userKeycloakId User ID

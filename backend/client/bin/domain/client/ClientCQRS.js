@@ -30,6 +30,29 @@ class ClientCQRS {
   constructor() {
   }
 
+
+    /**  
+   * Gets the Client
+   *
+   * @param {*} args args
+   */
+  getClientProfile$({ args }, authToken) {
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "getClientProfile",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["CLIENT"]
+    ).pipe(
+      mergeMap(roles => {
+        const username = authToken.preferred_username;
+        return ClientDA.getClientByUsername$(username)
+      }),
+      mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
+      catchError(err => GraphqlResponseTools.handleError$(error))
+    );
+  }
+
   /**  
    * Gets the Client
    *
@@ -108,6 +131,67 @@ class ClientCQRS {
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
   }
+
+  /**
+  * Create a client.
+  */
+ ValidateNewClient$({ root, args, jwt }, authToken) {
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles,
+    "Client",
+    "ValidateNewClient$",
+    PERMISSION_DENIED_ERROR_CODE,
+    ["CLIENT"]
+  ).pipe(
+    mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
+    mergeMap(client => 
+      iif(
+        () => client, 
+        of(client), 
+        of(authToken).pipe(
+          mergeMap(token => {
+            const client = {
+              generalInfo: {
+                name: token.preferred_username
+              },
+              auth: {
+                username: token.preferred_username,
+                userKeycloakId: token.sub
+              },
+              state: true,
+              businessId: token.businessId
+            };
+            client._id = uuidv4();
+            client.creatorUser = 'SYSTEM';
+            client.creationTimestamp = new Date().getTime();
+            client.modifierUser = authToken.preferred_username;
+            client.modificationTimestamp = new Date().getTime();
+            return ClientDA.createClient$(client);
+          }),
+          mergeMap(client => ClientDA.createClient$(client)),
+          mergeMap(client => {
+            const attributes = {
+              clientId: client._id
+            };
+            return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(client)) 
+          }),
+          mergeMap(client => eventSourcing.eventStore.emitEvent$(
+            new Event({
+              eventType: "EndClientCreated",
+              eventTypeVersion: 1,
+              aggregateType: "Client",
+              aggregateId: client._id,
+              data: client,
+              user: authToken.preferred_username
+            })).pipe(mapTo(client))      
+          )
+        ))
+    ),    
+    map(client => client),
+    mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+    catchError(err => GraphqlResponseTools.handleError$(err))
+  );
+}
 
   /**
   * Create a client.

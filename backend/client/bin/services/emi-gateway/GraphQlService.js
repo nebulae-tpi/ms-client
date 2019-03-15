@@ -189,6 +189,15 @@ class GraphQlService {
         aggregateType: "Client",
         messageType: "emigateway.graphql.mutation.clientUpdateClientLocation"
       },
+      // CLIENT GATEWAY
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.query.ClientProfile"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.ValidateNewClient"
+      }
     ];
   }
 
@@ -198,6 +207,16 @@ class GraphQlService {
    */
   generateFunctionMap() {    
     return {
+      // CLIENT GATEWAY      
+      "clientgateway.graphql.query.ClientProfile": {
+        fn: ClientCQRS.getClientProfile$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.ValidateNewClient": {
+        fn: ClientCQRS.ValidateNewClient$,
+        obj: ClientCQRS
+      },
+      // EMI GATEWAY
       "emigateway.graphql.query.ClientClients": {
         fn: ClientCQRS.getClientList$,
         obj: ClientCQRS
