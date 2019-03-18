@@ -30,6 +30,12 @@
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+        <input matInput type="text" maxlength="20" name="documentId" formControlName="documentId"
+        placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.DOCUMENT_ID' | translate}}">
+        
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
         <input matInput name="addressLine1" formControlName="addressLine1" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE1' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['addressLine1'])">
           {{'CLIENT.ADDRESS_REQUIRED' | translate}}

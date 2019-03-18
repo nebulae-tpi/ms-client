@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { DatePipe } from '@angular/common';
 import { FuseWidgetModule } from '../../../core/components/widget/widget.module';
-import { CurrencyMaskModule } from "ng2-currency-mask";
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ClientService } from './client.service';
 import { ClientListService } from './client-list/client-list.service';
 import { ClientListComponent } from './client-list/client-list.component';
@@ -15,6 +15,7 @@ import { DialogComponent } from './dialog/dialog.component';
 import { ClientLocationComponent } from './client-detail/location/client-location.component';
 import { ClientAuthComponent } from './client-detail/auth-credentials/client-auth.component';
 import { ClientSatelliteComponent } from './client-detail/satellite/client-satellite.component';
+import { ClientAutocompleteComponent } from './client-detail/satellite/client-autocomplete/client-autocomplete.component';
 
 
 const routes: Routes = [
@@ -44,7 +45,8 @@ const routes: Routes = [
     ClientDetailGeneralInfoComponent,
     ClientAuthComponent,
     ClientSatelliteComponent,
-    ClientLocationComponent
+    ClientLocationComponent,
+    ClientAutocompleteComponent
   ],
   entryComponents: [DialogComponent],
   providers: [ ClientService, ClientListService, ClientDetailService, DatePipe]

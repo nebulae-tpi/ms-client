@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject } from 'rxjs';
 import {
   startWith
-} from "rxjs/operators";
+} from 'rxjs/operators';
 import { GatewayService } from '../../../../api/gateway.service';
 import {
   ClientClients,
@@ -30,7 +30,7 @@ export class ClientListService {
   /**
    * Gets the client list
    * @param filter Data to filter the list
-   * @param paginator Object that contains info about page number and amount of records to recover 
+   * @param paginator Object that contains info about page number and amount of records to recover
    * @returns {Observable} Observable with the client list
    */
   getclientList$(filterInput, paginatorInput){
@@ -40,8 +40,8 @@ export class ClientListService {
         filterInput: filterInput,
         paginationInput: paginatorInput
       },
-      fetchPolicy: "network-only",
-      errorPolicy: "all"
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all'
     });
   }
 
@@ -56,8 +56,8 @@ export class ClientListService {
       variables: {
         filterInput: filterInput
       },
-      fetchPolicy: "network-only",
-      errorPolicy: "all"
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all'
     });
   }
 
@@ -68,7 +68,7 @@ export class ClientListService {
    * @returns {Observable<any>}
    */
   get filter$(): Observable<any> {
-    return this._filterSubject$.asObservable()
+    return this._filterSubject$.asObservable();
   }
 
   /**
@@ -76,7 +76,7 @@ export class ClientListService {
    * @returns {Observable<any>}
    */
   get paginator$(): Observable<any> {
-    return this._paginatorSubject$.asObservable()
+    return this._paginatorSubject$.asObservable();
   }
 
   updateFilterData(filterData){

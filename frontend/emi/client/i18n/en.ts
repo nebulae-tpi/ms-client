@@ -34,6 +34,7 @@ export const locale = {
         GENERAL_INFO: {
           TITLE: 'General Info',
           NAME: 'Name',
+          DOCUMENT_ID: 'Document Id',
           PHONE: 'Phone',
           ADDRESS_LINE1: 'Address 1',
           ADDRESS_LINE2: 'Address 2',
@@ -46,6 +47,7 @@ export const locale = {
           NOTES: 'Place references'
         },
         SATELLITE: {
+          APPLY_DEFAULT_AGREEMENT_TIP: 'Apply Same Tip To Client Agreement',
           BUSINESS_AGREEMENT: 'Business agreement',
           OFFER_CONFIGURATION: 'Offer configuration',
           OFFER_MIN_DISTANCE: 'Offer Min Distance (In meters)',
@@ -59,6 +61,10 @@ export const locale = {
           REQUIRED_TIP_TYPE: 'Business Agreement type required',
           REQUIRED_TIP: 'Business Agreement Required',
           TIP: 'Value ($) Business Agreement',
+          CLIENT_AGREEMENT_LIST_TITLE: '$Acuerdos con porteros',
+          CLIENT_NAME: 'Client',
+          REQUIRED_CLIENT_DOCUMENT_ID: 'Document Id Client Required',
+          CLIENT_REPEATED: 'Client Already Exists'
         },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',

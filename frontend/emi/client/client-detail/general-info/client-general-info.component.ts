@@ -92,6 +92,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.clientGeneralInfoForm = new FormGroup({
       name: new FormControl(this.client ? (this.client.generalInfo || {}).name : '', [Validators.required]),
+      documentId: new FormControl(this.client ? (this.client.generalInfo || {}).documentId : ''),
       phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required, Validators.max(999999999999999)]),
       email: new FormControl(this.client ? (this.client.generalInfo || {}).email : '', [Validators.required]),
       addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : '', [Validators.required]),
@@ -155,6 +156,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
         mergeMap(ok => {
           const generalInfoinput = {
             name: this.clientGeneralInfoForm.getRawValue().name.toUpperCase(),
+            documentId: this.clientGeneralInfoForm.getRawValue().documentId,
             phone: this.clientGeneralInfoForm.getRawValue().phone,
             addressLine1: this.clientGeneralInfoForm.getRawValue().addressLine1,
             addressLine2: this.clientGeneralInfoForm.getRawValue().addressLine2,
