@@ -216,6 +216,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }
   }
 
+
   /**
    * Shows a message snackbar on the bottom of the page
    * @param messageKey Key of the message to i18n
