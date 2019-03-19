@@ -1,0 +1,8 @@
+[
+    {
+        "name": "client",
+        "type": "graphql",        
+        "src": "api/client-gateway/graphql/client",
+        "preBuildCommands": []
+    }
+]

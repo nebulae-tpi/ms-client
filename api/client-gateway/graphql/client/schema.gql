@@ -4,7 +4,7 @@ type CommandAck {
    accepted: Boolean
 }
 
-type ClientProfile {
+type ClientData {
    clientId: String
    name: String
    username: String
@@ -12,9 +12,9 @@ type ClientProfile {
 
 type Query {
    "Get profile data of the logged user"
-   ClientProfile: ClientProfile @requireAuth     
+   ClientProfile: ClientData @requireAuth     
 }
 
 type Mutation {
-   validateNewClient: ClientProfile @requireAuth
+   ValidateNewClient: ClientData @requireAuth
 }

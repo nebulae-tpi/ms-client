@@ -169,11 +169,11 @@ class ClientCQRS {
             return ClientDA.createClient$(client);
           }),
           mergeMap(client => ClientDA.createClient$(client)),
-          mergeMap(client => {
+          mergeMap(result => {
             const attributes = {
-              clientId: client._id
+              clientId: result.ops[0]._id
             };
-            return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(client)) 
+            return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(result.ops[0])) 
           }),
           mergeMap(client => eventSourcing.eventStore.emitEvent$(
             new Event({
@@ -182,12 +182,12 @@ class ClientCQRS {
               aggregateType: "Client",
               aggregateId: client._id,
               data: client,
-              user: authToken.preferred_username
+              user: 'SYSTEM'
             })).pipe(mapTo(client))      
           )
         ))
-    ),    
-    map(client => client),
+    ),
+    map(client => ({clientId: client_id, name: client.generalInfo.name, username: client.auth.username})),
     mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
     catchError(err => GraphqlResponseTools.handleError$(err))
   );
