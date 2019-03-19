@@ -5,7 +5,7 @@ type CommandAck {
 }
 
 type ClientData {
-   "Client id"
+   "Client id."
    clientId: String
    "Client name"
    name: String
