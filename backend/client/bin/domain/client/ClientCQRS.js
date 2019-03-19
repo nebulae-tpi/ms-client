@@ -145,8 +145,7 @@ class ClientCQRS {
   ).pipe(
     mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
     mergeMap(client => 
-      iif(
-        () => client, 
+      iif(() => client, 
         of(client), 
         of(authToken).pipe(
           mergeMap(token => {
@@ -168,8 +167,9 @@ class ClientCQRS {
             client.modificationTimestamp = new Date().getTime();
             return ClientDA.createClient$(client);
           }),
-          mergeMap(client => ClientDA.createClient$(client)),
+          //mergeMap(client => ClientDA.createClient$(client)),
           mergeMap(result => {
+            console.log('Client created => ', result);
             const attributes = {
               clientId: result.ops[0]._id
             };
@@ -185,9 +185,10 @@ class ClientCQRS {
               user: 'SYSTEM'
             })).pipe(mapTo(client))      
           )
-        ))
+        )
+      )
     ),
-    map(client => ({clientId: client_id, name: client.generalInfo.name, username: client.auth.username})),
+    map(client => ({clientId: client._id, name: client.generalInfo.name, username: client.auth.username})),
     mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
     catchError(err => GraphqlResponseTools.handleError$(err))
   );
