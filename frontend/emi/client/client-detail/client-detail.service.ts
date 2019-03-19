@@ -12,7 +12,8 @@ import {
   ClientCreateClientAuth,
   ClientRemoveClientAuth,
   ClientResetClientPassword,
-  updateClientLocation
+  updateClientLocation,
+  getClientsFiltered
 } from '../gql/client.js';
 
 @Injectable()
@@ -112,7 +113,7 @@ export class ClientDetailService {
   }
 
   updateClientLocation$(id: string, clientLocation: any) {
-    //console.log('$$$$$ ==> ', id, clientLocation );
+    // console.log('$$$$$ ==> ', id, clientLocation );
     // return of({});
     return this.updateOperation$(clientLocation)
       .pipe(
@@ -211,7 +212,17 @@ export class ClientDetailService {
         id: id,
         input: userPasswordInput
       },
-      errorPolicy: "all"
+      errorPolicy: 'all'
+    });
+  }
+
+
+  getFilteredClientList$(filterInput, paginationInput){
+    return this.gateway.apollo.query<any>({
+      query: getClientsFiltered,
+      variables: { filterInput, paginationInput},
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all'
     });
   }
 

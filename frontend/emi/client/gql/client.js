@@ -8,6 +8,7 @@ export const ClientClient = gql`
       _id
       generalInfo {
         name
+        documentId
         phone
         addressLine1
         addressLine2
@@ -23,6 +24,13 @@ export const ClientClient = gql`
         tip
         offerMinDistance
         offerMaxDistance
+        clientAgreements{
+          clientId
+          clientName
+          documentId
+          tip
+          tipType
+        }
       }
       auth {
         userKeycloakId
@@ -41,6 +49,20 @@ export const ClientClient = gql`
   }
 `;
 
+// *here*
+export const getClientsFiltered = gql`
+query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: ClientClientPaginationInput!) {
+  ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
+    _id
+    generalInfo {
+      name
+      documentId
+    }
+    state
+  }
+}
+`;
+
 export const ClientClients = gql`
   query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: ClientClientPaginationInput!) {
     ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
@@ -53,7 +75,7 @@ export const ClientClients = gql`
         city
         neighborhood
         zone
-        email        
+        email
         notes
       }
       satelliteInfo{
@@ -62,6 +84,13 @@ export const ClientClients = gql`
         tip
         offerMinDistance
         offerMaxDistance
+        clientAgreements{
+          clientId
+          clientName
+          documentId
+          tip
+          tipType
+        }
       }
       auth {
         userKeycloakId
@@ -173,6 +202,7 @@ export const ClientClientUpdatedSubscription = gql`
       _id
       generalInfo {
         name
+        documentId
         phone
         addressLine1
         addressLine2
@@ -188,6 +218,13 @@ export const ClientClientUpdatedSubscription = gql`
         tip
         offerMinDistance
         offerMaxDistance
+        clientAgreements{
+          clientId
+          clientName
+          documentId
+          tip
+          tipType
+        }
       }
       auth {
         userKeycloakId

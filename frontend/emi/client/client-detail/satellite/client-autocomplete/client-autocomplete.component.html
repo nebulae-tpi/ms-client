@@ -1,0 +1,19 @@
+<div fxFlex="100" [formGroup]="formGroup"  >
+
+  <mat-form-field fxFlex="100" >
+    <input matInput [readonly]="!editable" [formControlName]="controlName"
+    placeholder="{{ placeHolder }}" [matAutocomplete]="auto">
+    <mat-error *ngIf="formGroup.hasError('checkDocumentId', [controlName])">
+        {{'CLIENT.DETAILS.SATELLITE.REQUIRED_CLIENT_DOCUMENT_ID' | translate}}
+    </mat-error>
+    <mat-error *ngIf="formGroup.hasError('clientRepeated', [controlName])">
+        {{'CLIENT.DETAILS.SATELLITE.CLIENT_REPEATED' | translate}}
+    </mat-error>
+  </mat-form-field>
+  <mat-autocomplete #auto="matAutocomplete"
+    (optionSelected)='onSelectBusinessEvent($event.option.value)' [displayWith]="displayFn" >
+    <mat-option *ngFor="let client of clientsQueryFiltered$ | async" [value]="client"  >
+      {{ client.name }} -- {{ client.documentId }}
+    </mat-option>
+  </mat-autocomplete>
+</div>

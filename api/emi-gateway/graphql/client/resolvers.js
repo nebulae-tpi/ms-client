@@ -29,7 +29,6 @@ function getResponseFromBackEnd$(response) {
 
 
 module.exports = {
-
     //// QUERY ///////
 
     Query: {
@@ -261,8 +260,6 @@ module.exports = {
               .toPromise();
         },
     },
-
-
     
     //// SUBSCRIPTIONS ///////
     Subscription: {

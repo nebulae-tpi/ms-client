@@ -12,7 +12,8 @@ import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
+  FormArray
 } from '@angular/forms';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -55,7 +56,7 @@ import { FuseTranslationLoaderService } from '../../../../../core/services/trans
 import { KeycloakService } from 'keycloak-angular';
 import { ClientDetailService } from '../client-detail.service';
 import { DialogComponent } from '../../dialog/dialog.component';
-import { ToolbarService } from "../../../../toolbar/toolbar.service";
+import { ToolbarService } from '../../../../toolbar/toolbar.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -98,22 +99,33 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
       offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
       offerMaxDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMaxDistance : ''),
+      clientAgreements: new FormArray( this.buildClientAgreementArray(this.client) )
     });
 
   }
 
   updateClientSatelliteInfo() {
-    this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
+    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
       .pipe(
         mergeMap(ok => {
+          console.log(this.clientSatelliteForm.getRawValue().clientAgreements);
           const clientClientSatelliteInput = {
             tip: this.clientSatelliteForm.getRawValue().tip,
             tipType: this.clientSatelliteForm.getRawValue().tipType,
             referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
+            clientAgreements: this.clientSatelliteForm.getRawValue().clientAgreements
+              .map(e => ({
+                clientId: e.client.id,
+                clientName: e.client.name,
+                documentId: e.client.documentId,
+                tipType: e.tipType,
+                tip: e.tip
+              }))
           };
           return this.ClientDetailservice.updateClientClientSatelliteInfo$(this.client._id, clientClientSatelliteInput);
+
         }),
         mergeMap(resp => this.graphQlAlarmsErrorHandler$(resp)),
         filter((resp: any) => !resp.errors || resp.errors.length === 0),
@@ -131,7 +143,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
   }
 
   onClientStateChange() {
-    this.showConfirmationDialog$("CLIENT.UPDATE_MESSAGE", "CLIENT.UPDATE_TITLE")
+    this.showConfirmationDialog$('CLIENT.UPDATE_MESSAGE', 'CLIENT.UPDATE_TITLE')
       .pipe(
         mergeMap(ok => {
           return this.ClientDetailservice.updateClientClientState$(this.client._id, this.clientStateForm.getRawValue().state);
@@ -150,7 +162,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
 
   showConfirmationDialog$(dialogMessage, dialogTitle) {
     return this.dialog
-      //Opens confirm dialog
+      // Opens confirm dialog
       .open(DialogComponent, {
         data: {
           dialogMessage,
@@ -195,8 +207,8 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
               this.showMessageSnackbar('ERRORS.' + errorDetail.message.code);
             });
           } else {
-            response.errors.forEach(error => {
-              this.showMessageSnackbar('ERRORS.' + error.message.code);
+            response.errors.forEach(err => {
+              this.showMessageSnackbar('ERRORS.' + err.message.code);
             });
           }
         });
@@ -204,13 +216,14 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }
   }
 
+
   /**
    * Shows a message snackbar on the bottom of the page
    * @param messageKey Key of the message to i18n
    * @param detailMessageKey Key of the detail message to i18n
    */
   showMessageSnackbar(messageKey, detailMessageKey?) {
-    let translationData = [];
+    const translationData = [];
     if (messageKey) {
       translationData.push(messageKey);
     }
@@ -230,6 +243,60 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
         );
       });
   }
+
+  addAsociatedDoorMan(client?: any, tipType?: string, tip?: string) {
+    const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
+    clientAgreements.push(this.formBuilder.group({
+      client: new FormControl(client, [Validators.required, this.checkDoorManList.bind(this)]),
+      tipType: new FormControl(tipType, [Validators.required]),
+      tip: new FormControl(tip, [Validators.required, Validators.min(0)])
+    }));
+  }
+
+  applySameTipToAsociatedClients(){
+    const defaultTip = this.clientSatelliteForm.get('tip').value;
+    const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
+    clientAgreements.controls.forEach(clientControl => clientControl.patchValue({tip: defaultTip}));
+
+  }
+
+  buildClientAgreementArray(client) {
+    if (client && client.satelliteInfo && client.satelliteInfo.clientAgreements) {
+      return client.satelliteInfo.clientAgreements
+        .map((clientRef: any) => new FormGroup({
+          client: new FormControl({ id: clientRef.clientId, name: clientRef.clientName, documentId: clientRef.documentId }),
+          tipType: new FormControl(clientRef.tipType),
+          tip: new FormControl(clientRef.tip)
+        }));
+    } else {
+      return [];
+    }
+  }
+
+  deleteAsociatedDoorMan(index){
+    this.clientSatelliteForm.pristine = false;
+    const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
+    clientAgreements.removeAt(index);
+  }
+
+  printForm(){
+    console.log(this.clientSatelliteForm);
+  }
+
+  checkDoorManList(c: FormControl){
+    if ( typeof c.value === 'string' || !c.value ){ return null; }
+    const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
+    const repeated = clientAgreements.getRawValue().filter((v) => ( v.client && c.value && v.client.id === c.value.id )).length;
+    if (repeated > 1){
+      return { clientRepeated: { valid: false } };
+    }
+
+    if (c.value && !c.value.documentId){
+      return { checkDocumentId: { valid: false } };
+    }
+    return null;
+  }
+
 
 
 
