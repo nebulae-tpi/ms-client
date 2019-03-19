@@ -45,7 +45,7 @@ type ClientGeneralInfo {
   "Client phone"
   phone: BigInt
   "Client address 1"
-  addressLine1: String!
+  addressLine1: String
   "Client address 2"
   addressLine2: String
   "Client city"
