@@ -47,7 +47,7 @@ class ClientDA {
   }
 
   /**
-   * Get client info by its username
+   * Get client info by its username.
    * @param {*} username 
    */
   static getClientByUsername$(username) {
