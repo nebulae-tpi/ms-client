@@ -234,7 +234,7 @@ jobs:
             name: Deploy client-gateway API
             command: |
               (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
-              (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-client-gateway api-emi-gateway=$(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
+              (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-client-gateway api-client-gateway=$(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
         - run:
             name: Deploy BackEnds 
             command: |
