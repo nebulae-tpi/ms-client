@@ -5,8 +5,11 @@ type CommandAck {
 }
 
 type ClientData {
+   "Client id"
    clientId: String
+   "Client name"
    name: String
+   "Client username"
    username: String
 }
 
