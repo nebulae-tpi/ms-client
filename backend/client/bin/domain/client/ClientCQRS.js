@@ -169,11 +169,11 @@ class ClientCQRS {
           }),
           //mergeMap(client => ClientDA.createClient$(client)),
           mergeMap(result => {
-            console.log('Client created => ', result);
+            console.log('Client created => ', JSON.stringify(result.ops[0]));
             const attributes = {
               clientId: result.ops[0]._id
             };
-            return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(result.ops[0])) 
+            return ClientKeycloakDA.updateUserAttributes$(result.ops[0].auth.userKeycloakId, attributes).pipe(mapTo(result.ops[0])) 
           }),
           mergeMap(client => eventSourcing.eventStore.emitEvent$(
             new Event({
