@@ -15,6 +15,7 @@ import { runInThisContext } from 'vm';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs/Rx';
 import { ClientDetailService } from '../../client-detail.service';
+import { ToolbarService } from '../../../../../toolbar/toolbar.service';
 
 export interface Actor{
   buId: string;
@@ -42,6 +43,8 @@ export class ClientAutocompleteComponent implements OnInit, OnDestroy {
   @Input() placeHolder: String;
   @Output() onSelected = new EventEmitter();
 
+  selectedBusinessId: any;
+
 
   subscriptions = [];
   currentConf: any;
@@ -54,12 +57,22 @@ export class ClientAutocompleteComponent implements OnInit, OnDestroy {
     private translationLoader: FuseTranslationLoaderService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private toolbarService: ToolbarService,
   ) {
     this.translationLoader.loadTranslations(english, spanish);
   }
 
   ngOnInit() {
+
+    this.toolbarService.onSelectedBusiness$
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe(buSelected => {
+      this.selectedBusinessId = (buSelected && buSelected.id) ? buSelected.id : null;
+    }, err => console.log(err), () => {});
+
     this.clientsQueryFiltered$ = this.formGroup.get(this.controlName).valueChanges
       .pipe(
         // startWith(this.formGroup.get(this.controlName).value),
@@ -67,22 +80,14 @@ export class ClientAutocompleteComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         filter(input => typeof input === 'string'),
         map((filterText: string) => ({
-          filterValue: { name: filterText ? filterText.trim().toLowerCase() : '' },
+          filterValue: {
+            name: filterText ? filterText.trim().toLowerCase() : '',
+            businessId: this.selectedBusinessId
+          },
           pagination: { count: 10, page: 0, sort: -1 }
         })),
         mergeMap(({ filterValue, pagination }) => this.getClientsFiltered$(filterValue, pagination))
       );
-
-    // Rx.Observable.of(this.formGroup.get(this.controlName).value)
-    // .pipe(
-    //   filter(filterText => filterText !== null),
-    //   mergeMap(filterText => this.getClientsFiltered$(filterText, 1)),
-    //   filter(result => result && result.length === 1),
-    //   map(result => result[0]),
-    //   tap(result => this.formGroup.get(this.controlName).setValue({name: result.name, id: result.id }) )
-    // )
-    // .subscribe(() => {}, error => console.log(error), () => {});
-
 
   }
 

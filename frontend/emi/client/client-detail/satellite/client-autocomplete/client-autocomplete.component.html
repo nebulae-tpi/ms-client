@@ -9,6 +9,9 @@
     <mat-error *ngIf="formGroup.hasError('clientRepeated', [controlName])">
         {{'CLIENT.DETAILS.SATELLITE.CLIENT_REPEATED' | translate}}
     </mat-error>
+    <mat-error *ngIf="formGroup.hasError('clientSelected', [controlName])">
+      {{'CLIENT.DETAILS.SATELLITE.CLIENT_MISSING' | translate}}
+  </mat-error>
   </mat-form-field>
   <mat-autocomplete #auto="matAutocomplete"
     (optionSelected)='onSelectBusinessEvent($event.option.value)' [displayWith]="displayFn" >

@@ -64,7 +64,8 @@ export const locale = {
           CLIENT_AGREEMENT_LIST_TITLE: '$Acuerdos con porteros',
           CLIENT_NAME: 'Client',
           REQUIRED_CLIENT_DOCUMENT_ID: 'Document Id Client Required',
-          CLIENT_REPEATED: 'Client Already Exists'
+          CLIENT_REPEATED: 'Client Already Exists',
+          CLIENT_MISSING: 'Select a Valid Client'
         },
         ENABLED: 'Enabled',
         DISABLED: 'Disabled',

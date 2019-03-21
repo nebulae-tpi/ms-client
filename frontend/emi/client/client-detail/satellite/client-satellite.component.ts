@@ -284,7 +284,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
   }
 
   checkDoorManList(c: FormControl){
-    if ( typeof c.value === 'string' || !c.value ){ return null; }
+    if ( typeof c.value === 'string' || !c.value ){ return { clientSelected: { valid: false } }; }
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     const repeated = clientAgreements.getRawValue().filter((v) => ( v.client && c.value && v.client.id === c.value.id )).length;
     if (repeated > 1){
