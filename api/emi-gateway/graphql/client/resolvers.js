@@ -27,7 +27,6 @@ function getResponseFromBackEnd$(response) {
     );
 }
 
-
 module.exports = {
     //// QUERY ///////
 
