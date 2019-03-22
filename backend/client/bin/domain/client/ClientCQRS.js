@@ -186,7 +186,7 @@ class ClientCQRS {
     mergeMap(client => iif(() => authToken.clientId, of(client), of(client).pipe(
       mergeMap(client => {
         const attributes = {
-          clientId: result.ops[0]._id,
+          clientId: client._id,
           businessId: authToken.businessId
         };
         return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(client)) 
