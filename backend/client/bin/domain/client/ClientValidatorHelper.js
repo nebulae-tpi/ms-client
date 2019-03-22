@@ -92,6 +92,19 @@ class ClientValidatorHelper {
     );
   }
 
+    /**
+   * Validates the token validity
+   */
+  static checkClientValidateNewClient$(){
+    return TokenKeycloakDA.checkTokenValidity$()
+    .pipe(
+      catchError(error => {
+        console.log('An error ocurred checking keycloak token validity: ', error);
+        return this.throwCustomError$(INVALID_TOKEN_ERROR_CODE);
+      })
+    );
+  }
+
   /**
    * Validates if the user can resset its password
    * @param {*} client 

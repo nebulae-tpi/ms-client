@@ -143,6 +143,8 @@ class ClientCQRS {
     PERMISSION_DENIED_ERROR_CODE,
     ["CLIENT"]
   ).pipe(
+    //Validate the data
+    mergeMap(roles => ClientValidatorHelper.checkClientValidateNewClient$().pipe(mapTo(roles))),
     mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
     mergeMap(client => 
       iif(() => client, 
@@ -167,14 +169,7 @@ class ClientCQRS {
             client.modificationTimestamp = new Date().getTime();
             return ClientDA.createClient$(client);
           }),
-          //mergeMap(client => ClientDA.createClient$(client)),
-          mergeMap(result => {
-            console.log('Client created => ', JSON.stringify(result.ops[0]));
-            const attributes = {
-              clientId: result.ops[0]._id
-            };
-            return ClientKeycloakDA.updateUserAttributes$(result.ops[0].auth.userKeycloakId, attributes).pipe(mapTo(result.ops[0])) 
-          }),
+          map(result => result.ops[0]),
           mergeMap(client => eventSourcing.eventStore.emitEvent$(
             new Event({
               eventType: "EndClientCreated",
@@ -184,10 +179,19 @@ class ClientCQRS {
               data: client,
               user: 'SYSTEM'
             })).pipe(mapTo(client))      
-          )
+          ),
         )
       )
     ),
+    mergeMap(client => iif(authToken.clientId, of(client), of(client).pipe(
+      mergeMap(client => {
+        const attributes = {
+          clientId: result.ops[0]._id,
+          businessId: authToken.businessId
+        };
+        return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(client)) 
+      })
+    ))),
     map(client => ({clientId: client._id, name: client.generalInfo.name, username: client.auth.username})),
     mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
     catchError(err => GraphqlResponseTools.handleError$(err))
