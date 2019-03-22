@@ -183,7 +183,7 @@ class ClientCQRS {
         )
       )
     ),
-    mergeMap(client => iif(authToken.clientId, of(client), of(client).pipe(
+    mergeMap(client => iif(() => authToken.clientId, of(client), of(client).pipe(
       mergeMap(client => {
         const attributes = {
           clientId: result.ops[0]._id,
