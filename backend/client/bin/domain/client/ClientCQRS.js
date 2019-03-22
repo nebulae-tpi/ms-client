@@ -133,7 +133,7 @@ class ClientCQRS {
   }
 
   /**
-  * Validate user logged from an identity provider
+  * Validate user logged from an identity provider.
   */
  ValidateNewClient$({ root, args, jwt }, authToken) {
   return RoleValidator.checkPermissions$(
