@@ -115,14 +115,16 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
             referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
-            clientAgreements: this.clientSatelliteForm.getRawValue().clientAgreements
-              .map(e => ({
-                clientId: e.client.id,
-                clientName: e.client.name,
-                documentId: e.client.documentId,
-                tipType: e.tipType,
-                tip: e.tip
-              }))
+            clientAgreements: this.clientSatelliteForm.getRawValue().tipType === 'VIRTUAL_WALLET'
+              ? this.clientSatelliteForm.getRawValue().clientAgreements
+                .map(e => ({
+                  clientId: e.client.id,
+                  clientName: e.client.name,
+                  documentId: e.client.documentId,
+                  tipType: 'VIRTUAL_WALLET',
+                  tip: e.tip
+                }))
+              : []
           };
           return this.ClientDetailservice.updateClientClientSatelliteInfo$(this.client._id, clientClientSatelliteInput);
 
@@ -244,11 +246,11 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       });
   }
 
-  addAsociatedDoorMan(client?: any, tipType?: string, tip?: string) {
+  addAsociatedDoorMan(client?: any, tip?: string) {
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     clientAgreements.push(this.formBuilder.group({
       client: new FormControl(client, [Validators.required, this.checkDoorManList.bind(this)]),
-      tipType: new FormControl(tipType, [Validators.required]),
+      // tipType: new FormControl(tipType, [Validators.required]),
       tip: new FormControl(tip, [Validators.required, Validators.min(0)])
     }));
   }
@@ -265,7 +267,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       return client.satelliteInfo.clientAgreements
         .map((clientRef: any) => new FormGroup({
           client: new FormControl({ id: clientRef.clientId, name: clientRef.clientName, documentId: clientRef.documentId }),
-          tipType: new FormControl(clientRef.tipType),
+          // tipType: new FormControl(clientRef.tipType),
           tip: new FormControl(clientRef.tip)
         }));
     } else {

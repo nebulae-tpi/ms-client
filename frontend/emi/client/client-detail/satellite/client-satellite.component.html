@@ -47,21 +47,23 @@
     </mat-form-field>
 
 
-    <div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+    <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'"
+      fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
       <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span>
     </div>
 
-      <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex="100">
+      <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'"
+        fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex="100">
         <div *ngFor="let item of clientSatelliteForm.get('clientAgreements')['controls']; let i = index;"
           fxFlex="100" formArrayName="clientAgreements" fxLayout="column">
           <div class="border" [formGroupName]="i" fxFlex="100" fxLayout="row wrap">
 
-            <client-autocomplete class="center-text pr-12 pl-12" fxFlex.gt-xs="35" fxFlex="100"
+            <client-autocomplete class="center-text pr-12 pl-12" fxFlex.gt-xs="60" fxFlex="100"
               [formGroup]="clientSatelliteForm.get('clientAgreements')['controls'][i]"
               [placeHolder]="'CLIENT.DETAILS.SATELLITE.CLIENT_NAME' | translate" [controlName]="'client'" [editable]="true">
             </client-autocomplete>
 
-            <mat-form-field fxFlex.gt-xs="35" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+            <!-- <mat-form-field fxFlex.gt-xs="35" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
               <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
                 <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
                   {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
@@ -70,9 +72,9 @@
               <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
                 {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
               </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
 
-            <mat-form-field fxFlex.gt-xs="20" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+            <mat-form-field fxFlex.gt-xs="30" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
               <input matInput name="tip" formControlName="tip" maxlength="8"
                 placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}" currencyMask
                 [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">

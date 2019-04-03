@@ -61,7 +61,7 @@ export const locale = {
           REQUIRED_TIP_TYPE: 'Business Agreement type required',
           REQUIRED_TIP: 'Business Agreement Required',
           TIP: 'Value ($) Business Agreement',
-          CLIENT_AGREEMENT_LIST_TITLE: '$Acuerdos con porteros',
+          CLIENT_AGREEMENT_LIST_TITLE: 'Doormen Agreements',
           CLIENT_NAME: 'Client',
           REQUIRED_CLIENT_DOCUMENT_ID: 'Document Id Client Required',
           CLIENT_REPEATED: 'Client Already Exists',
