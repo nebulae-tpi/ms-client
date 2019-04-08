@@ -64,7 +64,7 @@ class ClientCQRS {
       "Client",
       "getClient",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -88,7 +88,7 @@ class ClientCQRS {
       "Client",
       "getClientList",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -116,7 +116,7 @@ class ClientCQRS {
       "Client",
       "getClientListSize",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => {
         const isPlatformAdmin = roles["PLATFORM-ADMIN"];
@@ -214,7 +214,7 @@ class ClientCQRS {
       "Client",
       "createClient$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => ClientValidatorHelper.checkClientCreationClientValidator$(client, authToken, roles)),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
@@ -249,7 +249,7 @@ class ClientCQRS {
       "Client",
       "updateClientGeneralInfo$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -298,7 +298,7 @@ class ClientCQRS {
       "Client",
       "updateClientSatelliteInfo$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -339,7 +339,7 @@ class ClientCQRS {
       "Client",
       "updateClientState$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -383,7 +383,7 @@ class ClientCQRS {
       "Client",
       "updateClientLocation$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(() => eventSourcing.eventStore.emitEvent$(
         new Event({
@@ -418,7 +418,7 @@ class ClientCQRS {
       "Client",
       "createClientAuth$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -480,7 +480,7 @@ class ClientCQRS {
       "Client",
       "resetClientPassword$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)
@@ -527,7 +527,7 @@ class ClientCQRS {
       "Client",
       "removeClientAuth$",
       PERMISSION_DENIED_ERROR_CODE,
-      ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+      ["PLATFORM-ADMIN",  "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
     ).pipe(
       mergeMap(roles => 
         ClientDA.getClient$(client._id)

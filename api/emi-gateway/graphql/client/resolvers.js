@@ -32,7 +32,7 @@ module.exports = {
 
     Query: {
         ClientClients(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClients', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClients', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -48,7 +48,7 @@ module.exports = {
             ).toPromise();
         },
         ClientClientsSize(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClientsSize', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClientsSize', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -64,7 +64,7 @@ module.exports = {
             ).toPromise();
         },
         ClientClient(root, args, context) {
-            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClient', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER"])
+            return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-'+'Client', 'ClientClient', PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"])
             .pipe(
                 mergeMap(() =>
                     broker
@@ -90,7 +90,7 @@ module.exports = {
               "ClientCreateClient",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             )
             .pipe(
                 mergeMap(() =>
@@ -112,7 +112,7 @@ module.exports = {
               "ClientUpdateClientGeneralInfo",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -133,7 +133,7 @@ module.exports = {
               "ClientUpdateClientSatelliteInfo",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -154,7 +154,7 @@ module.exports = {
               "ClientUpdateClientState",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -175,7 +175,7 @@ module.exports = {
               "ClientUpdateClientLocation",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             ).pipe(
                 mergeMap(() =>
                   context.broker.forwardAndGetReply$(
@@ -196,7 +196,7 @@ module.exports = {
               "ClientCreateClientAuth",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             )
               .pipe(
                 mergeMap(() =>
@@ -219,7 +219,7 @@ module.exports = {
               "ClientResetClientPassword",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             )
               .pipe(
                 mergeMap(() =>
@@ -242,7 +242,7 @@ module.exports = {
               "ClientRemoveClientAuth",
               PERMISSION_DENIED_ERROR_CODE,
               "Permission denied",
-              ["PLATFORM-ADMIN", "BUSINESS-OWNER"]
+              ["PLATFORM-ADMIN", "BUSINESS-OWNER", "OPERATION-SUPERVISOR"]
             )
               .pipe(
                 mergeMap(() =>
