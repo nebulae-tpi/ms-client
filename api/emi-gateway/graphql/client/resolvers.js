@@ -258,8 +258,7 @@ module.exports = {
               )
               .toPromise();
         },
-    },
-    
+    },    
     //// SUBSCRIPTIONS ///////
     Subscription: {
         ClientClientUpdatedSubscription: {
