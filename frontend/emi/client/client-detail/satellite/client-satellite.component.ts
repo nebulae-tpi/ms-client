@@ -263,48 +263,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
   }
 
   buildClientAgreementArray(client) {
-    if (client && client.satelliteInfo && client.satelliteInfo.clientAgreements) {
-
-      client.satelliteInfo.clientAgreements = [...client.satelliteInfo.clientAgreements, 
-        {
-          clientId: '12QW-34ER',
-          clientName: 'samuel',
-          documentId: '1025695036',
-          tip: 1100
-        },
-        {
-          clientId: 'd456-34ER',
-          clientName: 'dario',
-          documentId: '1025695036',
-          tip: 800
-        },
-        {
-          clientId: 'er45t-34ER',
-          clientName: 'raul',
-          documentId: '1025695036',
-          tip: 550
-        },
-        {
-          clientId: '45t6y-34ER',
-          clientName: 'paulina',
-          documentId: '1025695036',
-          tip: 700
-        },
-        {
-          clientId: '56tb-34ER',
-          clientName: 'andres',
-          documentId: '1025695036',
-          tip: 1300
-        },
-        {
-          clientId: '2s4f-34ER',
-          clientName: 'carlos',
-          documentId: '1025695036',
-          tip: 1000
-        }
-    ];
-
-      
+    if (client && client.satelliteInfo && client.satelliteInfo.clientAgreements) {      
       return client.satelliteInfo.clientAgreements
         .map((clientRef: any) => new FormGroup({
           client: new FormControl({ id: clientRef.clientId, name: clientRef.clientName, documentId: clientRef.documentId }),
