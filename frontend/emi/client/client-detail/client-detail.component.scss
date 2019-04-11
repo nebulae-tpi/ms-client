@@ -1,20 +1,63 @@
 @import "src/app/core/scss/fuse";
 
+#detail {
+
+    .header {
+
+        .subtitle {
+            margin: 6px 0 0 0;
+        }
+    }
+
+    .content {
+
+        .mat-tab-group,
+        .mat-tab-body-wrapper,
+        .tab-content {
+            flex: 1 1 auto;
+            max-width: 100%;
+        }
+
+        .tab-content {
+            flex: 1 1 auto;
+
+            &.products {
+
+                .product-row {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .mat-tab-body-content {
+            display: flex;
+        }
+
+        .mat-tab-label {
+            height: 64px;
+        }
+    }
+
+}
+
+
+
+
 .small-map-content, .large-map-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px;
-  padding: 16px;
+  // margin: 16px;
+  // padding: 8px;
   border-radius: 8px;
 }
 
 .small-map-content {
-  height: 400px;
-  width: 95%;
+  height: 390px;
+  width: 100%;
 }
 
 .large-map-content {
   height: 650px;
-  width: 98%;
+  width: 100%;
 }

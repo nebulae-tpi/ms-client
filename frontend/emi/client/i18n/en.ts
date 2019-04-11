@@ -63,7 +63,7 @@ export const locale = {
           TIP: 'Value ($) Business Agreement',
           CLIENT_AGREEMENT_LIST_TITLE: 'Doormen Agreements',
           CLIENT_NAME: 'Client',
-          REQUIRED_CLIENT_DOCUMENT_ID: 'Document Id Client Required',
+          REQUIRED_CLIENT_DOCUMENT_ID: 'Client haven\'t Document ID',
           CLIENT_REPEATED: 'Client Already Exists',
           CLIENT_MISSING: 'Select a Valid Client'
         },

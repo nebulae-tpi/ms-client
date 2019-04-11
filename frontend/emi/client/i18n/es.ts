@@ -63,7 +63,7 @@ export const locale = {
           TIP: 'Valor ($) Acuerdo Empresarial',
           CLIENT_AGREEMENT_LIST_TITLE: 'Acuerdo Empresarial con porteros',
           CLIENT_NAME: 'Cliente',
-          REQUIRED_CLIENT_DOCUMENT_ID: 'Documento del Cliente es Requerido',
+          REQUIRED_CLIENT_DOCUMENT_ID: 'El Cliente no Tiene Documento Válido',
           CLIENT_REPEATED: 'Cliente Repetido',
           CLIENT_MISSING: 'Selecciona Un Cliente Válido'
         },
