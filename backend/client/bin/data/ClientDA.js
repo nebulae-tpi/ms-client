@@ -284,6 +284,11 @@ class ClientDA {
     return this.getClientByFilter$(query);
   }
 
+  static linkSatellite$(clientId, satelliteId){
+    const collection = mongoDB.db.collection(CollectionName);
+    return defer(() => collection.updateOne({ _id: clientId }, {$set: { satelliteId } }))
+  }
+
 }
 /**
  * @returns {ClientDA}

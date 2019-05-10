@@ -4,6 +4,13 @@ type CommandAck {
    accepted: Boolean
 }
 
+type CommandResponse {
+  "Response code"
+  code: Int
+  "Response message"
+  message: String
+}
+
 type ClientData {
    "Client id"
    clientId: String
@@ -11,6 +18,8 @@ type ClientData {
    name: String
    "Client username"
    username: String
+   "SatelliteID"
+   satelliteId: String
 }
 
 type Query {
@@ -20,4 +29,5 @@ type Query {
 
 type Mutation {
    ValidateNewClient: ClientData @requireAuth
+   linkSatellite(satelliteId: String): CommandResponse
 }

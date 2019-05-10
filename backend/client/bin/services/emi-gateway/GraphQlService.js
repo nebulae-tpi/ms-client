@@ -197,7 +197,11 @@ class GraphQlService {
       {
         aggregateType: "Client",
         messageType: "clientgateway.graphql.mutation.ValidateNewClient"
-      }
+      },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.linkSatellite"
+      },
     ];
   }
 
@@ -214,6 +218,10 @@ class GraphQlService {
       },
       "clientgateway.graphql.mutation.ValidateNewClient": {
         fn: ClientCQRS.ValidateNewClient$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.linkSatellite":{
+        fn: ClientCQRS.linkSatellite$,
         obj: ClientCQRS
       },
       // EMI GATEWAY

@@ -11,12 +11,14 @@ const MATERIALIZED_VIEW_TOPIC = "materialized-view-updates";
 const GraphqlResponseTools = require('../../tools/GraphqlResponseTools');
 const RoleValidator = require("../../tools/RoleValidator");
 const { of, interval, iif } = require("rxjs");
-const { take, mergeMap, catchError, map, toArray, mapTo } = require('rxjs/operators');
+const { take, mergeMap, catchError, map, toArray, mapTo, tap } = require('rxjs/operators');
 const {
   CustomError,
   DefaultError,
   INTERNAL_SERVER_ERROR_CODE,
-  PERMISSION_DENIED_ERROR_CODE
+  PERMISSION_DENIED_ERROR_CODE,
+  CLIENT_ID_MISSING,
+  CLIENT_NO_FOUND
 } = require("../../tools/customError");
 
 
@@ -196,6 +198,22 @@ class ClientCQRS {
     mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
     catchError(err => GraphqlResponseTools.handleError$(err))
   );
+}
+
+linkSatellite$({ root, args, jwt }, authToken) {
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
+      tap(satelliteFound => {
+        if(!authToken.clientId){ throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_ID_MISSING.code, CLIENT_ID_MISSING.description )  }
+        if(!satelliteFound){ throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
+      }),
+      mergeMap(() => ClientDA.linkSatellite$(authToken.clientId, args.satelliteId)),
+      map(() => ({ code: 200, message: `Satellite Linked successful` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
 }
 
   /**

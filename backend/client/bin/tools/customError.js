@@ -14,7 +14,9 @@ const INVALID_USER_CREDENTIALS_OR_TOKEN_ERROR_CODE = {code: 21017, description: 
 const USER_CREDENTIAL_EXIST_ERROR_CODE = {code: 21018, description: 'The user already has an user credentiales'};
 const USER_NOT_FOUND_ERROR_CODE = {code: 21019, description: 'The user was not found'};
 const USER_DOES_NOT_HAVE_AUTH_CREDENTIALS_ERROR_CODE = {code: 21020, description: 'The user does not have auth credentials'};
-const USER_WAS_NOT_DELETED = {code: 21021, description: 'An error ocurred, user was not deleted'};
+const USER_WAS_NOT_DELETED = { code: 21021, description: 'An error ocurred, user was not deleted'};
+const CLIENT_ID_MISSING = { code: 21022, description: 'Missing Client Id'};
+const CLIENT_NO_FOUND = { code: 21023, description: 'Client No Found'};
 
 /**
  * class to emcapsulute diferent errors.
@@ -74,5 +76,7 @@ class CustomError extends Error {
     USER_DOES_NOT_HAVE_AUTH_CREDENTIALS_ERROR_CODE,
     USER_WAS_NOT_DELETED,
     USER_WAS_NOT_DELETED,
-    INVALID_TOKEN_ERROR_CODE
+    INVALID_TOKEN_ERROR_CODE,
+    CLIENT_ID_MISSING,
+    CLIENT_NO_FOUND
   } 
