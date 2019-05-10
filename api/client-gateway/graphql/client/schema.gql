@@ -11,7 +11,7 @@ type CommandResponse {
   message: String
 }
 
-type ClientData {
+type ClientData{
    "Client id"
    clientId: String
    "Client name"
@@ -22,9 +22,45 @@ type ClientData {
    satelliteId: String
 }
 
+type SatelliteLatLng{
+   lat: Float
+   lng: Float
+}
+
+"Satellite basic Info"
+type ClientBasicSatelliteInfo {
+   "Business ID"
+   businessId: String! 
+   "Client ID"
+   _id: String!
+   "Name"
+   name: String
+   "Phone"
+   phone: String
+   "email"
+   email: String
+   "city"
+   city: String
+   "Neighborhood"
+   neighborhood: String
+   "Addres"
+   address: String
+   "Zone"
+   zone: String
+   "Active State"
+   active: Boolean
+   "location"
+   location: SatelliteLatLng
+   "Tip type"
+   tipType: String
+   "Tip"
+   tip: Int   
+}
+
 type Query {
    "Get profile data of the logged user"
-   ClientProfile: ClientData @requireAuth     
+   ClientProfile: ClientData @requireAuth
+   ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
 }
 
 type Mutation {

@@ -40,19 +40,13 @@ class ClientCQRS {
    */
   getClientProfile$({ args }, authToken) {
     return RoleValidator.checkPermissions$(
-      authToken.realm_access.roles,
-      "Client",
-      "getClientProfile",
-      PERMISSION_DENIED_ERROR_CODE,
-      ["CLIENT"]
-    ).pipe(
-      mergeMap(roles => {
-        const username = authToken.preferred_username;
-        return ClientDA.getClientByUsername$(username)
-      }),
-      mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
-      catchError(err => GraphqlResponseTools.handleError$(error))
-    );
+      authToken.realm_access.roles, "Client", "getClientProfile", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+      .pipe(
+        tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
+        mergeMap(roles => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
+        mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
+        catchError(err => GraphqlResponseTools.handleError$(error))
+      );
   }
 
   /**  
@@ -199,16 +193,16 @@ class ClientCQRS {
     catchError(err => GraphqlResponseTools.handleError$(err))
   );
 }
+// APP-CLIENT
 
 linkSatellite$({ root, args, jwt }, authToken) {
-  console.log({authToken});
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
     .pipe(
       mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
       tap(satelliteFound => {
-        if(!authToken.clientId){ throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_ID_MISSING.code, CLIENT_ID_MISSING.description )  }
-        if(!satelliteFound){ throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
+        if(!authToken.clientId){ throw new CustomError('Missing client ID in token', 'linkSatellite$', CLIENT_ID_MISSING.code, CLIENT_ID_MISSING.description )  }
+        if(!satelliteFound){ throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
       }),
       mergeMap(() => ClientDA.linkSatellite$(authToken.clientId, args.satelliteId)),
       map(() => ({ code: 200, message: `Satellite Linked successful` })),
@@ -216,6 +210,36 @@ linkSatellite$({ root, args, jwt }, authToken) {
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
 }
+
+clientLinkedSatellite$({ root, args, jwt }, authToken) {
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
+      tap(satelliteFound => {
+        if(!satelliteFound){ throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
+      }),
+      map(sf => ({
+        _id: sf._id,
+        businessId: sf.businessId,
+        name: sf.generalInfo.name,
+        phone: sf.generalInfo.phone,
+        city: sf.generalInfo.city,
+        neighborhood: sf.generalInfo.neighborhood,
+        address: sf.generalInfo.addressLine1,
+        email: sf.generalInfo.email,
+        location: sf.location,
+        zone: sf.generalInfo.zone,
+        active: sf.active,
+        tipType: sf.satelliteInfo.tipType,
+        tip: sf.satelliteInfo.tip
+      })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
+
 
   /**
   * Create a client.
