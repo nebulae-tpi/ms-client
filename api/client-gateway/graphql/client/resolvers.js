@@ -38,8 +38,7 @@ module.exports = {
     },
   },
 
-  Mutation: {
-    
+  Mutation: {    
     ValidateNewClient: (root, args, context, info) => {
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'ValidateNewClient', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
         switchMapTo(
@@ -49,6 +48,7 @@ module.exports = {
       ).toPromise();
     },
     linkSatellite: (root, args, context, info) => {
+      console.log(context.authToken);
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'linkSatellite', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
         switchMapTo(
           broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.linkSatellite", { root, args, jwt: context.encodedToken }, 2000)

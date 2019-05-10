@@ -201,6 +201,7 @@ class ClientCQRS {
 }
 
 linkSatellite$({ root, args, jwt }, authToken) {
+  console.log({authToken});
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
     .pipe(
