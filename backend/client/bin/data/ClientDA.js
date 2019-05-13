@@ -290,12 +290,10 @@ class ClientDA {
   }
 
   static getSatelliteClientList$(filterText, businessId){
-    const collection = mongoDB.db.collection(CollectionName);
-    
+    const collection = mongoDB.db.collection(CollectionName);    
     const query = { businessId: businessId };
     query["generalInfo.name"] = { $regex: filterText, $options: "i" };
-
-    return defer(() => collection.find(query).limit(10));
+    return defer(() => collection.find(query).limit(10).toArray());
   }
 
 }
