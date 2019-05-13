@@ -18,7 +18,23 @@ type ClientData{
    name: String
    "Client username"
    username: String
-   "SatelliteID"
+}
+
+"Client profile info"
+type ClientMongoData{
+   "Client Id"
+   id: String!
+   "Business Id"
+   businessId: String!
+   "Name"
+   name: String
+   "Phone"
+   phone: String
+   "Email"
+   email: String
+   "Active estatus"
+   active: Boolean!
+   "Satellite linked to"
    satelliteId: String
 }
 
@@ -59,7 +75,7 @@ type ClientBasicSatelliteInfo {
 
 type Query {
    "Get profile data of the logged user"
-   ClientProfile: ClientData @requireAuth
+   ClientProfile: ClientMongoData @requireAuth
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
 }
 

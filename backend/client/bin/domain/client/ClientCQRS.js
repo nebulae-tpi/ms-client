@@ -44,6 +44,18 @@ class ClientCQRS {
       .pipe(
         tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
         mergeMap(roles => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
+        tap(client => {
+          if(!client){ throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
+        }),
+        map(client => ({
+          id: client._id,
+          businessId: client.businessId,
+          name: generalInfo.name,
+          phone: generalInfo.phone,
+          email: generalInfo.email,
+          active: state,
+          satelliteId: satelliteId
+        })),
         mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
         catchError(err => GraphqlResponseTools.handleError$(error))
       );
