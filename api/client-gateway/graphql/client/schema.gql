@@ -73,10 +73,52 @@ type ClientBasicSatelliteInfo {
    tip: Int   
 }
 
+type ClientSatelliteGeneralInfo {
+  "Client name"
+  name: String!
+  "Document ID"
+  documentId: String
+  "Client phone"
+  phone: BigInt
+  "Client address 1"
+  addressLine1: String
+  "Client address 2"
+  addressLine2: String
+  "Client city"
+  city: String
+  "Client email"
+  email: String
+  "Client neighborhood"
+  neighborhood: String
+  "Client zone."
+  zone: String
+  "Location notes"
+  notes: String
+}
+
+type ClientSatelliteLocation {
+  lat: Float
+  lng: Float
+}
+
+type ClientSatellite{
+   "Client ID"
+  _id: ID!
+  "User general info"
+  generalInfo: ClientSatelliteGeneralInfo
+  "Client location"
+  location: ClientSatelliteLocation
+  "Client state"
+  state: Boolean!
+  "Business ID"
+  businessId: String!
+}
+
 type Query {
    "Get profile data of the logged user"
    ClientProfile: ClientMongoData @requireAuth
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
+   ClientSatellites(filterText: String!): [ClientSatellite]
 }
 
 type Mutation {

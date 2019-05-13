@@ -286,7 +286,16 @@ class ClientDA {
 
   static linkSatellite$(clientId, satelliteId){
     const collection = mongoDB.db.collection(CollectionName);
-    return defer(() => collection.updateOne({ _id: clientId }, {$set: { satelliteId } }))
+    return defer(() => collection.updateOne({ _id: clientId }, {$set: { satelliteId } }));
+  }
+
+  static getSatelliteClientList$(filterText, businessId){
+    const collection = mongoDB.db.collection(CollectionName);
+    
+    const query = { businessId: businessId };
+    query["generalInfo.name"] = { $regex: filterText, $options: "i" };
+
+    return defer(() => collection.find(query).limit(10));
   }
 
 }
