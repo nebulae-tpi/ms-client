@@ -43,8 +43,9 @@ class ClientCQRS {
       authToken.realm_access.roles, "Client", "getClientProfile", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
       .pipe(
         tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
-        mergeMap(roles => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
+        mergeMap(() => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
         tap(client => {
+          console.log('Client found ==> ', client)
           if(!client){ throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
         }),
         map(client => ({
@@ -57,7 +58,7 @@ class ClientCQRS {
           satelliteId: satelliteId
         })),
         mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
-        catchError(err => GraphqlResponseTools.handleError$(error))
+        catchError(err => GraphqlResponseTools.handleError$(err))
       );
   }
 
