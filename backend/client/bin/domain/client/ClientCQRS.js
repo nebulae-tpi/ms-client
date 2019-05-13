@@ -253,10 +253,11 @@ clientLinkedSatellite$({ root, args, jwt }, authToken) {
 }
 
 clientSatellites$({ args }, authToken) {
+  console.log({...args});
   return RoleValidator.checkPermissions$( authToken.realm_access.roles, "Client", "getClientList", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
     .pipe(
       mergeMap(() => ClientDA.getSatelliteClientList$(args.filterText, authToken.businessId || '') ),
-      toArray(),
+      // toArray(),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
