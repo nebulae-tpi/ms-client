@@ -51,11 +51,11 @@ class ClientCQRS {
         map(client => ({
           id: client._id,
           businessId: client.businessId,
-          name: generalInfo.name,
-          phone: generalInfo.phone,
-          email: generalInfo.email,
-          active: state,
-          satelliteId: satelliteId
+          name: client.generalInfo.name,
+          phone: client.generalInfo.phone,
+          email: client.generalInfo.email,
+          active: client.state,
+          satelliteId: client.satelliteId
         })),
         mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
         catchError(err => GraphqlResponseTools.handleError$(err))

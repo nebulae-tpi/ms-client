@@ -13,7 +13,7 @@ spec:
         app: client
     spec:      
       containers:
-      - image: DOCKERHUB/client.backend.client:0.0.44
+      - image: DOCKERHUB/client.backend.client:0.0.45
         name: client
         volumeMounts:
         - name: google-application-credentials
