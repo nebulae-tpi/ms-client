@@ -45,7 +45,7 @@ class ClientCQRS {
         tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
         mergeMap(() => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
         tap(client => {
-          console.log('Client found ==> ', client)
+          console.log('Client found ==>', client)
           if(!client){ throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
         }),
         map(client => ({
