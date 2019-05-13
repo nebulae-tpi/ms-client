@@ -118,7 +118,7 @@ type Query {
    "Get profile data of the logged user"
    ClientProfile: ClientMongoData @requireAuth
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
-   ClientSatellites(filterText: String!): [ClientSatellite]
+   ClientSatellites(filterText: String!): [ClientSatellite] @requireAuth
 }
 
 type Mutation {
