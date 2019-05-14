@@ -247,14 +247,16 @@ clientLinkedSatellite$({ root, args, jwt }, authToken) {
         _id: sf._id,
         businessId: sf.businessId,
         name: sf.generalInfo.name,
+        documentId: sf.generalInfo.documentId,
         phone: sf.generalInfo.phone,
+        email: sf.generalInfo.email,
         city: sf.generalInfo.city,
         neighborhood: sf.generalInfo.neighborhood,
-        address: sf.generalInfo.addressLine1,
-        email: sf.generalInfo.email,
-        location: sf.location,
+        addressLine1: sf.generalInfo.addressLine1,
+        addressLine2: sf.generalInfo.addressLine1,
         zone: sf.generalInfo.zone,
-        active: sf.active,
+        active: sf.state,        
+        location: sf.location,
         tipType: (sf.satelliteInfo || {}).tipType,
         tip: (sf.satelliteInfo || {}).tip || 0
       })),
@@ -267,10 +269,29 @@ clientSatellites$({ args }, authToken) {
   return RoleValidator.checkPermissions$( authToken.realm_access.roles, "Client", "getClientList", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
     .pipe(
       mergeMap(() => ClientDA.getSatelliteClientList$(args.filterText, authToken.businessId || '')),
+      map(list => list.map(item => ({
+        _id: item._id,
+        businessId: item.businessId,
+        name: item.generalInfo.name,
+        documentId: item.generalInfo.documentId,
+        phone: item.generalInfo.phone,
+        email: item.generalInfo.email,
+        city: item.generalInfo.city,
+        neighborhood: item.generalInfo.neighborhood,
+        addressLine1: item.generalInfo.addressLine1,
+        addressLine2: item.generalInfo.addressLine1,
+        zone: item.generalInfo.zone,
+        active: item.state,        
+        location: item.location,
+        tipType: (item.satelliteInfo || {}).tipType,
+        tip: (item.satelliteInfo || {}).tip || 0
+      }))),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
 }
+
+// APP-CLIENT
 
 
 

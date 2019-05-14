@@ -45,12 +45,14 @@ type SatelliteLatLng{
 
 "Satellite basic Info"
 type ClientBasicSatelliteInfo {
-   "Business ID"
-   businessId: String! 
    "Client ID"
    _id: String!
+   "Business ID"
+   businessId: String!    
    "Name"
-   name: String
+   name: String!
+   "Document ID"
+   documentId: String
    "Phone"
    phone: String
    "email"
@@ -59,8 +61,10 @@ type ClientBasicSatelliteInfo {
    city: String
    "Neighborhood"
    neighborhood: String
-   "Addres"
-   address: String
+   "Addres Line 1"
+   addressLine1: String
+   "Addres Line 2"
+   addressLine2: String
    "Zone"
    zone: String
    "Active State"
@@ -73,46 +77,9 @@ type ClientBasicSatelliteInfo {
    tip: Int   
 }
 
-type ClientSatelliteGeneralInfo {
-  "Client name"
-  name: String!
-  "Document ID"
-  documentId: String
-  "Client phone"
-  phone: BigInt
-  "Client address 1"
-  addressLine1: String
-  "Client address 2"
-  addressLine2: String
-  "Client city"
-  city: String
-  "Client email"
-  email: String
-  "Client neighborhood"
-  neighborhood: String
-  "Client zone."
-  zone: String
-  "Location notes"
-  notes: String
-}
 
-type ClientSatelliteLocation {
-  lat: Float
-  lng: Float
-}
 
-type ClientSatellite{
-   "Client ID"
-  _id: ID!
-  "User general info"
-  generalInfo: ClientSatelliteGeneralInfo
-  "Client location"
-  location: ClientSatelliteLocation
-  "Client state"
-  state: Boolean!
-  "Business ID"
-  businessId: String!
-}
+
 
 type Query {
    "Get profile data of the logged user"
@@ -120,7 +87,7 @@ type Query {
    "Get the satellite linked to user"
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
    "get filtered Satellites"
-   ClientSatellites(filterText: String!): [ClientSatellite] @requireAuth
+   ClientSatellites(filterText: String!): [ClientBasicSatelliteInfo] @requireAuth
 }
 
 type Mutation {
