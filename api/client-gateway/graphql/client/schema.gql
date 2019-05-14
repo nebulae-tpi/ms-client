@@ -126,4 +126,5 @@ type Query {
 type Mutation {
    ValidateNewClient: ClientData @requireAuth
    linkSatellite(satelliteId: String): CommandResponse @requireAuth
+   unlinkSatellite: CommandResponse @requireAuth
 }

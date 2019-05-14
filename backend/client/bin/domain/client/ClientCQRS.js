@@ -224,6 +224,17 @@ linkSatellite$({ root, args, jwt }, authToken) {
     );
 }
 
+unlinkSatellite$({ root, args, jwt }, authToken) {
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "unlinkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.linkSatellite$(authToken.clientId, null)),
+      map(() => ({ code: 200, message: `Satellite Linked successful` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
 clientLinkedSatellite$({ root, args, jwt }, authToken) {
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
