@@ -244,8 +244,8 @@ clientLinkedSatellite$({ root, args, jwt }, authToken) {
         location: sf.location,
         zone: sf.generalInfo.zone,
         active: sf.active,
-        tipType: sf.satelliteInfo.tipType,
-        tip: sf.satelliteInfo.tip
+        tipType: (sf.satelliteInfo || {}).tipType,
+        tip: (sf.satelliteInfo || {}).tip || 0
       })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
