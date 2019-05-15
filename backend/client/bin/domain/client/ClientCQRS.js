@@ -284,7 +284,10 @@ clientSatellites$({ args }, authToken) {
         active: item.state,        
         location: item.location,
         tipType: (item.satelliteInfo || {}).tipType,
-        tip: (item.satelliteInfo || {}).tip || 0
+        tip: (item.satelliteInfo || {}).tip || 0,
+        referrerDriverDocumentId: (item.satelliteInfo || {}).referrerDriverDocumentId,
+        offerMinDistance: (item.satelliteInfo || {}).offerMinDistance,
+        offerMaxDistance: (item.satelliteInfo || {}).offerMaxDistance
       }))),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
       catchError(err => GraphqlResponseTools.handleError$(err))

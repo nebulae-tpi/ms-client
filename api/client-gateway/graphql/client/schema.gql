@@ -75,6 +75,13 @@ type ClientBasicSatelliteInfo {
    tipType: String
    "Tip"
    tip: Int   
+   "Referrer driver document id"
+   referrerDriverDocumentId: String,
+   "Minimum broadcasting radius"
+   offerMinDistance: Int
+   "Maximum broadcasting radius"
+   offerMaxDistance: Int
+   
 }
 
 
