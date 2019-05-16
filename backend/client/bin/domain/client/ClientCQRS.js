@@ -276,7 +276,7 @@ updateFavoritePlace$({ root, args, jwt }, authToken) {
     );
 }
 
-removeFavoritePlace({ root, args, jwt }, authToken) {
+removeFavoritePlace$({ root, args, jwt }, authToken) {
   const { id } = args;
   const { clientId } = authToken;
 
