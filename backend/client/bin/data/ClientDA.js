@@ -52,12 +52,33 @@ class ClientDA {
    */
   static getClientByUsername$(username) {
     const collection = mongoDB.db.collection(CollectionName);
-
-    const query = {
-      'auth.username': username
-    };
-
+    const query = { 'auth.username': username};
     return defer(() => collection.findOne(query));
+  }
+
+  static getClientFavorites$(userId){
+    // todo use mongo projection
+    const collection = mongoDB.db.collection(CollectionName);
+    const query = { _id: userId};
+    return defer(() => collection.findOne(query));
+  }
+
+  static addClientFavoritePlace$(userId, favoritePlace){
+    const collection = mongoDB.db.collection(CollectionName);    
+    const query = { _id: userId};
+    return defer(() => collection.updateOne(query, { $push: { "favoritePlaces": favoritePlace } }) )
+  }
+
+  static updateFavoritePlace$(clientId, favoritePlace){
+    const collection = mongoDB.db.collection(CollectionName);    
+    const query = { _id: clientId, "favoritePlaces.id": favoritePlace.id };
+    return defer(() => collection.updateOne(query, { $set: { "favoritePlaces.$": favoritePlace } }) );
+  }
+
+  static removeFavoritePlace$(clientId, favoritePlaceId){
+    const collection = mongoDB.db.collection(CollectionName);    
+    const query = { _id: clientId };
+    return defer(() => collection.updateOne(query, { $pull: { "favoritePlaces": { id: favoritePlaceId } } }) );
   }
 
   static getClientList$(filter, pagination) {
@@ -295,6 +316,8 @@ class ClientDA {
     query["generalInfo.name"] = { $regex: filterText, $options: "i" };
     return defer(() => collection.find(query).limit(10).toArray());
   }
+
+
 
 }
 /**

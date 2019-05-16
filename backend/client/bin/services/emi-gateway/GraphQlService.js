@@ -189,6 +189,23 @@ class GraphQlService {
         aggregateType: "Client",
         messageType: "emigateway.graphql.mutation.clientUpdateClientLocation"
       },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.query.clientFavoritePlaces"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.addFavoritePlace"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.updateFavoritePlace"
+      },
+      {
+        aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.removeFavoritePlace"
+      },
+
       // CLIENT GATEWAY
       {
         aggregateType: "Client",
@@ -246,6 +263,22 @@ class GraphQlService {
       },
       "clientgateway.graphql.mutation.unlinkSatellite":{
         fn: ClientCQRS.unlinkSatellite$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.query.clientFavoritePlaces":{
+        fn: ClientCQRS.clientFavoritePlaces$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.addFavoritePlace":{
+        fn: ClientCQRS.addFavoritePlace$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.updateFavoritePlace":{
+        fn: ClientCQRS.updateFavoritePlace$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.removeFavoritePlace":{
+        fn: ClientCQRS.removeFavoritePlace$,
         obj: ClientCQRS
       },
       // EMI GATEWAY

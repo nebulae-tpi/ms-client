@@ -53,6 +53,16 @@ module.exports = {
           mergeMap(response => getResponseFromBackEnd$(response))
         ).toPromise();
     },
+    ClientFavoritePlaces: (root, args, context, info) => {
+      return RoleValidator.checkPermissions$(
+          context.authToken.realm_access.roles, 'ms-client', 'ClientFavoritePlaces',
+          USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT'])
+        .pipe(
+          switchMapTo( broker.forwardAndGetReply$("Client", "clientgateway.graphql.query.clientFavoritePlaces",
+          { root, args, jwt: context.encodedToken }, 2000)),
+          mergeMap(response => getResponseFromBackEnd$(response))
+        ).toPromise();
+    },
   },
   Mutation: {    
     ValidateNewClient: (root, args, context, info) => {
@@ -75,6 +85,30 @@ module.exports = {
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'unlinkSatellite', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
         switchMapTo(
           broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.unlinkSatellite", { root, args, jwt: context.encodedToken }, 2000)
+        ),
+        mergeMap(response => getResponseFromBackEnd$(response))
+      ).toPromise();
+    },
+    AddFavoritePlace: (root, args, context, info) => {
+      return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'AddFavoritePlace', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
+        switchMapTo(
+          broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.addFavoritePlace", { root, args, jwt: context.encodedToken }, 2000)
+        ),
+        mergeMap(response => getResponseFromBackEnd$(response))
+      ).toPromise();
+    },
+    UpdateFavoritePlace:(root, args, context, info) => {
+      return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'UpdateFavoritePlace', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
+        switchMapTo(
+          broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.updateFavoritePlace", { root, args, jwt: context.encodedToken }, 2000)
+        ),
+        mergeMap(response => getResponseFromBackEnd$(response))
+      ).toPromise();
+    },
+    RemoveFavoritePlace:(root, args, context, info) => {
+      return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'RemoveFavoritePlace', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
+        switchMapTo(
+          broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.removeFavoritePlace", { root, args, jwt: context.encodedToken }, 2000)
         ),
         mergeMap(response => getResponseFromBackEnd$(response))
       ).toPromise();

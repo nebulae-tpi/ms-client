@@ -235,6 +235,61 @@ unlinkSatellite$({ root, args, jwt }, authToken) {
     );
 }
 
+clientFavoritePlaces$({ root, args, jwt }, authToken){
+  return RoleValidator.checkPermissions$( authToken.realm_access.roles, "Client", "clientFavoritePlaces", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(roles => ClientDA.getClientFavorites$(authToken.preferred_username)),
+      map(client => client.favoritePlaces || []),
+      mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
+addFavoritePlace$({ root, args, jwt }, authToken) {
+  const { type, name, lat, lng } = args.favoritePlace;
+  const { clientId } = authToken;
+
+  const favoritePlace = { id: uuidv4(), type, name, location: { lat, lng} };
+  
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "addFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.addClientFavoritePlace$(clientId, favoritePlace)),
+      map(() => ({ code: 200, message: `favorite place added successful` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
+updateFavoritePlace$({ root, args, jwt }, authToken) {
+  const { id, type, name, lat, lng } = args.favoritePlace;
+  const { clientId } = authToken;
+  const favoritePlace = { id, type, name, location: { lat, lng} };
+
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "updateFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.updateFavoritePlace$(clientId, favoritePlace)),
+      map(() => ({ code: 200, message: `Favorite place updated successful` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
+removeFavoritePlace({ root, args, jwt }, authToken) {
+  const { id } = args;
+  const { clientId } = authToken;
+
+  return RoleValidator.checkPermissions$(
+    authToken.realm_access.roles, "Client", "updateFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(() => ClientDA.removeFavoritePlace$(clientId, id)),
+      map(() => ({ code: 200, message: `Favorite place removed successful` })),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
 clientLinkedSatellite$({ root, args, jwt }, authToken) {
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])

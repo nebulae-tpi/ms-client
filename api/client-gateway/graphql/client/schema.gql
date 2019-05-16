@@ -84,6 +84,21 @@ type ClientBasicSatelliteInfo {
    
 }
 
+type FavoritePlace{
+   id: String
+   type: String
+   name: String
+   location: SatelliteLatLng
+}
+
+input FavoritePlaceInput{
+   id: String
+   type: String
+   name: String
+   lat: Float
+   lng: Float
+}
+
 
 
 
@@ -95,10 +110,14 @@ type Query {
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
    "get filtered Satellites"
    ClientSatellites(filterText: String!): [ClientBasicSatelliteInfo] @requireAuth
+   ClientFavoritePlaces: [FavoritePlace]
 }
 
 type Mutation {
    ValidateNewClient: ClientData @requireAuth
    linkSatellite(satelliteId: String): CommandResponse @requireAuth
    unlinkSatellite: CommandResponse @requireAuth
+   AddFavoritePlace(favoritePlace: FavoritePlaceInput): CommandResponse @requireAuth
+   UpdateFavoritePlace(favoritePlace: FavoritePlaceInput): CommandResponse @requireAuth
+   RemoveFavoritePlace(id: String): CommandResponse @requireAuth
 }
