@@ -55,7 +55,8 @@ class ClientCQRS {
           phone: client.generalInfo.phone,
           email: client.generalInfo.email,
           active: client.state,
-          satelliteId: client.satelliteId
+          satelliteId: client.satelliteId,
+          favoritePlaces: client.favoritePlaces || []
         })),
         mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
         catchError(err => GraphqlResponseTools.handleError$(err))

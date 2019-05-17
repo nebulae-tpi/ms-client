@@ -20,6 +20,14 @@ type ClientData{
    username: String
 }
 
+type ClientFavoritePlace {
+   id: String
+   type: String   
+   name: String
+   referenceName: String
+   location: SatelliteLatLng
+}
+
 "Client profile info"
 type ClientMongoData{
    "Client Id"
@@ -36,6 +44,8 @@ type ClientMongoData{
    active: Boolean!
    "Satellite linked to"
    satelliteId: String
+   "favorite places"
+   favoritePlaces: [ClientFavoritePlace]
 }
 
 type SatelliteLatLng{
@@ -88,6 +98,7 @@ type FavoritePlace{
    id: String
    type: String
    name: String
+   referenceName: String
    location: SatelliteLatLng
 }
 
@@ -95,6 +106,7 @@ input FavoritePlaceInput{
    id: String
    type: String
    name: String
+   referenceName: String
    lat: Float
    lng: Float
 }
