@@ -75,10 +75,16 @@ class ClientDA {
     return defer(() => collection.updateOne(query, { $set: { "favoritePlaces.$": favoritePlace } }) );
   }
 
-  static removeFavoritePlace$(clientId, favoritePlaceId){
+  static removeFavoritePlaceById$(clientId, favoritePlaceId){
     const collection = mongoDB.db.collection(CollectionName);    
     const query = { _id: clientId };
     return defer(() => collection.updateOne(query, { $pull: { "favoritePlaces": { id: favoritePlaceId } } }) );
+  }
+
+  static removeFavoritePlaceByName$(clientId, favoritePlaceName){
+    const collection = mongoDB.db.collection(CollectionName);    
+    const query = { _id: clientId };
+    return defer(() => collection.updateOne(query, { $pull: { "favoritePlaces": { name: favoritePlaceName } } }) );
   }
 
   static getClientList$(filter, pagination) {

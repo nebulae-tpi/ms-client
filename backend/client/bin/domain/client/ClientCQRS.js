@@ -278,13 +278,15 @@ updateFavoritePlace$({ root, args, jwt }, authToken) {
 }
 
 removeFavoritePlace$({ root, args, jwt }, authToken) {
-  const { id } = args;
   const { clientId } = authToken;
 
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "updateFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
     .pipe(
-      mergeMap(() => ClientDA.removeFavoritePlace$(clientId, id)),
+      mergeMap(() => args.id
+        ? ClientDA.removeFavoritePlaceById$(clientId, args.id)
+        : ClientDA.removeFavoritePlaceByName$(clientId, args.name)
+      ),
       map(() => ({ code: 200, message: `Favorite place removed successful` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))

@@ -131,5 +131,5 @@ type Mutation {
    unlinkSatellite: CommandResponse @requireAuth
    AddFavoritePlace(favoritePlace: FavoritePlaceInput): CommandResponse @requireAuth
    UpdateFavoritePlace(favoritePlace: FavoritePlaceInput): CommandResponse @requireAuth
-   RemoveFavoritePlace(id: String): CommandResponse @requireAuth
+   RemoveFavoritePlace(id: String, name: String): CommandResponse @requireAuth
 }
