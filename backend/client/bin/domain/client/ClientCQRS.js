@@ -287,6 +287,7 @@ removeFavoritePlace$({ root, args, jwt }, authToken) {
         ? ClientDA.removeFavoritePlaceById$(clientId, args.id)
         : ClientDA.removeFavoritePlaceByName$(clientId, args.name)
       ),
+      tap(r => console.log('removeFavoritePlace$ mongo result ==> ', r)),
       map(() => ({ code: 200, message: `Favorite place removed successful` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))

@@ -192,7 +192,7 @@ jobs:
             mkdir ~/nebulae/backend
             cp ~/nebulae/go/mbinit ~/nebulae/repo/backend/client/
             export DOCKERHUB_IMAGE=client.backend.client
-            export DOCKERHUB_TAG=0.0.57
+            export DOCKERHUB_TAG=0.0.58
             gitChanged backend/client || docker build  -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:latest ~/nebulae/repo/backend/client/
             gitChanged backend/client || docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
             gitChanged backend/client || docker push $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG
