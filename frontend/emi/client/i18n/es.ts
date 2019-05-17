@@ -48,6 +48,7 @@ export const locale = {
         },
         SATELLITE: {
           APPLY_DEFAULT_AGREEMENT_TIP: 'Aplicar la misma tarifa en la lista',
+          COPY_LINK_APP_CLIENT: 'Copiar vínculo ',
           BUSINESS_AGREEMENT: 'Acuerdo empresarial',
           OFFER_CONFIGURATION: 'Configuración de oferta',
           OFFER_MIN_DISTANCE: 'Mínimo Radio de Difusión (En metros)',

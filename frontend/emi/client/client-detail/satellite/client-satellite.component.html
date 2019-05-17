@@ -2,7 +2,13 @@
 
     <form name="clientSatelliteForm" [formGroup]="clientSatelliteForm" fxFlex="100" fxLayout="row wrap" class="mat-white-bg p-24 mb-24">
   
-      <h2 fxFlex="100" fxFlex="start center" >{{'CLIENT.DETAILS.SATELLITE.OFFER_CONFIGURATION' | translate}}</h2>
+      <div fxLayout="row" fxFlex="100" fxLayoutAlign="start center">
+          <h2>{{'CLIENT.DETAILS.SATELLITE.OFFER_CONFIGURATION' | translate}}</h2>
+          <button mat-icon-button matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.COPY_LINK_APP_CLIENT' | translate}}"
+           (click)="copySatellitLink()" >
+            <mat-icon>link</mat-icon>
+          </button>
+      </div>      
   
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
         <input matInput name="offerMinDistance" type="number" formControlName="offerMinDistance" placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MIN_DISTANCE' | translate}}">
@@ -18,10 +24,10 @@
   
   
   
-      <div fxFlex="100" fxFlex="start center" fxLayout="row wrap">
-        <div class="mt-12 mb-12" style="font-size: 20px" >{{'CLIENT.DETAILS.SATELLITE.BUSINESS_AGREEMENT' | translate}}</div>
+      <div fxFlex="100" fxFlex="start center" fxLayout="row" >
+        <h2 class="mt-12 mb-12">{{'CLIENT.DETAILS.SATELLITE.BUSINESS_AGREEMENT' | translate}}</h2>
         
-        <button fxLayoutAling="center center" (click)="applySameTipToAsociatedClients()" matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.APPLY_DEFAULT_AGREEMENT_TIP' | translate}}" mat-icon-button color="primary">
+        <button (click)="applySameTipToAsociatedClients()" matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.APPLY_DEFAULT_AGREEMENT_TIP' | translate}}" mat-icon-button color="primary">
           <mat-icon>low_priority</mat-icon>
         </button>
       </div>

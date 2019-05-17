@@ -48,6 +48,7 @@ export const locale = {
         },
         SATELLITE: {
           APPLY_DEFAULT_AGREEMENT_TIP: 'Apply Same Tip To Client Agreement',
+          COPY_LINK_APP_CLIENT: 'Copy Link',
           BUSINESS_AGREEMENT: 'Business agreement',
           OFFER_CONFIGURATION: 'Offer configuration',
           OFFER_MIN_DISTANCE: 'Offer Min Distance (In meters)',

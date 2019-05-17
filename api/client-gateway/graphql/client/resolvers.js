@@ -24,7 +24,6 @@ function getResponseFromBackEnd$(response) {
     }));
 }
 
-
 module.exports = {
   Query: {
     ClientProfile: (root, args, context, info) => {

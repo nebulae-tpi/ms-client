@@ -299,6 +299,21 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  copySatellitLink(){
+    console.log(this.client);
+    const element = document.createElement('textarea');
+    element.id = 'satellite-link';
+    element.style.position = 'fixed';
+    element.style.top = '0';
+    element.style.left = '0';
+    element.style.opacity = '0';
+    element.value =  `https://app.txplus.com.co/profile/satellite/${this.client._id}`;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(document.getElementById('satellite-link'));
+  }
+
 
 
 
