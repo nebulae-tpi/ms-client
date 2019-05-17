@@ -26,7 +26,6 @@ function getResponseFromBackEnd$(response) {
 
 
 module.exports = {
-
   Query: {
     ClientProfile: (root, args, context, info) => {
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'ClientProfile', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
