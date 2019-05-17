@@ -22,7 +22,8 @@ type ClientData{
 
 type ClientFavoritePlace {
    id: String
-   type: String   
+   type: String  
+   address: String 
    name: String
    referenceName: String
    location: SatelliteLatLng
@@ -94,17 +95,12 @@ type ClientBasicSatelliteInfo {
    
 }
 
-type FavoritePlace{
-   id: String
-   type: String
-   name: String
-   referenceName: String
-   location: SatelliteLatLng
-}
+
 
 input FavoritePlaceInput{
    id: String
    type: String
+   address: String
    name: String
    referenceName: String
    lat: Float
@@ -122,7 +118,8 @@ type Query {
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
    "get filtered Satellites"
    ClientSatellites(filterText: String!): [ClientBasicSatelliteInfo] @requireAuth
-   ClientFavoritePlaces: [FavoritePlace]
+   "get the favoritePlaces of user"
+   ClientFavoritePlaces: [ClientFavoritePlace]
 }
 
 type Mutation {
