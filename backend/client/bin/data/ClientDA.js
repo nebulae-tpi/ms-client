@@ -320,6 +320,7 @@ class ClientDA {
     const collection = mongoDB.db.collection(CollectionName);    
     const query = { businessId: businessId };
     query["generalInfo.name"] = { $regex: filterText, $options: "i" };
+    query["satelliteInfo"] = { $exists: true };
     return defer(() => collection.find(query).limit(10).toArray());
   }
 

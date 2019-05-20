@@ -314,7 +314,7 @@ clientLinkedSatellite$({ root, args, jwt }, authToken) {
         city: sf.generalInfo.city,
         neighborhood: sf.generalInfo.neighborhood,
         addressLine1: sf.generalInfo.addressLine1,
-        addressLine2: sf.generalInfo.addressLine1,
+        addressLine2: sf.generalInfo.addressLine2,
         zone: sf.generalInfo.zone,
         active: sf.state,        
         location: sf.location,
