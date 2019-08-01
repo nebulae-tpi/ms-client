@@ -121,7 +121,7 @@ type Query {
    "get the favoritePlaces of user"
    ClientFavoritePlaces: [ClientFavoritePlace]
    "get the favorite place"
-   ClientFavoritePlace: ClientFavoritePlace
+   ClientFavoritePlace(id: String): ClientFavoritePlace
 }
 
 type Mutation {
