@@ -220,6 +220,10 @@ class GraphQlService {
       },
       {
         aggregateType: "Client",
+        messageType: "clientgateway.graphql.query.clientFavoritePlace"
+      },
+      {
+        aggregateType: "Client",
         messageType: "clientgateway.graphql.mutation.addFavoritePlace"
       },
       {
@@ -266,6 +270,10 @@ class GraphQlService {
       },
       "clientgateway.graphql.query.clientFavoritePlaces":{
         fn: ClientCQRS.clientFavoritePlaces$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.query.clientFavoritePlace":{
+        fn: ClientCQRS.clientFavoritePlace$,
         obj: ClientCQRS
       },
       "clientgateway.graphql.mutation.addFavoritePlace":{

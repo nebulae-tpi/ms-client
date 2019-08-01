@@ -120,6 +120,8 @@ type Query {
    ClientSatellites(filterText: String!): [ClientBasicSatelliteInfo] @requireAuth
    "get the favoritePlaces of user"
    ClientFavoritePlaces: [ClientFavoritePlace]
+   "get the favorite place"
+   ClientFavoritePlace: ClientFavoritePlace
 }
 
 type Mutation {

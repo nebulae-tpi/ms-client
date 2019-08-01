@@ -63,6 +63,18 @@ class ClientDA {
     return defer(() => collection.findOne(query));
   }
 
+
+  static getClientFavoritePlace$(userId, id){
+    // todo use mongo projection
+    const collection = mongoDB.db.collection(CollectionName);
+    const query = { _id: userId, };
+    return defer(() => collection.findOne(query))
+    .pipe(
+      map(client => client.favoritePlaces || [] ),
+      map(favoritePlaces => favoritePlaces.filter(favoritePlace => favoritePlace.id === id)[0])      
+    )
+  }
+
   static addClientFavoritePlace$(userId, favoritePlace){
     const collection = mongoDB.db.collection(CollectionName);    
     const query = { _id: userId};

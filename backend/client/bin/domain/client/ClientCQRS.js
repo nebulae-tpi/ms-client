@@ -246,6 +246,19 @@ clientFavoritePlaces$({ root, args, jwt }, authToken){
     );
 }
 
+clientFavoritePlace$({ root, args, jwt }, authToken){
+  const { id } = args;
+
+  return RoleValidator.checkPermissions$( authToken.realm_access.roles, "Client", "clientFavoritePlaces", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+    .pipe(
+      mergeMap(roles => ClientDA.getClientFavoritePlace$(authToken.preferred_username, id)),     
+      mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+}
+
+
+
 addFavoritePlace$({ root, args, jwt }, authToken) {
   const { type, name, lat, lng } = args.favoritePlace;
   const { clientId } = authToken;

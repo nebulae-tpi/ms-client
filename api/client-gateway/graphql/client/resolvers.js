@@ -62,6 +62,16 @@ module.exports = {
           mergeMap(response => getResponseFromBackEnd$(response))
         ).toPromise();
     },
+    ClientFavoritePlace: (root, args, context, info) => {
+      return RoleValidator.checkPermissions$(
+          context.authToken.realm_access.roles, 'ms-client', 'ClientFavoritePlace',
+          USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT'])
+        .pipe(
+          switchMapTo( broker.forwardAndGetReply$("Client", "clientgateway.graphql.query.clientFavoritePlace",
+          { root, args, jwt: context.encodedToken }, 2000)),
+          mergeMap(response => getResponseFromBackEnd$(response))
+        ).toPromise();
+    },
   },
   Mutation: {    
     ValidateNewClient: (root, args, context, info) => {
