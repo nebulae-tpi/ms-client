@@ -276,9 +276,9 @@ addFavoritePlace$({ root, args, jwt }, authToken) {
 }
 
 updateFavoritePlace$({ root, args, jwt }, authToken) {
-  const { id, type, name, lat, lng } = args.favoritePlace;
+  const { id, type, address, name, lat, lng } = args.favoritePlace;
   const { clientId } = authToken;
-  const favoritePlace = { id, type, name, location: { lat, lng} };
+  const favoritePlace = { id, type, address, name, location: { lat, lng} };
 
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "updateFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
