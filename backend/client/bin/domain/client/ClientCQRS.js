@@ -42,10 +42,10 @@ class ClientCQRS {
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles, "Client", "getClientProfile", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
       .pipe(
-        tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
+        // tap(() => console.log("getClientProfile$ ==> ", { clientId: authToken.clientId, businessId: authToken.businessId })),
         mergeMap(() => ClientDA.getClient$(authToken.clientId, authToken.businessId || '')),
         tap(client => {
-          console.log('Client found ==>', client)
+          // console.log('Client found ==>', client)
           if(!client){ throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description )  }
         }),
         map(client => ({
@@ -292,7 +292,7 @@ updateFavoritePlace$({ root, args, jwt }, authToken) {
 
 removeFavoritePlace$({ root, args, jwt }, authToken) {
   const { clientId } = authToken;
-  console.log({args});
+  // console.log({args});
 
   return RoleValidator.checkPermissions$(
     authToken.realm_access.roles, "Client", "updateFavoritePlace$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
@@ -302,7 +302,7 @@ removeFavoritePlace$({ root, args, jwt }, authToken) {
         : ClientDA.removeFavoritePlaceByName$(clientId, args.name)
       ),
       
-      tap(r => console.log('removeFavoritePlace$ mongo result ==> ', r.result )),
+      // tap(r => console.log('removeFavoritePlace$ mongo result ==> ', r.result )),
       map(() => ({ code: 200, message: `Favorite place removed successful` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))

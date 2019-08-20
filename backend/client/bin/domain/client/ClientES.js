@@ -56,7 +56,7 @@ class ClientES {
      * @param {*} clientSatelliteInfoUpdatedEvent client info updated event
      */
     handleClientSatelliteInfoUpdated$(clientSatelliteInfoUpdatedEvent) {  
-        console.log('handleClientSatelliteInfoUpdated => ', clientSatelliteInfoUpdatedEvent);
+        // console.log('handleClientSatelliteInfoUpdated => ', clientSatelliteInfoUpdatedEvent);
         const clientSatelliteInfo = clientSatelliteInfoUpdatedEvent.data;
         return ClientDA.updateClientSatelliteInfo$(clientSatelliteInfoUpdatedEvent.aid, clientSatelliteInfo)
         .pipe(
@@ -140,7 +140,7 @@ class ClientES {
     }
 
     emitClientSatelliteEvent$(client){
-        console.log('emitClientSatelliteEvent => ', client);
+        // console.log('emitClientSatelliteEvent => ', client);
         const userData = {
             ...client
         };
