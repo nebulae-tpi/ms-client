@@ -194,6 +194,23 @@ class ClientDA {
     );
   }
 
+  static updateClientBusinessId$(id, businessId) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    return defer(()=>
+        collection.findOneAndUpdate(
+          { _id: id },
+          {
+            $set: {businessId}
+          },{
+            returnOriginal: false
+          }
+        )
+    ).pipe(
+      map(result => result && result.value ? result.value : undefined)
+    );
+  }
+
     /**
    * modifies the satellite info of the indicated Client 
    * @param {*} id  Client ID

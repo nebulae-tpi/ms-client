@@ -18,6 +18,8 @@ type ClientData{
    name: String
    "Client username"
    username: String
+   "Client was updated"
+   updated: Boolean
 }
 
 type ClientFavoritePlace {
@@ -125,7 +127,7 @@ type Query {
 }
 
 type Mutation {
-   ValidateNewClient: ClientData @requireAuth
+   ValidateNewClient(businessId: String): ClientData @requireAuth
    linkSatellite(satelliteId: String): CommandResponse @requireAuth
    unlinkSatellite: CommandResponse @requireAuth
    AddFavoritePlace(favoritePlace: FavoritePlaceInput): CommandResponse @requireAuth
