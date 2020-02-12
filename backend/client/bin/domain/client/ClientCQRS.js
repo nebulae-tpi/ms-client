@@ -165,7 +165,7 @@ class ClientCQRS {
           }
           else { 
             console.log('marca para cambiar unidad de negocio');
-            return ClientDA.updateClientBusinessId$(client._id, businessId).pipe(
+            return ClientDA.updateClientBusinessId$(client._id, args.businessId).pipe(
               map(newClient => ({client: newClient, updated: true}))
             )
           }
@@ -182,7 +182,7 @@ class ClientCQRS {
                   userKeycloakId: token.sub
                 },
                 state: true,
-                businessId: token.businessId
+                businessId: args && args.businessId ? token.businessId : args.businessId
               };
               client._id = uuidv4();
               client.creatorUser = 'SYSTEM';
@@ -212,7 +212,7 @@ class ClientCQRS {
             mergeMap(client => {
               const attributes = {
                 clientId: client._id,
-                businessId: authToken.businessId
+                businessId: client.businessId
               };
               return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
             })
