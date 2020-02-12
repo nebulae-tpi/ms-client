@@ -146,7 +146,6 @@ class ClientCQRS {
   * Validate user logged from an identity provider
   */
   ValidateNewClient$({ root, args, jwt }, authToken) {
-    console.log('Inicia proceso de validación3: ', args);
     const businessId = (args && args.businessId) ? args.businessId : authToken.businessId
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
@@ -161,11 +160,9 @@ class ClientCQRS {
       mergeMap(client => {
         if (client) {
           if (client.businessId === businessId) {
-            console.log('Pasa sin hacer cambios');
             return of({client, updated: false});
           }
           else { 
-            console.log('marca para cambiar unidad de negocio');
             return ClientDA.updateClientBusinessId$(client._id, businessId).pipe(
               map(newClient => ({client: newClient, updated: true}))
             )
@@ -229,9 +226,6 @@ class ClientCQRS {
         username: clientResult.client.auth.username,
         updated: clientResult.updated
       })),
-      tap(valueToReturn => { 
-        console.log('Retorna valor final: ', valueToReturn);
-      }),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );

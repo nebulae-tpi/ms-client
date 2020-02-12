@@ -42,6 +42,7 @@ class ClientDA {
     if(businessId){
       query.businessId = businessId;
     }
+    console.log('Query: ', query);
 
     return defer(() => collection.findOne(query));
   }
