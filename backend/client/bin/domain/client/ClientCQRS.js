@@ -146,7 +146,7 @@ class ClientCQRS {
   * Validate user logged from an identity provider
   */
   ValidateNewClient$({ root, args, jwt }, authToken) {
-    console.log('Inicia proceso de validación2: ', args);
+    console.log('Inicia proceso de validación3: ', args);
     const businessId = (args && args.businessId) ? args.businessId : authToken.businessId
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,

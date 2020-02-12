@@ -75,6 +75,7 @@ module.exports = {
   },
   Mutation: {   
     ValidateNewClient: (root, args, context, info) => {
+      console.log('llega args: ', args);
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'ValidateNewClient', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
         switchMapTo(
           broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.ValidateNewClient", { root, args, jwt: context.encodedToken }, 2000)
