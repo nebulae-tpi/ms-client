@@ -146,7 +146,10 @@ class ClientCQRS {
   * Validate user logged from an identity provider
   */
   ValidateNewClient$({ root, args, jwt }, authToken) {
-    console.log('Inicia proceso de validación');
+    if (!args || !args.businessId) { 
+      args = {businessId: authToken.businessId}
+    }
+    console.log('Inicia proceso de validación: ', args);
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",
@@ -182,7 +185,7 @@ class ClientCQRS {
                   userKeycloakId: token.sub
                 },
                 state: true,
-                businessId: (args && args.businessId) ? args.businessId : token.businessId
+                businessId: (args && args.businessId !== null) ? args.businessId : token.businessId
               };
               client._id = uuidv4();
               client.creatorUser = 'SYSTEM';
@@ -207,6 +210,7 @@ class ClientCQRS {
       }
       ),
       mergeMap(clientResult => { 
+        console.log('Result business: ', clientResult);
         if (authToken.clientId || clientResult.updated) {
           return of(clientResult.client).pipe(
             mergeMap(client => {
