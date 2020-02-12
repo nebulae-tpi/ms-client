@@ -182,7 +182,7 @@ class ClientCQRS {
                   userKeycloakId: token.sub
                 },
                 state: true,
-                businessId: args && args.businessId ? token.businessId : args.businessId
+                businessId: (args && args.businessId) ? args.businessId : token.businessId
               };
               client._id = uuidv4();
               client.creatorUser = 'SYSTEM';
