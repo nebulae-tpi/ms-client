@@ -170,7 +170,7 @@ class ClientCQRS {
             )
           }
         }
-        else { 
+        else {
           return of(authToken).pipe(
             mergeMap(token => {
               const client = {
