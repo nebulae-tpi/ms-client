@@ -209,7 +209,7 @@ class ClientCQRS {
         }
       }
       ),
-      mergeMap(clientResult => { 
+      mergeMap(clientResult => {
         console.log('Result business: ', clientResult);
         if (authToken.clientId || clientResult.updated) {
           return of(clientResult.client).pipe(
