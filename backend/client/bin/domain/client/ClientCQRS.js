@@ -146,10 +146,8 @@ class ClientCQRS {
   * Validate user logged from an identity provider
   */
   ValidateNewClient$({ root, args, jwt }, authToken) {
-    if (!args || !args.businessId) { 
-      args = {businessId: authToken.businessId}
-    }
-    console.log('Inicia proceso de validación: ', args);
+    console.log('Inicia proceso de validación2: ', args);
+    const businessId = (args && args.businessId) ? args.businessId : authToken.businessId
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",
@@ -162,13 +160,13 @@ class ClientCQRS {
       mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
       mergeMap(client => {
         if (client) {
-          if (client.businessId === args.businessId) {
+          if (client.businessId === businessId) {
             console.log('Pasa sin hacer cambios');
             return of({client, updated: false});
           }
           else { 
             console.log('marca para cambiar unidad de negocio');
-            return ClientDA.updateClientBusinessId$(client._id, args.businessId).pipe(
+            return ClientDA.updateClientBusinessId$(client._id, businessId).pipe(
               map(newClient => ({client: newClient, updated: true}))
             )
           }
@@ -185,7 +183,7 @@ class ClientCQRS {
                   userKeycloakId: token.sub
                 },
                 state: true,
-                businessId: (args && args.businessId !== null) ? args.businessId : token.businessId
+                businessId: (args && businessId !== null) ? businessId : token.businessId
               };
               client._id = uuidv4();
               client.creatorUser = 'SYSTEM';
@@ -210,7 +208,7 @@ class ClientCQRS {
       }
       ),
       mergeMap(clientResult => {
-        console.log('Result business: ', clientResult);
+        //console.log('Result business: ', clientResult);
         if (authToken.clientId || clientResult.updated) {
           return of(clientResult.client).pipe(
             mergeMap(client => {
