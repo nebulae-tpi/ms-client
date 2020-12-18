@@ -1,53 +1,53 @@
 <div class="tab-content p-24" fxLayout="column" fusePerfectScrollbar>
 
-    <form name="userAuthForm" [formGroup]="userAuthForm" #formDirective="ngForm" class="user w-100-p" fxLayout="column" class="mat-white-bg p-24 mb-24">
-        <div fxLayout="row wrap" class="mb-20">
-          <div fxFlex="80" *ngIf="client.auth && client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.RESET_AUTH' | translate}}</div>
-          <div fxFlex="80" *ngIf="!client.auth || !client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.CREATE_AUTH' | translate}}</div>
-          <button mat-raised-button *ngIf="client.auth && client.auth.username" type="button" (click)="removeClientAuth()">{{'CLIENT.DETAILS.REMOVE_USER_AUTH' | translate}}</button>
-        </div>
+  <form name="userAuthForm" [formGroup]="userAuthForm" #formDirective="ngForm" class="user w-100-p" fxLayout="column" class="mat-white-bg p-24 mb-24">
+      <div fxLayout="row wrap" class="mb-20">
+        <div fxFlex="80" *ngIf="client.auth && client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.RESET_AUTH' | translate}}</div>
+        <div fxFlex="80" *ngIf="!client.auth || !client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.CREATE_AUTH' | translate}}</div>
+        <button class="text-wrap" mat-raised-button *ngIf="client.auth && client.auth.username" type="button" (click)="removeClientAuth()">{{'CLIENT.DETAILS.REMOVE_USER_AUTH' | translate}}</button>
+      </div>
 
-        <mat-form-field class="w-100-p">
-          <input matInput name="username" formControlName="username" maxlength="40" placeholder="{{'CLIENT.DETAILS.USERNAME' | translate}}">
-          <mat-error *ngIf="userAuthForm.hasError('required', ['username'])">
-            {{'CLIENT.DETAILS.USERNAME_REQUIRED' | translate}}
-          </mat-error>
-          <mat-error *ngIf="userAuthForm.hasError('pattern', ['username'])">
-            {{'CLIENT.DETAILS.INVALID_USERNAME_FORMAT' | translate}}
-          </mat-error>
-        </mat-form-field>
+      <mat-form-field class="w-100-p">
+        <input matInput name="username" formControlName="username" maxlength="40" placeholder="{{'CLIENT.DETAILS.USERNAME' | translate}}">
+        <mat-error *ngIf="userAuthForm.hasError('required', ['username'])">
+          {{'CLIENT.DETAILS.USERNAME_REQUIRED' | translate}}
+        </mat-error>
+        <mat-error *ngIf="userAuthForm.hasError('pattern', ['username'])">
+          {{'CLIENT.DETAILS.INVALID_USERNAME_FORMAT' | translate}}
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field class="w-100-p">
-          <input matInput name="password" formControlName="password" placeholder="{{'CLIENT.DETAILS.NEW_PASSWORD' | translate}}" type="password">
-          <mat-error *ngIf="userAuthForm.hasError('required', ['password'])">
-            {{'CLIENT.DETAILS.NEW_PASSWORD_REQUIRED' | translate}}
-          </mat-error>
-          <mat-error *ngIf="userAuthForm.hasError('pattern', ['password'])">
-            {{'CLIENT.DETAILS.INVALID_PASSWORD' | translate}}
-          </mat-error>
+      <mat-form-field class="w-100-p">
+        <input matInput name="password" formControlName="password" placeholder="{{'CLIENT.DETAILS.NEW_PASSWORD' | translate}}" type="password">
+        <mat-error *ngIf="userAuthForm.hasError('required', ['password'])">
+          {{'CLIENT.DETAILS.NEW_PASSWORD_REQUIRED' | translate}}
+        </mat-error>
+        <mat-error *ngIf="userAuthForm.hasError('pattern', ['password'])">
+          {{'CLIENT.DETAILS.INVALID_PASSWORD' | translate}}
+        </mat-error>
 
-        </mat-form-field>
+      </mat-form-field>
 
-        <mat-form-field class="w-100-p">
-          <input matInput name="passwordConfirmation" formControlName="passwordConfirmation" placeholder="{{'CLIENT.DETAILS.PASSWORD_CONFIRMATION' | translate}}"
-            type="password">
-          <mat-error *ngIf="userAuthForm.hasError('required', 'passwordConfirmation')">
-            {{'CLIENT.DETAILS.PASSWORD_CONFIRMATION_REQUIRED' | translate}}
-          </mat-error>
-          <mat-error *ngIf="userAuthForm.hasError('notEquivalent', ['passwordConfirmation'])">
-            {{'CLIENT.DETAILS.NOT_EQUIVALENT_PASSWORD' | translate}}
-          </mat-error>
-        </mat-form-field>
+      <mat-form-field class="w-100-p">
+        <input matInput name="passwordConfirmation" formControlName="passwordConfirmation" placeholder="{{'CLIENT.DETAILS.PASSWORD_CONFIRMATION' | translate}}"
+          type="password">
+        <mat-error *ngIf="userAuthForm.hasError('required', 'passwordConfirmation')">
+          {{'CLIENT.DETAILS.PASSWORD_CONFIRMATION_REQUIRED' | translate}}
+        </mat-error>
+        <mat-error *ngIf="userAuthForm.hasError('notEquivalent', ['passwordConfirmation'])">
+          {{'CLIENT.DETAILS.NOT_EQUIVALENT_PASSWORD' | translate}}
+        </mat-error>
+      </mat-form-field>
 
-        <mat-slide-toggle formControlName="temporary" color="accent">
-          <label>{{'CLIENT.DETAILS.TEMPORARY' | translate}}</label>
-        </mat-slide-toggle>
+      <mat-slide-toggle formControlName="temporary" color="accent">
+        <label>{{'CLIENT.DETAILS.TEMPORARY' | translate}}</label>
+      </mat-slide-toggle>
 
-        <div class="mt-16">
-            <button mat-raised-button *ngIf="client._id && (!client.auth || !client.auth.username)" (click)="createClientAuth(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.SAVE' | translate}}</button>
-            <button mat-raised-button *ngIf="client._id && client.auth && client.auth.username" (click)="resetClientPassword(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.RESET_PASSWORD' | translate}}</button>
-        </div>
+      <div class="mt-16">
+          <button mat-raised-button *ngIf="client._id && (!client.auth || !client.auth.username)" (click)="createClientAuth(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.SAVE' | translate}}</button>
+          <button mat-raised-button *ngIf="client._id && client.auth && client.auth.username" (click)="resetClientPassword(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.RESET_PASSWORD' | translate}}</button>
+      </div>
 
-      </form>
+    </form>
 
 </div>
