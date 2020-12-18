@@ -5,7 +5,7 @@
         <div fxFlex="80" *ngIf="client.auth && client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.RESET_AUTH' | translate}}</div>
         <div fxFlex="80" *ngIf="!client.auth || !client.auth.username" fxLayoutAlign="start start" class="h2">{{'CLIENT.DETAILS.CREATE_AUTH' | translate}}</div>
         <button class="text-wrap" mat-raised-button *ngIf="client.auth && client.auth.username" type="button" (click)="removeClientAuth()">{{'CLIENT.DETAILS.REMOVE_USER_AUTH' | translate}}</button>
-      </div>
+      </div> 
 
       <mat-form-field class="w-100-p">
         <input matInput name="username" formControlName="username" maxlength="40" placeholder="{{'CLIENT.DETAILS.USERNAME' | translate}}">
