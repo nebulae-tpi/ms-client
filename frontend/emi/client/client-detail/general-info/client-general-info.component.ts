@@ -73,6 +73,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
 
   clientGeneralInfoForm: any;
   clientStateForm: any;
+  addressField: any;
 
   constructor(
     private translationLoader: FuseTranslationLoaderService,
@@ -93,19 +94,27 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
     this.clientGeneralInfoForm = new FormGroup({
       name: new FormControl(this.client ? (this.client.generalInfo || {}).name : '', [Validators.required]),
       documentId: new FormControl(this.client ? (this.client.generalInfo || {}).documentId : ''),
-      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.required, Validators.max(999999999999999)]),
-      email: new FormControl(this.client ? (this.client.generalInfo || {}).email : '', [Validators.required]),
+      phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.max(999999999999999)]),
+      email: new FormControl(this.client ? (this.client.generalInfo || {}).email : ''),
       addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : '', [Validators.required]),
       addressLine2: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine2 : ''),
-      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : '', [Validators.required]),
+      city: new FormControl(this.client ? (this.client.generalInfo || {}).city : ''),
       neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
-      zone: new FormControl(this.client ? (this.client.generalInfo || {}).zone : '', [Validators.required]),
+      zone: new FormControl(this.client ? (this.client.generalInfo || {}).zone : ''),
       notes: new FormControl(this.client ? (this.client.generalInfo || {}).notes : ''),
     });
+    this.addressField = this.client ? (this.client.generalInfo || {}).addressLine1 : '';
 
     this.clientStateForm = new FormGroup({
       state: new FormControl(this.client ? this.client.state : true)
     });
+  }
+
+  onNameChange(newValue) {
+    this.addressField = newValue;
+  }
+  onEmailChange(newValue) {
+    this.ClientDetailservice.emailChangeSubject.next(newValue);
   }
 
   createClient() {
@@ -120,10 +129,11 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       filter(selectedBusiness => selectedBusiness != null && selectedBusiness.id != null),
       mergeMap(selectedBusiness => {
         return this.showConfirmationDialog$("CLIENT.CREATE_MESSAGE", "CLIENT.CREATE_TITLE")
-        .pipe(
-          map(() => this.clientGeneralInfoForm.getRawValue()),
+          .pipe(
+            map(() => this.clientGeneralInfoForm.getRawValue()),
           map(generalInfoRawValue => ({
             ...generalInfoRawValue,
+            phone: parseInt(generalInfoRawValue.phone),
             name: generalInfoRawValue.name.toUpperCase(),
             email: generalInfoRawValue.email.toLowerCase()
           })),
@@ -157,7 +167,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
           const generalInfoinput = {
             name: this.clientGeneralInfoForm.getRawValue().name.toUpperCase(),
             documentId: this.clientGeneralInfoForm.getRawValue().documentId,
-            phone: this.clientGeneralInfoForm.getRawValue().phone,
+            phone: parseInt(this.clientGeneralInfoForm.getRawValue().phone),
             addressLine1: this.clientGeneralInfoForm.getRawValue().addressLine1,
             addressLine2: this.clientGeneralInfoForm.getRawValue().addressLine2,
             city: this.clientGeneralInfoForm.getRawValue().city,

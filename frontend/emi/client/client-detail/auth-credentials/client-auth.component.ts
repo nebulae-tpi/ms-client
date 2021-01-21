@@ -33,7 +33,7 @@ import {
   take
 } from 'rxjs/operators';
 
-import { Subject, fromEvent, of, forkJoin, Observable, concat, combineLatest } from 'rxjs';
+import { Subject, fromEvent, of, forkJoin, Observable, concat, combineLatest, BehaviorSubject } from 'rxjs';
 
 //////////// ANGULAR MATERIAL ///////////
 import {
@@ -73,6 +73,8 @@ export class ClientAuthComponent implements OnInit, OnDestroy {
   @Input('client') client: any;
 
   userAuthForm: any;
+  private emailMessageSubject = new BehaviorSubject<Boolean>(false);
+  showEmailMessage = false;
 
 
   constructor(
@@ -84,7 +86,7 @@ export class ClientAuthComponent implements OnInit, OnDestroy {
     private activatedRouter: ActivatedRoute,
     private ClientDetailservice: ClientDetailService,
     private dialog: MatDialog,
-    private toolbarService: ToolbarService
+    private toolbarService: ToolbarService,
   ) {
       this.translationLoader.loadTranslations(english, spanish);
   }
@@ -92,6 +94,12 @@ export class ClientAuthComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userAuthForm = this.createUserAuthForm();
+    this.ClientDetailservice.emailChangeSubject.pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe(email => { 
+      this.showEmailMessage = email && email !== "";
+      this.emailMessageSubject.next(email && email !== "");
+    })
   }
 
     /**

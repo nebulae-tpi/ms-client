@@ -15,6 +15,7 @@ import { MarkerRef, ClientPoint, MarkerRefOriginalInfoWindowContent } from './en
 import { of, concat, from, forkJoin, Observable, Subject, defer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, tap, map, mergeMap, toArray, filter, mapTo, defaultIfEmpty, takeUntil } from 'rxjs/operators';
 import { ClientDetailService } from '../client-detail.service';
+import { ToolbarService } from "../../../../toolbar/toolbar.service";
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -59,6 +60,7 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
   PLATFORM_ADMIN = 'PLATFORM-ADMIN';
   productOpstions: string[];
   DEFAULT_LOCATION = { lat: 3.4240684, long: -76.5359473 };
+  selectedBusiness: any;
 
   constructor(
     private clientDetailService: ClientDetailService,
@@ -66,7 +68,8 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private keycloakService: KeycloakService,
     private translateService: TranslateService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private toolbarService: ToolbarService
     ) {
       this.translationLoader.loadTranslations(english, spanish);
   }
@@ -171,13 +174,17 @@ export class ClientLocationComponent implements OnInit, OnDestroy {
 
     of(this.client.location)
       .pipe(
-        //tap(cl => console.log('UBICACION DEL CLIENTE ACTUAL', cl)),
-        mergeMap(cl =>  cl != null
+        //tap(cl => console.log('SELECTED ===> ', this.selectedBusiness)),
+        mergeMap(cl => {
+          const selectedBusiness = this.toolbarService.onSelectedBusiness$.getValue();
+          console.log("Selected BU ===> ", selectedBusiness)
+          return cl != null
             ? of({ lat: cl.lat, long: cl.lng })
-            : defer(() => this.requestBrowserLocation$())
+            : of(!selectedBusiness || !selectedBusiness.attributes ||selectedBusiness.attributes.length < 1? this.DEFAULT_LOCATION :{ lat: parseFloat(selectedBusiness.attributes.find(attr => attr.key === "latitude").value), long: parseFloat(selectedBusiness.attributes.find(attr => attr.key === "longitude").value) })
+        }
         ),
         tap(r => console.log('RESULTADO DE LA RESPUESTA  DEL COORDS ', r)),
-        map( (latLng: any) => {
+        map((latLng: any) => {
           this.map = new MapRef(this.gmapElement.nativeElement, {
             center: new google.maps.LatLng(latLng.lat, latLng.long),
             zoom: 15,

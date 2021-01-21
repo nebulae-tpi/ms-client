@@ -21,6 +21,7 @@ export class ClientDetailService {
 
   lastOperation = null;
   client = null;
+  emailChangeSubject = new BehaviorSubject<String>("")
 
   constructor(private gateway: GatewayService) {
 
