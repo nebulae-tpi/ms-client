@@ -406,6 +406,7 @@ class ClientCQRS {
     client.creationTimestamp = new Date().getTime();
     client.modifierUser = authToken.preferred_username;
     client.modificationTimestamp = new Date().getTime();
+    client.satelliteInfo = {tip: 0, tipType: "CASH"}
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",

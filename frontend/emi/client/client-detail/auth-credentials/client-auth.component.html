@@ -45,8 +45,8 @@
       </mat-slide-toggle>
 
       <div class="mt-16">
-          <button mat-raised-button *ngIf="client._id && (!client.auth || !client.auth.username)" (click)="createClientAuth(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.SAVE' | translate}}</button>
-          <button mat-raised-button *ngIf="client._id && client.auth && client.auth.username" (click)="resetClientPassword(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine">{{'CLIENT.RESET_PASSWORD' | translate}}</button>
+          <button mat-raised-button *ngIf="client._id && (!client.auth || !client.auth.username)" (click)="createClientAuth(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine || !showEmailMessage">{{'CLIENT.SAVE' | translate}}</button>
+          <button mat-raised-button *ngIf="client._id && client.auth && client.auth.username" (click)="resetClientPassword(formDirective)" [disabled]="userAuthForm.invalid || userAuthForm.pristine || !showEmailMessage">{{'CLIENT.RESET_PASSWORD' | translate}}</button>
       </div>
 
     </form>
