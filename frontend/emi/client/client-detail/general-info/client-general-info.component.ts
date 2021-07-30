@@ -111,7 +111,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
   }
 
   onNameChange(newValue) {
-    this.addressField = newValue;
+    //this.addressField = newValue;
   }
   onEmailChange(newValue) {
     this.ClientDetailservice.emailChangeSubject.next(newValue);

@@ -13,14 +13,14 @@
       </div>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="name" (ngModelChange)="onNameChange($event)" formControlName="name" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NAME' | translate}}">
+        <input matInput name="name" formControlName="name" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NAME' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['name'])">
           {{'CLIENT.NAME_REQUIRED' | translate}}
         </mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="addressLine1" [(ngModel)]="addressField" formControlName="addressLine1" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE1' | translate}}">
+        <input matInput name="addressLine1" formControlName="addressLine1" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE1' | translate}}">
         <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['addressLine1'])">
           {{'CLIENT.ADDRESS_REQUIRED' | translate}}
         </mat-error>
