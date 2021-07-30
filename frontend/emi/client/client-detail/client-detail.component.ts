@@ -50,7 +50,7 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject();
 
   pageType: string;
-
+ 
   client: any;
 
   constructor(
