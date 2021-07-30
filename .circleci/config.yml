@@ -35,7 +35,7 @@ jobs:
             gitChanged frontend || export PATH=~/.npm-global/bin:$PATH
             gitChanged frontend || source ~/.profile
             gitChanged frontend || npm install -g @nebulae/cli
-            gitChanged frontend || npm install -g @angular/cli
+            gitChanged frontend || npm install -g @angular/cli@7.3.9
             gitChanged frontend || nebulae register microfrontend --microservice-id=client --frontend-id=emi --setup-file=/home/circleci/nebulae/repo/etc/mfe-setup.json --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json            
             gitChanged frontend || nebulae compose-ui production --shell-finalEnvFile=$FILE_ENV_FRONTEND --shell-type=FUSE2_ANGULAR --shell-repo=https://github.com/nebulae-tpi/emi.git --frontend-id=emi --output-dir=/home/circleci/nebulae/frontend/emi/ --store-type=GCP_DATASTORE --gcp-service-account-token=/tmp/gcloud-service-key.json
             gitChanged frontend || ls /home/circleci/nebulae/frontend/emi/           
@@ -192,7 +192,7 @@ jobs:
             mkdir ~/nebulae/backend
             cp ~/nebulae/go/mbinit ~/nebulae/repo/backend/client/
             export DOCKERHUB_IMAGE=client.backend.client
-            export DOCKERHUB_TAG=0.0.81
+            export DOCKERHUB_TAG=0.0.82
             gitChanged backend/client || docker build  -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:latest ~/nebulae/repo/backend/client/
             gitChanged backend/client || docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
             gitChanged backend/client || docker push $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG
