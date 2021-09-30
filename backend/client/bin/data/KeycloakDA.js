@@ -32,14 +32,14 @@ class KeycloakDA {
           if(this.keycloakToken == null || (this.keycloakToken != null && this.keycloakToken.refresh_expires_in <= 20)){
             console.log("call getToken$")
             console.log("- keycloakToken: ", this.keycloakToken);
-            console.log("- keycloakToken.refresh_expires_in: ", this.keycloakToken.refresh_expires_in);
-            console.log("- keycloakAdmin: ", his.keycloakAdmin);
+            console.log("- keycloakToken.refresh_expires_in: ", (this.keycloakToken || {}).refresh_expires_in);
+            console.log("- keycloakAdmin: ", this.keycloakAdmin);
             return this.getToken$();
           }else{
             console.log("call refreshToken$")
             console.log("- keycloakToken", this.keycloakToken);
-            console.log("- keycloakToken.refresh_expires_in", this.keycloakToken.refresh_expires_in);
-            console.log("- keycloakAdmin: ", his.keycloakAdmin);
+            console.log("- keycloakToken.refresh_expires_in", t(his.keycloakToken|| {}).refresh_expires_in);
+            console.log("- keycloakAdmin: ", this.keycloakAdmin);
             return this.refreshToken$();
           }
         }),
@@ -73,7 +73,12 @@ class KeycloakDA {
    * @returns {Rx.Observable} Observable that resolve to the Keycloak client
    */
   getToken$() {
-    return this.keycloakAdmin.getToken$();
+    try{
+      return this.keycloakAdmin.getToken$();
+    }catch(error){
+      throw new Error(error);
+    }
+    
   }
 
     /**
