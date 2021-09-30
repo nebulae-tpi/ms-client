@@ -22,7 +22,7 @@ const start = () => {
         mongoDB.start$(),
         ClientDA.start$(),
         graphQlService.start$(),
-        KeycloakDA.checkKeycloakToken$(), 
+        //KeycloakDA.checkKeycloakToken$(), 
     ).subscribe(
         (evt) => {
             // console.log(evt)

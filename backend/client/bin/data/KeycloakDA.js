@@ -30,29 +30,17 @@ class KeycloakDA {
       .pipe(
         mergeMap(data=>{
           if(this.keycloakToken == null || (this.keycloakToken != null && this.keycloakToken.refresh_expires_in <= 20)){
-            console.log("call getToken$")
-            console.log("- keycloakToken: ", this.keycloakToken);
-            console.log("- keycloakToken.refresh_expires_in: ", (this.keycloakToken || {}).refresh_expires_in);
-            console.log("- keycloakAdmin: ", this.keycloakAdmin);
             return this.getToken$();
           }else{
-            console.log("call refreshToken$")
-            console.log("- keycloakToken", this.keycloakToken);
-            console.log("- keycloakToken.refresh_expires_in", t(his.keycloakToken|| {}).refresh_expires_in);
-            console.log("- keycloakAdmin: ", this.keycloakAdmin);
             return this.refreshToken$();
           }
         }),
         //If an error ocurred getting or refreshing the token, we try to get a new token. 
         catchError(error => {
-          console.log('Error refreshing token => ', error);
-          console.log('Stacktrace => ', error.stack);
-          //TODO: Se debe descomentar cuando se solucione el problema de certificados
-          // return this.getToken$()
-          // .pipe(
-          //   retry(2)
-          // )
-          return of(undefined);
+          return this.getToken$()
+          .pipe(
+            retry(2)
+          )
         }),
         tap(([client, token]) => {
           if(client && token){
