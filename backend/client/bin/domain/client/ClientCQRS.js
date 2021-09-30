@@ -204,29 +204,28 @@ class ClientCQRS {
         }
       }
       ),
-      //TODO: Se debe descomentar cuando se solucione problema de certificado
-      // mergeMap(clientResult => {
-      //   //console.log('Result business: ', clientResult);
-      //   if (authToken.clientId || clientResult.updated) {
-      //     return of(clientResult.client).pipe(
-      //       mergeMap(client => {
-      //         const attributes = {
-      //           clientId: client._id,
-      //           businessId: client.businessId
-      //         };
-      //         return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
-      //       })
-      //     )
-      //   } else { 
-      //     return of(clientResult);
-      //   }
-      // }),
-      // map(clientResult => ({
-      //   clientId: clientResult.client._id,
-      //   name: clientResult.client.generalInfo.name,
-      //   username: clientResult.client.auth.username,
-      //   updated: clientResult.updated
-      // })),
+      mergeMap(clientResult => {
+        //console.log('Result business: ', clientResult);
+        if (authToken.clientId || clientResult.updated) {
+          return of(clientResult.client).pipe(
+            mergeMap(client => {
+              const attributes = {
+                clientId: client._id,
+                businessId: client.businessId
+              };
+              return ClientKeycloakDA.updateUserAttributes$(client.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
+            })
+          )
+        } else { 
+          return of(clientResult);
+        }
+      }),
+      map(clientResult => ({
+        clientId: clientResult.client._id,
+        name: clientResult.client.generalInfo.name,
+        username: clientResult.client.auth.username,
+        updated: clientResult.updated
+      })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
