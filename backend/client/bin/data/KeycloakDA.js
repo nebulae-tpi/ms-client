@@ -78,6 +78,7 @@ class KeycloakDA {
       return this.keycloakAdmin.getToken$();
     }catch(error){
       console.log("INGRESA ERROR!!!!!!!!!!", error.stack)
+      console.trace();
       console.log("ERROR ====> ", error)
       throw new Error(error);
     }
