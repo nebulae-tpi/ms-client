@@ -46,6 +46,7 @@ class KeycloakDA {
         //If an error ocurred getting or refreshing the token, we try to get a new token. 
         catchError(error => {
           console.log('Error refreshing token => ', error);
+          console.log('Stacktrace => ', error.stack);
           return this.getToken$()
           .pipe(
             retry(2)
@@ -76,6 +77,8 @@ class KeycloakDA {
     try{
       return this.keycloakAdmin.getToken$();
     }catch(error){
+      console.log("INGRESA ERROR!!!!!!!!!!", error.stack)
+      console.log("ERROR ====> ", error)
       throw new Error(error);
     }
     
