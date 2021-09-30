@@ -47,13 +47,16 @@ class KeycloakDA {
         catchError(error => {
           console.log('Error refreshing token => ', error);
           console.log('Stacktrace => ', error.stack);
-          return this.getToken$()
-          .pipe(
-            retry(2)
-          )
+          //TODO: Se debe descomentar cuando se solucione el problema de certificados
+          // return this.getToken$()
+          // .pipe(
+          //   retry(2)
+          // )
+          return of(undefined);
         }),
         tap(([client, token]) => {
-          console.log('Token refreshed; refresh token expires in:  ', token.refresh_expires_in, ', token expires in: ', token.expires_in);
+          if(client && token){
+            console.log('Token refreshed; refresh token expires in:  ', token.refresh_expires_in, ', token expires in: ', token.expires_in);
           //takes the lowest expiration time
           const expirationTimeToken = token.expires_in < token.refresh_expires_in ? token.expires_in : token.refresh_expires_in;
   
@@ -63,6 +66,10 @@ class KeycloakDA {
           
           //set the new time
           this.tokenTimeSubject$.next(expirationTimeMillis);
+          }
+          
+          
+          
         })
       )     
     })
@@ -74,14 +81,7 @@ class KeycloakDA {
    * @returns {Rx.Observable} Observable that resolve to the Keycloak client
    */
   getToken$() {
-    try{
       return this.keycloakAdmin.getToken$();
-    }catch(error){
-      console.log("INGRESA ERROR!!!!!!!!!!", error.stack)
-      console.trace();
-      console.log("ERROR ====> ", error)
-      throw new Error(error);
-    }
     
   }
 
