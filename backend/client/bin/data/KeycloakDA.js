@@ -103,8 +103,7 @@ module.exports = {
     if (!instance) {        
       instance = new KeycloakDA({ 
         realmName: process.env.KEYCLOAK_BACKEND_REALM_NAME,
-        //baseUrl: process.env.KEYCLOAK_BACKEND_BASE_URL,
-        baseUrl: "http://10.0.6.113:8080/auth",
+        baseUrl: process.env.KEYCLOAK_BACKEND_BASE_URL,
         username: process.env.KEYCLOAK_BACKEND_USER, 
         password: process.env.KEYCLOAK_BACKEND_PASSWORD,
         grant_type: 'password',
