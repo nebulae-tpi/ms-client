@@ -137,6 +137,10 @@ class EventStoreService {
         fn: ClientES.handleClientStateUpdated$,
         obj: ClientES
       },
+      DriverAssociatedToClient: {
+        fn: ClientES.handleDriverAssociatedToClient$,
+        obj: ClientES
+      },
       ClientLocationUpdated: {
         fn: ClientES.handleClientLocationUpdated$,
         obj: ClientES
@@ -168,6 +172,10 @@ class EventStoreService {
       {
         aggregateType: "Client",
         eventType: "ClientSatelliteInfoUpdated"
+      },
+      {
+        aggregateType: "Client",
+        eventType: "DriverAssociatedToClient"
       },
       {
         aggregateType: "Client",

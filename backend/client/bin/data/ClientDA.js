@@ -47,6 +47,16 @@ class ClientDA {
     return defer(() => collection.findOne(query));
   }
 
+  static getClientById$(id) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    const query = {
+      _id: id      
+    };
+
+    return defer(() => collection.findOne(query));
+  }
+
   /**
    * Get client info by its username.
    * @param {*} username 
@@ -253,6 +263,19 @@ class ClientDA {
         )
     ).pipe(
       map(result => result && result.value ? result.value : undefined)
+    );
+  }
+
+  static addDriverCode$(id, referrerDriverCode) {
+    const collection = mongoDB.db.collection(CollectionName);
+    
+    return defer(()=>
+        collection.updateOne(
+          { _id: id},
+          {
+            $set: {referrerDriverCode}
+          }
+        )
     );
   }
 

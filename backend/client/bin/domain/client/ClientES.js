@@ -83,6 +83,10 @@ class ClientES {
         );
     }
 
+    handleDriverAssociatedToClient(DriverAssociatedToClientEvent) {          
+        return ClientDA.addDriverCode$(DriverAssociatedToClientEvent.aid, DriverAssociatedToClientEvent.data.referrerDriverCode);
+    }
+
     handleClientLocationUpdated$(clientLocationUpdatedEvt){
         return ClientDA.updateClientLocation$(clientLocationUpdatedEvt.aid, clientLocationUpdatedEvt.data)
         .pipe(

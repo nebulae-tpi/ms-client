@@ -74,6 +74,15 @@ module.exports = {
     },
   },
   Mutation: {   
+    AssociateDriverToClient: (root, args, context, info) => {
+      console.log('llega args: ', args);
+      return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'AssociateDriverToClient', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(
+        switchMapTo(
+          broker.forwardAndGetReply$("Client", "clientgateway.graphql.mutation.AssociateDriverToClient", { root, args, jwt: context.encodedToken }, 2000)
+        ),
+        mergeMap(response => getResponseFromBackEnd$(response))
+      ).toPromise();
+    },
     ValidateNewClient: (root, args, context, info) => {
       console.log('llega args: ', args);
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'ValidateNewClient', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT']).pipe(

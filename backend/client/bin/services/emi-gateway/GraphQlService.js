@@ -196,6 +196,10 @@ class GraphQlService {
       },
       {
         aggregateType: "Client",
+        messageType: "clientgateway.graphql.mutation.AssociateDriverToClient"
+      },
+      {
+        aggregateType: "Client",
         messageType: "clientgateway.graphql.mutation.ValidateNewClient"
       },
       {
@@ -245,6 +249,10 @@ class GraphQlService {
       // CLIENT GATEWAY      
       "clientgateway.graphql.query.ClientProfile": {
         fn: ClientCQRS.getClientProfile$,
+        obj: ClientCQRS
+      },
+      "clientgateway.graphql.mutation.AssociateDriverToClient": {
+        fn: ClientCQRS.associateDriverToClient$,
         obj: ClientCQRS
       },
       "clientgateway.graphql.mutation.ValidateNewClient": {

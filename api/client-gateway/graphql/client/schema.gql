@@ -20,6 +20,8 @@ type ClientData{
    username: String
    "Client was updated"
    updated: Boolean
+   "associated DriverId"
+   referrerDriverCode: String
 }
 
 type ClientFavoritePlace {
@@ -127,6 +129,7 @@ type Query {
 }
 
 type Mutation {
+   AssociateDriverToClient(driverCode: String): ClientData @requireAuth
    ValidateNewClient(businessId: String): ClientData @requireAuth
    linkSatellite(satelliteId: String): CommandResponse @requireAuth
    unlinkSatellite: CommandResponse @requireAuth

@@ -142,6 +142,47 @@ class ClientCQRS {
     );
   }
 
+
+  /**
+  * Validate user logged from an identity provider
+  */
+   associateDriverToClient$({ root, args, jwt }, authToken) {
+    const referrerDriverCode = args.driverCode;
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "associateDriverToClient$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["CLIENT"]
+    ).pipe(
+      //Validate the data
+      mergeMap(roles => ClientDA.getClientById$(authToken.clientId)),
+      mergeMap(client => {
+        if (client) {
+          return eventSourcing.eventStore.emitEvent$(
+            new Event({
+              eventType: "DriverAssociatedToClient",
+              eventTypeVersion: 1,
+              aggregateType: "Client",
+              aggregateId: client._id,
+              data: {
+                referrerDriverCode
+              },
+              user: authToken.preferred_username
+            })).pipe(
+              mapTo({...client, referrerDriverCode, updated: true})
+            )
+        }else {
+          throw new CustomError('Missing client ID in token', 'associateDriverToClient$', CLIENT_ID_MISSING.code, CLIENT_ID_MISSING.description); 
+        }
+      }
+      ),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
+
   /**
   * Validate user logged from an identity provider
   */
