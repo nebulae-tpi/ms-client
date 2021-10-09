@@ -83,7 +83,7 @@ class ClientES {
         );
     }
 
-    handleDriverAssociatedToClient(DriverAssociatedToClientEvent) {          
+    handleDriverAssociatedToClient$(DriverAssociatedToClientEvent) {          
         return ClientDA.addDriverCode$(DriverAssociatedToClientEvent.aid, DriverAssociatedToClientEvent.data.referrerDriverCode);
     }
 
