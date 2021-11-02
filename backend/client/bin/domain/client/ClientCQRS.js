@@ -261,12 +261,13 @@ class ClientCQRS {
           return of(clientResult);
         }
       }),
+
       map(clientResult => ({
         clientId: clientResult.client._id,
         name: clientResult.client.generalInfo.name,
         username: clientResult.client.auth.username,
         updated: clientResult.updated,
-        referrerDriverCode: clientResult.referrerDriverCode
+        referrerDriverCode: clientResult.client.referrerDriverCode
       })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
       catchError(err => GraphqlResponseTools.handleError$(err))
