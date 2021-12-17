@@ -116,6 +116,7 @@ input FavoritePlaceInput{
 
 
 type Query {
+   
    "Get profile data of the logged user"
    ClientProfile: ClientMongoData @requireAuth
    "Get the satellite linked to user"
