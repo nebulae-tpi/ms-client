@@ -36,6 +36,7 @@ module.exports = {
       ).toPromise();
     },
     ClientLinkedSatellite: (root, args, context, info) => {
+      
       return RoleValidator.checkPermissions$(context.authToken.realm_access.roles, 'ms-client', 'ClientLinkedSatellite', USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT', 'SATELLITE']).pipe(
         switchMapTo(
           broker.forwardAndGetReply$("Client", "clientgateway.graphql.query.clientLinkedSatellite", { root, args, jwt: context.encodedToken }, 2000)
