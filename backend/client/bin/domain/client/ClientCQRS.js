@@ -377,7 +377,7 @@ class ClientCQRS {
 
   clientLinkedSatellite$({ root, args, jwt }, authToken) {
     return RoleValidator.checkPermissions$(
-      authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
+      authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT", "SATELLITE"])
       .pipe(
         mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
         tap(satelliteFound => {
