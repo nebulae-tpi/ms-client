@@ -71,26 +71,6 @@ export const ClientClients = gql`
         name
         phone
         addressLine1
-        addressLine1
-        city
-        neighborhood
-        zone
-        email
-        notes
-      }
-      satelliteInfo{
-        referrerDriverDocumentId
-        tipType
-        tip
-        offerMinDistance
-        offerMaxDistance
-        clientAgreements{
-          clientId
-          clientName
-          documentId
-          tip
-          tipType
-        }
       }
       auth {
         userKeycloakId
