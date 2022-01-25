@@ -135,12 +135,12 @@ class ClientDA {
     if (filter.modifierUser) {
       query.modifierUser = { $regex: filter.modifierUser, $options: "i" };
     }
+    console.log("Consulta cliente ===> ", query);
 
     const cursor = collection
       .find(query)
       .skip(pagination.count * pagination.page)
       .limit(pagination.count)
-      .sort({ creationTimestamp: pagination.sort });
 
     return mongoDB.extractAllFromMongoCursor$(cursor);
   }

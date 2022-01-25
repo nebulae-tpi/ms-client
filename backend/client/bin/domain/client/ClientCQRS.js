@@ -110,6 +110,7 @@ class ClientCQRS {
         return ClientDA.getClientList$(filterInput, args.paginationInput);
       }),
       toArray(),
+      tap(result => {console.log("finaliza consulta")}),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
