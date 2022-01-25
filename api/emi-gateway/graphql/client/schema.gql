@@ -200,7 +200,7 @@ input ClientAuthInput {
 
 type Query {
   "Get Clients filtered"
-  ClientClients(filterInput: ClientClientFilterInput!, paginationInput: ClientClientPaginationInput!): [ClientClient]
+  ClientClients(filterInput: ClientClientFilterInput!, paginationInput: ClientClientPaginationInput!): [JSON]
   "Get the amount of Clients filtered "
   ClientClientsSize(filterInput: ClientClientFilterInput!): Int!
   "Get Client by its id"

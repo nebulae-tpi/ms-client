@@ -52,36 +52,13 @@ export const ClientClient = gql`
 // *here*
 export const getClientsFiltered = gql`
 query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: ClientClientPaginationInput!) {
-  ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
-    _id
-    generalInfo {
-      name
-      documentId
-    }
-    state
-  }
+  ClientClients(filterInput: $filterInput, paginationInput: $paginationInput)
 }
 `;
 
 export const ClientClients = gql`
   query ClientClients($filterInput: ClientClientFilterInput!, $paginationInput: ClientClientPaginationInput!) {
-    ClientClients(filterInput: $filterInput, paginationInput: $paginationInput) {
-      _id
-      generalInfo {
-        name
-        phone
-        addressLine1
-      }
-      auth {
-        userKeycloakId
-        username
-      }
-      state
-      creationTimestamp
-      creatorUser
-      modificationTimestamp
-      modifierUser
-    }
+    ClientClients(filterInput: $filterInput, paginationInput: $paginationInput)
   }
 `;
 
