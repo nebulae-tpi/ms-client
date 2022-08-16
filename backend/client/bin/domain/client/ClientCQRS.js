@@ -399,7 +399,9 @@ class ClientCQRS {
           active: sf.state,
           location: sf.location,
           tipType: (sf.satelliteInfo || {}).tipType,
-          tip: (sf.satelliteInfo || {}).tip || 0
+          tip: (sf.satelliteInfo || {}).tip || 0,
+          offerMinDistance: (sf.satelliteInfo || {}).offerMinDistance,
+          offerMaxDistance: (sf.satelliteInfo || {}).offerMaxDistance
         })),
         mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
         catchError(err => GraphqlResponseTools.handleError$(err))
