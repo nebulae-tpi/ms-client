@@ -383,6 +383,7 @@ class ClientCQRS {
         mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
         tap(satelliteFound => {
           if (!satelliteFound) { throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description) }
+          console.log("MAX DISTANCE ===> ",(satelliteFound.satelliteInfo || {}).offerMaxDistance)
         }),
         map(sf => ({
           _id: sf._id,
