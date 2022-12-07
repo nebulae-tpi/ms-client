@@ -135,12 +135,23 @@ class ClientDA {
     if (filter.modifierUser) {
       query.modifierUser = { $regex: filter.modifierUser, $options: "i" };
     }
-    console.log("Consulta cliente ===> ", query);
-
     const cursor = collection
       .find(query)
       .skip(pagination.count * pagination.page)
       .limit(pagination.count)
+
+    return mongoDB.extractAllFromMongoCursor$(cursor);
+  }
+
+  static getAssociatedClients$(id) {
+    const collection = mongoDB.db.collection(CollectionName);
+
+    const query = {
+      satelliteId: id
+    };
+    console.log("QUERY ===> ", query)
+    const cursor = collection
+      .find(query)
 
     return mongoDB.extractAllFromMongoCursor$(cursor);
   }

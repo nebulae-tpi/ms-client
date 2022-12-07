@@ -73,6 +73,7 @@ type ClientClientSatelliteInfo {
   offerMaxDistance: Int
   "Client Agreement list"
   clientAgreements: [ClientClientAsociated]
+  associatedClients: [ClientClientAsociated]
 }
 
 input ClientClientFilterInput {
@@ -160,6 +161,10 @@ input ClientClientSatelliteInfoInput {
   offerMaxDistance: Int
   "Clients asociated"
   clientAgreements: [ClientClientAsociatedInput]
+  "Clients asociated"
+  associatedClients: [ClientClientAsociatedInput]
+  "Clients asociated"
+  associatedClientsRemoved: [ClientClientAsociatedInput]
 }
 
 # input ClientClientCredentialsInput {

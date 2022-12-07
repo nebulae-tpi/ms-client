@@ -1,74 +1,51 @@
 <div class="tab-content p-24" fusePerfectScrollbar>
 
-    <form name="clientSatelliteForm" [formGroup]="clientSatelliteForm" fxFlex="100" fxLayout="row wrap" class="mat-white-bg p-24 mb-24">
-  
-      <div fxLayout="row" fxFlex="100" fxLayoutAlign="start center">
-          <h2>{{'CLIENT.DETAILS.SATELLITE.OFFER_CONFIGURATION' | translate}}</h2>
-          <button mat-icon-button matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.COPY_LINK_APP_CLIENT' | translate}}"
-           (click)="copySatellitLink()" >
-            <mat-icon>link</mat-icon>
-          </button>
-      </div>      
-  
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
-        <input matInput name="offerMinDistance" type="number" formControlName="offerMinDistance" placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MIN_DISTANCE' | translate}}">
-      </mat-form-field>
-  
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
-        <input matInput name="offerMaxDistance" type="number" formControlName="offerMaxDistance" placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
-      </mat-form-field>
-  
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
-        <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40" placeholder="{{'CLIENT.DETAILS.SATELLITE.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
-      </mat-form-field>
-  
-      <div fxFlex="100" fxFlex="start center" fxLayout="row" >
-        <h2 class="mt-12 mb-12">{{'CLIENT.DETAILS.SATELLITE.BUSINESS_AGREEMENT' | translate}}</h2>
-        
-        <button (click)="applySameTipToAsociatedClients()" matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.APPLY_DEFAULT_AGREEMENT_TIP' | translate}}" mat-icon-button color="primary">
-          <mat-icon>low_priority</mat-icon>
-        </button>
-      </div>
-  
-  
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
-          <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
-            {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
-          </mat-option>
-        </mat-select>
-        <!-- <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
-          {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
-        </mat-error> -->
-      </mat-form-field>
-  
-      <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-        <input matInput name="tip" formControlName="tip" maxlength="8" placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}"
-        currencyMask [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">
-        <!-- <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tip'])">
-          {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP' | translate}}
-        </mat-error> -->
-      </mat-form-field>
-  
-  
-      <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'"
-        fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-        <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->
-        <div class="mt-12 mb-12" style="font-size: 20px" >{{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}}</div>
-      </div>
-  
-      <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'"
-        fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex="100">
-        <div *ngFor="let item of clientSatelliteForm.get('clientAgreements')['controls']; let i = index;"
-          fxFlex="100" formArrayName="clientAgreements" fxLayout="column">
-          <div class="border" [formGroupName]="i" fxFlex="100" fxLayout="row wrap">
-  
-            <client-autocomplete class="center-text pr-12 pl-12" fxFlex.gt-xs="60" fxFlex="100"
-              [formGroup]="clientSatelliteForm.get('clientAgreements')['controls'][i]"
-              [placeHolder]="'CLIENT.DETAILS.SATELLITE.CLIENT_NAME' | translate" [controlName]="'client'" [editable]="true">
-            </client-autocomplete>
-  
-            <!-- <mat-form-field fxFlex.gt-xs="35" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+  <form name="clientSatelliteForm" [formGroup]="clientSatelliteForm" fxFlex="100" fxLayout="row wrap"
+    class="mat-white-bg p-24 mb-24">
+
+    <div fxLayout="row" fxFlex="100" fxLayoutAlign="start center">
+      <h2>{{'CLIENT.DETAILS.SATELLITE.OFFER_CONFIGURATION' | translate}}</h2>
+      <button mat-icon-button matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.COPY_LINK_APP_CLIENT' | translate}}"
+        (click)="copySatellitLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
+      <input matInput name="offerMinDistance" type="number" formControlName="offerMinDistance"
+        placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MIN_DISTANCE' | translate}}">
+    </mat-form-field>
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
+      <input matInput name="offerMaxDistance" type="number" formControlName="offerMaxDistance"
+        placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
+    </mat-form-field>
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
+      <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40"
+        placeholder="{{'CLIENT.DETAILS.SATELLITE.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
+    </mat-form-field>
+
+
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->
+      <div class="mt-12 mb-12" style="font-size: 20px">{{'CLIENT.DETAILS.SATELLITE.ASSOCIATED_CLIENTS_LIST' |
+        translate}}</div>
+    </div>
+
+    <div fxLayout="column"
+      fxLayoutAlign="space-around stretch" fxFlex="100">
+      <div *ngFor="let item of clientSatelliteForm.get('associatedClients')['controls']; let i = index;" fxFlex="100"
+        formArrayName="associatedClients" fxLayout="column">
+        <div class="border" [formGroupName]="i" fxFlex="100" fxLayout="row wrap">
+
+          <client-autocomplete class="center-text pr-12 pl-12" fxFlex="100"
+            [formGroup]="clientSatelliteForm.get('associatedClients')['controls'][i]"
+            [placeHolder]="'CLIENT.DETAILS.SATELLITE.CLIENT_NAME' | translate" [controlName]="'client'"
+            [editable]="true">
+          </client-autocomplete>
+
+          <!-- <mat-form-field fxFlex.gt-xs="35" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
               <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
                 <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
                   {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
@@ -78,36 +55,111 @@
                 {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
               </mat-error>
             </mat-form-field> -->
-  
-            <mat-form-field fxFlex.gt-xs="30" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
-              <input matInput name="tip" formControlName="tip" maxlength="8"
-                placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}" currencyMask
-                [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">
-              <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tip'])">
-                {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP' | translate}}
-              </mat-error>
-            </mat-form-field>
-  
-            <button type="button" fxFlex="10" fxFlex.xs="100" mat-icon-button (click)="deleteAsociatedDoorMan(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-  
+
+          <button type="button" fxFlex="10" fxFlex.xs="100" mat-icon-button (click)="deleteAsociatedClient(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
-        <button style="margin-top: 10px" mat-mini-fab (click)="addAsociatedDoorMan()" [disabled]="!clientSatelliteForm.get('clientAgreements').valid"  >
-          <mat-icon>add</mat-icon>
-        </button>
+
       </div>
-  
-      <div fxFlex="100" class="mt-16">
-        <button mat-raised-button (click)="updateClientSatelliteInfo()"
-          [disabled]="clientSatelliteForm.invalid || clientSatelliteForm.pristine">
-          {{'CLIENT.UPDATE' | translate}}
-        </button>
-        <!-- <button mat-raised-button (click)="printForm()">VIEW</button> -->
+      <button style="margin-top: 10px" mat-mini-fab (click)="addAsociatedClient()"
+        [disabled]="!clientSatelliteForm.get('associatedClients').valid">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+
+    <div fxFlex="100" fxFlex="start center" fxLayout="row">
+      <h2 class="mt-12 mb-12">{{'CLIENT.DETAILS.SATELLITE.BUSINESS_AGREEMENT' | translate}}</h2>
+
+      <button (click)="applySameTipToAsociatedClients()"
+        matTooltip="{{ 'CLIENT.DETAILS.SATELLITE.APPLY_DEFAULT_AGREEMENT_TIP' | translate}}" mat-icon-button
+        color="primary">
+        <mat-icon>low_priority</mat-icon>
+      </button>
+    </div>
+
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+      <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
+        <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
+          {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
+        </mat-option>
+      </mat-select>
+      <!-- <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
+          {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
+        </mat-error> -->
+    </mat-form-field>
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+      <input matInput name="tip" formControlName="tip" maxlength="8"
+        placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}" currencyMask
+        [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">
+      <!-- <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tip'])">
+          {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP' | translate}}
+        </mat-error> -->
+    </mat-form-field>
+
+
+    <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'" fxFlex="100" fxLayout="row"
+      fxLayoutAlign="start center">
+      <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->
+      <div class="mt-12 mb-12" style="font-size: 20px">{{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' |
+        translate}}</div>
+    </div>
+
+    <div *ngIf="clientSatelliteForm.controls['tipType'].value === 'VIRTUAL_WALLET'" fxLayout="column"
+      fxLayoutAlign="space-around stretch" fxFlex="100">
+      <div *ngFor="let item of clientSatelliteForm.get('clientAgreements')['controls']; let i = index;" fxFlex="100"
+        formArrayName="clientAgreements" fxLayout="column">
+        <div class="border" [formGroupName]="i" fxFlex="100" fxLayout="row wrap">
+
+          <client-autocomplete class="center-text pr-12 pl-12" fxFlex.gt-xs="60" fxFlex="100"
+            [formGroup]="clientSatelliteForm.get('clientAgreements')['controls'][i]"
+            [placeHolder]="'CLIENT.DETAILS.SATELLITE.CLIENT_NAME' | translate" [controlName]="'client'"
+            [editable]="true">
+          </client-autocomplete>
+
+          <!-- <mat-form-field fxFlex.gt-xs="35" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+              <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP_TYPE' | translate}}" formControlName="tipType">
+                <mat-option *ngFor="let tipType of tipTypeList" [value]="tipType">
+                  {{ "CLIENT.DETAILS.SATELLITE.TIP_TYPES."+tipType | translate}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
+                {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
+              </mat-error>
+            </mat-form-field> -->
+
+          <mat-form-field fxFlex.gt-xs="30" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+            <input matInput name="tip" formControlName="tip" maxlength="8"
+              placeholder="{{'CLIENT.DETAILS.SATELLITE.TIP' | translate}}" currencyMask
+              [options]="{ prefix: '$ ', thousands: ',', precision: '0' }">
+            <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tip'])">
+              {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP' | translate}}
+            </mat-error>
+          </mat-form-field>
+
+          <button type="button" fxFlex="10" fxFlex.xs="100" mat-icon-button (click)="deleteAsociatedDoorMan(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
       </div>
-  
-    </form>
-  
-  </div>
-  
+      <button style="margin-top: 10px" mat-mini-fab (click)="addAsociatedDoorMan()"
+        [disabled]="!clientSatelliteForm.get('clientAgreements').valid">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div fxFlex="100" class="mt-16">
+      <button mat-raised-button (click)="updateClientSatelliteInfo()"
+        [disabled]="clientSatelliteForm.invalid || clientSatelliteForm.pristine">
+        {{'CLIENT.UPDATE' | translate}}
+      </button>
+      <!-- <button mat-raised-button (click)="printForm()">VIEW</button> -->
+    </div>
+
+  </form>
+
+</div>

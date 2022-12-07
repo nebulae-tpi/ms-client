@@ -99,7 +99,9 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
       offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
       offerMaxDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMaxDistance : ''),
-      clientAgreements: new FormArray( this.buildClientAgreementArray(this.client) )
+      clientAgreements: new FormArray( this.buildClientAgreementArray(this.client) ),
+      associatedClients: new FormArray( this.buildAssociatedClientArray(this.client) ),
+      associatedClientsToRemove: new FormArray([]),
     });
 
   }
@@ -115,6 +117,20 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
             referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
+            associatedClients: this.clientSatelliteForm.getRawValue().associatedClients
+              .map(e => ({
+                clientId: e.client.id,
+                clientName: e.client.name,
+                documentId: e.client.documentId
+              }))
+            ,
+            associatedClientsRemoved: this.clientSatelliteForm.getRawValue().associatedClientsToRemove
+              .map(e => ({
+                clientId: e.client.id,
+                clientName: e.client.name,
+                documentId: e.client.documentId
+              }))
+            ,
             clientAgreements: this.clientSatelliteForm.getRawValue().tipType === 'VIRTUAL_WALLET'
               ? this.clientSatelliteForm.getRawValue().clientAgreements
                 .map(e => ({
@@ -246,6 +262,15 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       });
   }
 
+ 
+
+  addAsociatedClient(client?: any, tip?: string) {
+    const associatedClients = this.clientSatelliteForm.get('associatedClients') as FormArray;
+    associatedClients.push(this.formBuilder.group({
+      client: new FormControl(client, [Validators.required, this.checkAssociatedClientList.bind(this)]),
+    }));
+  }
+
   addAsociatedDoorMan(client?: any, tip?: string) {
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     clientAgreements.push(this.formBuilder.group({
@@ -275,10 +300,35 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }
   }
 
+  buildAssociatedClientArray(client) {
+    if (client && client.satelliteInfo && client.satelliteInfo.associatedClients) {      
+      return client.satelliteInfo.associatedClients
+        .map((clientRef: any) => new FormGroup({
+          client: new FormControl({ id: clientRef.clientId, name: clientRef.clientName, documentId: clientRef.documentId }),
+        }));
+    } else {
+      return [];
+    }
+  }
+
   deleteAsociatedDoorMan(index){
     this.clientSatelliteForm.pristine = false;
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     clientAgreements.removeAt(index);
+  }
+
+
+  deleteAsociatedClient(index){
+    this.clientSatelliteForm.pristine = false;
+    const associatedClients = this.clientSatelliteForm.get('associatedClients') as FormArray;
+    const associatedClientsToRemove = this.clientSatelliteForm.get('associatedClientsToRemove') as FormArray;
+    associatedClientsToRemove.push(this.formBuilder.group({
+      client: new FormControl(associatedClients.at(index).value.client, []),
+    }));
+    associatedClients.removeAt(index);
+
+    
+    
   }
 
   printForm(){
@@ -289,6 +339,20 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     if ( typeof c.value === 'string' || !c.value ){ return { clientSelected: { valid: false } }; }
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     const repeated = clientAgreements.getRawValue().filter((v) => ( v.client && c.value && v.client.id === c.value.id )).length;
+    if (repeated > 1){
+      return { clientRepeated: { valid: false } };
+    }
+
+    if (c.value && !c.value.documentId){
+      return { checkDocumentId: { valid: false } };
+    }
+    return null;
+  }
+
+  checkAssociatedClientList(c: FormControl){
+    if ( typeof c.value === 'string' || !c.value ){ return { clientSelected: { valid: false } }; }
+    const associatedClients = this.clientSatelliteForm.get('associatedClients') as FormArray;
+    const repeated = associatedClients.getRawValue().filter((v) => ( v.client && c.value && v.client.id === c.value.id )).length;
     if (repeated > 1){
       return { clientRepeated: { valid: false } };
     }

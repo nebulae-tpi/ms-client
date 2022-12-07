@@ -10,7 +10,7 @@ const broker = require("../../tools/broker/BrokerFactory")();
 const MATERIALIZED_VIEW_TOPIC = "materialized-view-updates";
 const GraphqlResponseTools = require('../../tools/GraphqlResponseTools');
 const RoleValidator = require("../../tools/RoleValidator");
-const { of, interval, iif } = require("rxjs");
+const { of, interval, iif, from } = require("rxjs");
 const { take, mergeMap, catchError, map, toArray, mapTo, tap } = require('rxjs/operators');
 const {
   CustomError,
@@ -82,8 +82,23 @@ class ClientCQRS {
         const businessId = !isPlatformAdmin ? (authToken.businessId || '') : null;
         return ClientDA.getClient$(args.id, businessId)
       }),
+      mergeMap(client => {
+        return ClientDA.getAssociatedClients$(args.id).pipe(
+          map(associatedClient => {
+            return {clientId: associatedClient._id, clientName: associatedClient.generalInfo.name, documentId: associatedClient.generalInfo.documentId};
+          }),
+          toArray(),
+          map(associatedClientRes => {
+            console.log("RES ===> ", associatedClientRes)
+            return {...client, satelliteInfo: {...client.satelliteInfo, associatedClients: associatedClientRes} }
+          })
+        )
+      }),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
-      catchError(err => GraphqlResponseTools.handleError$(error))
+      catchError(err => {
+        console.log("ERROR ===> ", err)
+        GraphqlResponseTools.handleError$(err)
+      })
     );
   }
 
@@ -93,6 +108,7 @@ class ClientCQRS {
    * @param {*} args args
    */
   getClientList$({ args }, authToken) {
+    console.log("")
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles,
       "Client",
@@ -110,7 +126,7 @@ class ClientCQRS {
         return ClientDA.getClientList$(filterInput, args.paginationInput);
       }),
       toArray(),
-      tap(result => {console.log("finaliza consulta")}),
+      tap(result => {console.log("finaliza consulta ===> ", result)}),
       mergeMap(rawResponse => GraphqlResponseTools.buildSuccessResponse$(rawResponse)),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
@@ -551,19 +567,53 @@ class ClientCQRS {
             mergeMap(userMongo => ClientValidatorHelper.checkClientUpdateClientSatelliteValidator$(client, authToken, roles, userMongo)),
           )
       ),
+      mergeMap(data => {
+        
+        if(((client.satelliteInfo || {}).associatedClients || []).length > 0){
+          return from(client.satelliteInfo.associatedClients).pipe(
+            mergeMap(associatedClient => {
+              return ClientDA.linkSatellite$(associatedClient.clientId, client._id)
+            }),
+            toArray(),
+            mapTo(data)
+          )
+        }
+        else {
+          return of(data)
+        }
+        
+      }),
+      mergeMap(data => {
+        if(((client.satelliteInfo || {}).associatedClientsRemoved || []).length > 0){
+          return from(client.satelliteInfo.associatedClientsRemoved).pipe(
+            mergeMap(associatedClient => {
+              return ClientDA.linkSatellite$(associatedClient.clientId, null)
+            }),
+            toArray(),
+            mapTo(data)
+          )
+        }
+        else {
+          return of(data)
+        }
+        
+      }),
       mergeMap(data => eventSourcing.eventStore.emitEvent$(
         new Event({
           eventType: "ClientSatelliteInfoUpdated",
           eventTypeVersion: 1,
           aggregateType: "Client",
           aggregateId: client._id,
-          data: client,
+          data: {...client, satelliteInfo: {...client.satelliteInfo, associatedClients: undefined}},
           user: authToken.preferred_username
         })).pipe(mapTo(data))
       ),
       map(data => ({ code: 200, message: `Client with id: ${data.client._id} has been updated` })),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
-      catchError(err => GraphqlResponseTools.handleError$(err))
+      catchError(err => {
+        console.log("ERR => ", err)
+        GraphqlResponseTools.handleError$(err)
+      })
     );
   }
 

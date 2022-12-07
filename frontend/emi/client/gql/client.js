@@ -31,6 +31,11 @@ export const ClientClient = gql`
           tip
           tipType
         }
+        associatedClients{
+          clientId
+          clientName
+          documentId
+        }
       }
       auth {
         userKeycloakId
@@ -181,6 +186,11 @@ export const ClientClientUpdatedSubscription = gql`
           documentId
           tip
           tipType
+        }
+        associatedClients{
+          clientId
+          clientName
+          documentId
         }
       }
       auth {

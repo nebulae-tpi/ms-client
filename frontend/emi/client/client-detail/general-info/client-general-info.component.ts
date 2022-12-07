@@ -117,6 +117,7 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
     this.ClientDetailservice.emailChangeSubject.next(newValue);
   }
 
+  
   createClient() {
     this.toolbarService.onSelectedBusiness$
     .pipe(
