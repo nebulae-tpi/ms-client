@@ -226,6 +226,7 @@ class ClientCQRS {
             )
           }
         }
+        
         else {
           return of(authToken).pipe(
             mergeMap(token => {
