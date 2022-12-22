@@ -34,7 +34,7 @@
     "@nebulae/keycloak-admin-client": "^1.0.1",
     "async-mqtt": "^1.0.1",
     "dotenv": "^5.0.1",
-    "jsonwebtoken": "^8.2.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.0.6",
     "rxjs": "^6.3.3",
     "uuid": "^3.3.2"
