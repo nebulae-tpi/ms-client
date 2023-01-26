@@ -588,7 +588,7 @@ class ClientCQRS {
                 mergeMap(dataLink => {
                   return eventSourcing.eventStore.emitEvent$(
                     new Event({
-                      eventType: "ClientSatelliteUpdated",
+                      eventType: "ClientSatelliteIdUpdated",
                       eventTypeVersion: 1,
                       aggregateType: "Client",
                       aggregateId: associatedClient.clientId,
