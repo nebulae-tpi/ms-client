@@ -303,6 +303,17 @@ class ClientCQRS {
           if (!satelliteFound) { throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description) }
         }),
         mergeMap(() => ClientDA.linkSatellite$(authToken.clientId, args.satelliteId)),
+        mergeMap(data => {
+          return eventSourcing.eventStore.emitEvent$(
+            new Event({
+              eventType: "ClientSatelliteUpdated",
+              eventTypeVersion: 1,
+              aggregateType: "Client",
+              aggregateId: client._id,
+              data: {satelliteId: args.satelliteId},
+              user: authToken.preferred_username
+            })).pipe(mapTo(data))
+        }),
         map(() => ({ code: 200, message: `Satellite Linked successful` })),
         mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
         catchError(err => GraphqlResponseTools.handleError$(err))
@@ -573,8 +584,21 @@ class ClientCQRS {
         if(((client.satelliteInfo || {}).associatedClients || []).length > 0){
           return from(client.satelliteInfo.associatedClients).pipe(
             mergeMap(associatedClient => {
-              return ClientDA.linkSatellite$(associatedClient.clientId, client._id)
+              return ClientDA.linkSatellite$(associatedClient.clientId, client._id).pipe(
+                mergeMap(dataLink => {
+                  return eventSourcing.eventStore.emitEvent$(
+                    new Event({
+                      eventType: "ClientSatelliteUpdated",
+                      eventTypeVersion: 1,
+                      aggregateType: "Client",
+                      aggregateId: associatedClient.clientId,
+                      data: {satelliteId: client._id},
+                      user: authToken.preferred_username
+                    })).pipe(mapTo(dataLink))
+                })
+              )
             }),
+            
             toArray(),
             mapTo(data)
           )
@@ -588,7 +612,19 @@ class ClientCQRS {
         if(((client.satelliteInfo || {}).associatedClientsRemoved || []).length > 0){
           return from(client.satelliteInfo.associatedClientsRemoved).pipe(
             mergeMap(associatedClient => {
-              return ClientDA.linkSatellite$(associatedClient.clientId, null)
+              return ClientDA.linkSatellite$(associatedClient.clientId, null).pipe(
+                mergeMap(dataLink => {
+                  return eventSourcing.eventStore.emitEvent$(
+                    new Event({
+                      eventType: "ClientSatelliteIdUpdated",
+                      eventTypeVersion: 1,
+                      aggregateType: "Client",
+                      aggregateId: associatedClient.clientId,
+                      data: {satelliteId: null},
+                      user: authToken.preferred_username
+                    })).pipe(mapTo(dataLink))
+                })
+              )
             }),
             toArray(),
             mapTo(data)
