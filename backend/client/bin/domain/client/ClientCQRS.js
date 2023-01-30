@@ -408,7 +408,7 @@ class ClientCQRS {
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT", "SATELLITE"])
       .pipe(
-        mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
+        mergeMap(() => ClientDA.getClient$(args.satelliteId)),
         tap(satelliteFound => {
           if (!satelliteFound) { throw new CustomError('Missin client ID', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description) }
           console.log("MAX DISTANCE ===> ",(satelliteFound.satelliteInfo || {}).offerMaxDistance)
