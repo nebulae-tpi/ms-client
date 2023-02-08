@@ -96,10 +96,10 @@ export class ClientDetailGeneralInfoComponent implements OnInit, OnDestroy {
       documentId: new FormControl(this.client ? (this.client.generalInfo || {}).documentId : ''),
       phone: new FormControl(this.client ? (this.client.generalInfo || {}).phone : '', [Validators.max(999999999999999)]),
       email: new FormControl(this.client ? (this.client.generalInfo || {}).email : ''),
-      addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : '', [Validators.required]),
+      addressLine1: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine1 : ''),
       addressLine2: new FormControl(this.client ? (this.client.generalInfo || {}).addressLine2 : ''),
       city: new FormControl(this.client ? (this.client.generalInfo || {}).city : ''),
-      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : '', [Validators.required]),
+      neighborhood: new FormControl(this.client ? (this.client.generalInfo || {}).neighborhood : ''),
       zone: new FormControl(this.client ? (this.client.generalInfo || {}).zone : ''),
       notes: new FormControl(this.client ? (this.client.generalInfo || {}).notes : ''),
     });

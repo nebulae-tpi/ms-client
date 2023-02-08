@@ -21,9 +21,6 @@
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
         <input matInput name="addressLine1" formControlName="addressLine1" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.ADDRESS_LINE1' | translate}}">
-        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['addressLine1'])">
-          {{'CLIENT.ADDRESS_REQUIRED' | translate}}
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
@@ -32,9 +29,6 @@
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
         <input matInput name="neighborhood" formControlName="neighborhood" maxlength="30" placeholder="{{'CLIENT.DETAILS.GENERAL_INFO.NEIGHBORHOOD' | translate}}">
-        <mat-error *ngIf="clientGeneralInfoForm.hasError('required', ['neighborhood'])">
-          {{'CLIENT.NEIGHBORHOOD_REQUIRED' | translate}}
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">

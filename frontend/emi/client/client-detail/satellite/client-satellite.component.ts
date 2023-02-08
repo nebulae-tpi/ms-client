@@ -326,9 +326,12 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       client: new FormControl(associatedClients.at(index).value.client, []),
     }));
     associatedClients.removeAt(index);
+  }
 
-    
-    
+  linkAsociatedClient(index) {
+    const associatedClients = this.clientSatelliteForm.get('associatedClients') as FormArray;
+    window.open(
+      `https://tpi.nebulae.com.co/emi/client/${associatedClients.at(index).value.client.id}`, "_blank");
   }
 
   printForm(){
@@ -357,9 +360,6 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       return { clientRepeated: { valid: false } };
     }
 
-    if (c.value && !c.value.documentId){
-      return { checkDocumentId: { valid: false } };
-    }
     return null;
   }
 
