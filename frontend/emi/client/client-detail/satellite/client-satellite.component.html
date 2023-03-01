@@ -21,11 +21,6 @@
         placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
     </mat-form-field>
 
-    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
-      <input matInput name="referrerDriverDocumentId" formControlName="referrerDriverDocumentId" maxlength="40"
-        placeholder="{{'CLIENT.DETAILS.SATELLITE.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
-    </mat-form-field>
-
 
     <div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
       <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->
@@ -71,6 +66,34 @@
         <mat-icon>add</mat-icon>
       </button>
     </div>
+
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->
+      <div class="mt-12 mb-12" style="font-size: 20px">Conductores Referidos</div>
+    </div>
+
+    <div fxLayout="column"
+    fxLayoutAlign="space-around stretch" fxFlex="100">
+    <div *ngFor="let item of clientSatelliteForm.get('referrerDriverDocumentIds')['controls']; let i = index;" fxFlex="100"
+      formArrayName="referrerDriverDocumentIds" fxLayout="column">
+      <div class="border" [formGroupName]="i" fxFlex="100" fxLayout="row wrap">
+
+        <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
+          <input matInput name="document" formControlName="document" maxlength="40"
+            placeholder="{{'CLIENT.DETAILS.SATELLITE.REFERRER_DRIVER_DOCUMENT_ID' | translate}}">
+        </mat-form-field>
+
+        <button type="button" fxFlex="10" fxFlex.xs="100" mat-icon-button (click)="deleteReferedDriverDocumentId(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+    </div>
+    <button style="margin-top: 10px" mat-mini-fab (click)="addReferrerDriverDocumentId()"
+      [disabled]="!clientSatelliteForm.get('referrerDriverDocumentIds').valid">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 
 
     <div fxFlex="100" fxFlex="start center" fxLayout="row">

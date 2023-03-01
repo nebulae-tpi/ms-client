@@ -20,6 +20,7 @@ export const ClientClient = gql`
       }
       satelliteInfo{
         referrerDriverDocumentId
+        referrerDriverDocumentIds
         tipType
         tip
         offerMinDistance
@@ -176,6 +177,7 @@ export const ClientClientUpdatedSubscription = gql`
       }
       satelliteInfo{
         referrerDriverDocumentId
+        referrerDriverDocumentIds
         tipType
         tip
         offerMinDistance

@@ -94,7 +94,6 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.clientSatelliteForm = new FormGroup({
-      referrerDriverDocumentId: new FormControl(this.client ? (this.client.satelliteInfo || {}).referrerDriverDocumentId : ''),
       tip: new FormControl(this.client ? (this.client.satelliteInfo || {}).tip : '', [Validators.required]),
       tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
       offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
@@ -102,6 +101,14 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       clientAgreements: new FormArray( this.buildClientAgreementArray(this.client) ),
       associatedClients: new FormArray( this.buildAssociatedClientArray(this.client) ),
       associatedClientsToRemove: new FormArray([]),
+      referrerDriverDocumentIds: new FormArray( ((this.client.satelliteInfo || {}).referrerDriverDocumentIds || [(this.client ? (this.client.satelliteInfo || {}).referrerDriverDocumentId : '')])
+      .filter(d => d !== "")
+      .map(r => {
+        return new FormGroup({
+          document: new FormControl(r)
+        })
+        //return {document: }
+      }) )
     });
 
   }
@@ -114,7 +121,6 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
           const clientClientSatelliteInput = {
             tip: this.clientSatelliteForm.getRawValue().tip,
             tipType: this.clientSatelliteForm.getRawValue().tipType,
-            referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
             associatedClients: this.clientSatelliteForm.getRawValue().associatedClients
@@ -124,6 +130,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
                 documentId: e.client.documentId
               }))
             ,
+            referrerDriverDocumentIds: (this.clientSatelliteForm.getRawValue().referrerDriverDocumentIds || []).map(d => d.document),
             associatedClientsRemoved: this.clientSatelliteForm.getRawValue().associatedClientsToRemove
               .map(e => ({
                 clientId: e.client.id,
@@ -271,6 +278,13 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }));
   }
 
+  addReferrerDriverDocumentId(document: String) {
+    const referrerDriverDocumentIds = this.clientSatelliteForm.get('referrerDriverDocumentIds') as FormArray;
+    referrerDriverDocumentIds.push(this.formBuilder.group({
+      document: new FormControl(document, [Validators.required]),
+    }));
+  }
+
   addAsociatedDoorMan(client?: any, tip?: string) {
     const clientAgreements = this.clientSatelliteForm.get('clientAgreements') as FormArray;
     clientAgreements.push(this.formBuilder.group({
@@ -317,6 +331,11 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     clientAgreements.removeAt(index);
   }
 
+  deleteReferedDriverDocumentId(index){
+    this.clientSatelliteForm.pristine = false;
+    const referrerDriverDocumentIdList = this.clientSatelliteForm.get('referrerDriverDocumentIds') as FormArray;
+    referrerDriverDocumentIdList.removeAt(index);
+  }
 
   deleteAsociatedClient(index){
     this.clientSatelliteForm.pristine = false;
