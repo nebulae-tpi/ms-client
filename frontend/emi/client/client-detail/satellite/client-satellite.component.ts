@@ -94,6 +94,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.clientSatelliteForm = new FormGroup({
+      referrerDriverDocumentId: new FormControl(this.client ? (this.client.satelliteInfo || {}).referrerDriverDocumentId : ''),
       tip: new FormControl(this.client ? (this.client.satelliteInfo || {}).tip : '', [Validators.required]),
       tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
       offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
@@ -121,6 +122,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
           const clientClientSatelliteInput = {
             tip: this.clientSatelliteForm.getRawValue().tip,
             tipType: this.clientSatelliteForm.getRawValue().tipType,
+            referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
             associatedClients: this.clientSatelliteForm.getRawValue().associatedClients
