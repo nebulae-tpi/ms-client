@@ -47,6 +47,7 @@ export const locale = {
           NOTES: 'Referencia del Lugar'
         },
         SATELLITE: {
+          OFFER_ONLY_VIP: 'Ofertar solo VIP',
           APPLY_DEFAULT_AGREEMENT_TIP: 'Aplicar la misma tarifa en la lista',
           COPY_LINK_APP_CLIENT: 'Copiar vínculo ',
           BUSINESS_AGREEMENT: 'Acuerdo empresarial',
@@ -55,6 +56,11 @@ export const locale = {
           OFFER_MAX_DISTANCE: 'Máximo Radio de Difusión (En metros)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Documento de Identificación del conductor referido',
           TIP_TYPE: 'Tipo de acuerdo empresarial',
+          SATELLITE_TYPE: 'Tipo de satélite',
+          SATELLITE_TYPES: {
+            HOTEL: 'Hotel',
+            PORTER_LODGE: 'Porteria'
+          },
           TIP_TYPES: {
             'CASH': 'Efectivo',
             'VIRTUAL_WALLET': 'Billetera virtual'

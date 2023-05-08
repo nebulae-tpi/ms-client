@@ -22,6 +22,8 @@ export const ClientClient = gql`
         referrerDriverDocumentId
         referrerDriverDocumentIds
         tipType
+        satelliteType
+        offerOnlyVip
         tip
         offerMinDistance
         offerMaxDistance

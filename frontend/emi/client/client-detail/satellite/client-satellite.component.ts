@@ -73,6 +73,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
   @Input('client') client: any;
 
   tipTypeList = ['CASH', 'VIRTUAL_WALLET'];
+  satelliteTypeList = ['PORTER_LODGE','HOTEL']
 
   clientSatelliteForm: any;
   clientStateForm: any;
@@ -97,6 +98,8 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
       referrerDriverDocumentId: new FormControl(this.client ? (this.client.satelliteInfo || {}).referrerDriverDocumentId : ''),
       tip: new FormControl(this.client ? (this.client.satelliteInfo || {}).tip : '', [Validators.required]),
       tipType: new FormControl(this.client ? (this.client.satelliteInfo || {}).tipType : '', [Validators.required]),
+      satelliteType: new FormControl(this.client ? (this.client.satelliteInfo || {}).satelliteType : ''),
+      offerOnlyVip: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerOnlyVip : ''),
       offerMinDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMinDistance : ''),
       offerMaxDistance: new FormControl(this.client ? (this.client.satelliteInfo || {}).offerMaxDistance : ''),
       clientAgreements: new FormArray( this.buildClientAgreementArray(this.client) ),
@@ -122,6 +125,8 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
           const clientClientSatelliteInput = {
             tip: this.clientSatelliteForm.getRawValue().tip,
             tipType: this.clientSatelliteForm.getRawValue().tipType,
+            satelliteType: this.clientSatelliteForm.getRawValue().satelliteType,
+            offerOnlyVip: this.clientSatelliteForm.getRawValue().offerOnlyVip,
             referrerDriverDocumentId: this.clientSatelliteForm.getRawValue().referrerDriverDocumentId,
             offerMinDistance: this.clientSatelliteForm.getRawValue().offerMinDistance,
             offerMaxDistance: this.clientSatelliteForm.getRawValue().offerMaxDistance,
@@ -280,7 +285,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }));
   }
 
-  addReferrerDriverDocumentId() {
+  addReferrerDriverDocumentId(document: String) {
     const referrerDriverDocumentIds = this.clientSatelliteForm.get('referrerDriverDocumentIds') as FormArray;
     referrerDriverDocumentIds.push(this.formBuilder.group({
       document: new FormControl(document, [Validators.required]),

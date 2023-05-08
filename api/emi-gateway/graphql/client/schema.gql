@@ -64,6 +64,8 @@ type ClientClientSatelliteInfo {
   "Referrer driver document id"
   referrerDriverDocumentId: String,
   referrerDriverDocumentIds: [String]
+  satelliteType: String
+  offerOnlyVip: Boolean
   "Tipping type"
   tipType: String
   "Tip given to the client. Eg. satellites"
@@ -153,6 +155,8 @@ input ClientClientSatelliteInfoInput {
   "Referrer driver document id."
   referrerDriverDocumentId: String,
   referrerDriverDocumentIds: [String]
+  satelliteType: String
+  offerOnlyVip: Boolean
   "Tipping type"
   tipType: String!
   "Tip given to the client. Eg. satellites"

@@ -21,6 +21,26 @@
         placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
     </mat-form-field>
 
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" class="pr-8 pl-8">
+      <input matInput name="offerMaxDistance" type="number" formControlName="offerMaxDistance"
+        placeholder="{{'CLIENT.DETAILS.SATELLITE.OFFER_MAX_DISTANCE' | translate}}">
+    </mat-form-field>
+
+    <mat-checkbox class="example-margin"  formControlName="offerOnlyVip">
+      {{ 'CLIENT.DETAILS.SATELLITE.OFFER_ONLY_VIP' | translate }}
+    </mat-checkbox>
+
+    <mat-form-field fxFlex.gt-xs="50" fxFlex="100" fxLayout="column" class="pr-8 pl-8">
+      <mat-select placeholder="{{'CLIENT.DETAILS.SATELLITE.SATELLITE_TYPE' | translate}}" formControlName="satelliteType">
+        <mat-option *ngFor="let satelliteType of satelliteTypeList" [value]="satelliteType">
+          {{ "CLIENT.DETAILS.SATELLITE.SATELLITE_TYPES."+satelliteType | translate}}
+        </mat-option>
+      </mat-select>
+      <!-- <mat-error *ngIf="clientSatelliteForm.hasError('required', ['tipType'])">
+          {{'CLIENT.DETAILS.SATELLITE.REQUIRED_TIP_TYPE' | translate}}
+        </mat-error> -->
+    </mat-form-field>
+
 
     <div fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
       <!-- <span fxLayoutAlign="center center"> {{'CLIENT.DETAILS.SATELLITE.CLIENT_AGREEMENT_LIST_TITLE' | translate}} </span> -->

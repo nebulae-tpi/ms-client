@@ -47,6 +47,7 @@ export const locale = {
           NOTES: 'Place references'
         },
         SATELLITE: {
+          OFFER_ONLY_VIP: 'Offer only VIP',
           APPLY_DEFAULT_AGREEMENT_TIP: 'Apply Same Tip To Client Agreement',
           COPY_LINK_APP_CLIENT: 'Copy Link',
           BUSINESS_AGREEMENT: 'Business agreement',
@@ -54,6 +55,11 @@ export const locale = {
           OFFER_MIN_DISTANCE: 'Offer Min Distance (In meters)',
           OFFER_MAX_DISTANCE: 'Offer Max Distance (In meters)',
           REFERRER_DRIVER_DOCUMENT_ID: 'Referrer Driver Document Id',
+          SATELLITE_TYPE: 'Satellite type',
+          SATELLITE_TYPES: {
+            HOTEL: 'Hotel',
+            PORTER_LODGE: 'Porter lodge'
+          },
           TIP_TYPE: 'Type of Business Agreement',
           TIP_TYPES: {
             'CASH': 'Cash',
