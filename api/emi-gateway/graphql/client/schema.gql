@@ -234,7 +234,7 @@ type Mutation {
   "Changes Client password" 
   ClientResetClientPassword(id: ID!, input: ClientPasswordInput): CommandResponse  
   ClientUpdateClientState(id: ID!, newState: Boolean!): CommandResponse
-}
+} 
 
 type Subscription {
   "This events is triggered when a Client is created or updated"
