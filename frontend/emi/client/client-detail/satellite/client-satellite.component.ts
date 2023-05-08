@@ -285,7 +285,7 @@ export class ClientSatelliteComponent implements OnInit, OnDestroy {
     }));
   }
 
-  addReferrerDriverDocumentId(document: String) {
+  addReferrerDriverDocumentId() {
     const referrerDriverDocumentIds = this.clientSatelliteForm.get('referrerDriverDocumentIds') as FormArray;
     referrerDriverDocumentIds.push(this.formBuilder.group({
       document: new FormControl(document, [Validators.required]),

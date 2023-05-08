@@ -231,7 +231,7 @@ type Mutation {
   ClientCreateClientAuth(id: ID!, username: String!, input: ClientAuthInput): CommandResponse
   "Removes auth of the user (The user will be deleted from Keycloak)"
   ClientRemoveClientAuth(id: ID!): CommandResponse
-  "Changes Client password"
+  "Changes Client password" 
   ClientResetClientPassword(id: ID!, input: ClientPasswordInput): CommandResponse  
   ClientUpdateClientState(id: ID!, newState: Boolean!): CommandResponse
 }
