@@ -112,7 +112,7 @@ class ClientDA {
 
   static getClientList$(filter, pagination) {
     const collection = mongoDB.db.collection(CollectionName);
-
+    const customPhone = Number(filter.phone)
     const query = {
     };
 
@@ -126,6 +126,9 @@ class ClientDA {
 
     if (filter.creationTimestamp) {
       query.creationTimestamp = {$gte: filter.creationTimestamp};
+    }
+    if(filter.phone){
+      query["generalInfo.phone"] = customPhone;
     }
 
     if (filter.creatorUser) {

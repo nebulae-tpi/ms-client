@@ -107,6 +107,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
   displayedColumns = [
     "name",
     "state",
+    "phone",
     "creationTimestamp",
     "creatorUser",
     "modificationTimestamp",
@@ -183,6 +184,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
     // Reactive Filter Form
     this.filterForm = this.formBuilder.group({
       name: [null],
+      phone: [null],
       creationTimestamp: [null],
       creatorUser: [null],      
       //modificationDate: [null],
@@ -201,6 +203,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(filterData => {
+        console.log("FILTER ==> ", filterData)
         this.ClientListservice.updateFilterData(filterData);
       });
   }
@@ -233,6 +236,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
           if (filter) {
             this.filterForm.patchValue({
               name: filter.name,
+              phone: filter.phone,
               creationTimestamp: filter.creationTimestamp,
               creatorUser: filter.creatorUser
             });
@@ -263,6 +267,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
         const filterInput = {
           businessId: selectedBusiness ? selectedBusiness.id: null,
           name: filter.name,
+          phone: filter.phone,
           creatorUser: filter.creatorUser,
           creationTimestamp: filter.creationTimestamp ? filter.creationTimestamp.startOf('day').valueOf() : null
         };

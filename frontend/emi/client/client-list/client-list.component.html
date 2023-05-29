@@ -83,6 +83,16 @@
               />
             </mat-form-field>
 
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{'CLIENT.PHONE' | translate}}"
+                formControlName="phone"
+                id="phone"
+                maxlength="20"
+              />
+            </mat-form-field>
+
               <mat-form-field>
                   <input
                     matInput
@@ -174,6 +184,19 @@
               </p>
             </mat-cell>
           </ng-container>
+
+          <!-- phone Column -->
+          <ng-container cdkColumnDef="phone">
+            <mat-header-cell *cdkHeaderCellDef fxFlex="80" fxFlex.gt-xs="18">{{
+              "CLIENT.PHONE" | translate
+            }}</mat-header-cell>
+            <mat-cell *cdkCellDef="let element" fxFlex="80" fxFlex.gt-xs="18">
+              <p class="text-truncate">
+                {{ element.generalInfo.phone }}
+              </p>
+            </mat-cell>
+          </ng-container>
+          
 
           <!-- Active Column -->
           <ng-container cdkColumnDef="state">

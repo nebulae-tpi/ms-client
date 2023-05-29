@@ -84,6 +84,7 @@ input ClientClientFilterInput {
   businessId: String
   "Name"
   name: String
+  phone: String
   "State"
   state: Boolean
   "Creator user"

@@ -16,6 +16,7 @@ export const locale = {
       TITLE: 'Clients',
       FILTER: 'Filter',
       NAME: 'Name',
+      PHONE: "Phone",
       CREATION_DATE: 'Creation date',
       CREATOR_USER: 'Created by',
       RESET_FILTER: 'Reset filter',
