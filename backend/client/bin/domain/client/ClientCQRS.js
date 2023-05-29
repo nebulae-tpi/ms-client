@@ -106,7 +106,7 @@ class ClientCQRS {
    * Gets the Client list
    *
    * @param {*} args args
-   */
+   */ 
   getClientList$({ args }, authToken) {
     console.log("")
     return RoleValidator.checkPermissions$(
