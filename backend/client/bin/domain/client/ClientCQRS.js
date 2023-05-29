@@ -100,7 +100,7 @@ class ClientCQRS {
         GraphqlResponseTools.handleError$(err)
       })
     );
-  }
+  } 
 
   /**  
    * Gets the Client list

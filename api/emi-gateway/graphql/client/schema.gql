@@ -7,7 +7,7 @@ type CommandResponse {
 
 type ClientClient {
   "Client ID"
-  _id: ID!
+  _id: ID! 
   "User general info"
   generalInfo: ClientGeneralInfo
   "User satellite info"
