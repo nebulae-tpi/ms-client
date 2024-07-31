@@ -153,6 +153,11 @@ class EventStoreService {
         fn: ClientES.handleClientAuthDeleted$,
         obj: ClientES 
       },
+      ClientCodeRequested: {
+        fn: ClientES.handleClientCodeRequested$,
+        obj: ClientES 
+      },
+      
     };
   }
 
@@ -193,6 +198,10 @@ class EventStoreService {
         aggregateType: "Client",
         eventType: "ClientAuthDeleted"
       },
+      {
+        aggregateType: "Client",
+        eventType: "ClientCodeRequested"
+      }
     ]
   }
 }

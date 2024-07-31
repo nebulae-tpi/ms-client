@@ -4,6 +4,7 @@ const {of} = require("rxjs");
 const { tap, mergeMap, catchError, map, mapTo } = require('rxjs/operators');
 const broker = require("../../tools/broker/BrokerFactory")();
 const ClientDA = require('../../data/ClientDA');
+const CLientCodeDA = require("../../data/CLientCodeDA");
 const MATERIALIZED_VIEW_TOPIC = "emi-gateway-materialized-view-updates";
 const eventSourcing = require("../../tools/EventSourcing")();
 const Event = require("@nebulae/event-store").Event;
@@ -85,6 +86,14 @@ class ClientES {
 
     handleDriverAssociatedToClient$(DriverAssociatedToClientEvent) {          
         return ClientDA.addDriverCode$(DriverAssociatedToClientEvent.aid, DriverAssociatedToClientEvent.data.referrerDriverCode);
+    }
+
+    handleClientCodeRequested$(ClientCodeRequestedEvent){
+        return CLientCodeDA.incrementAndGet$().pipe(
+            mergeMap(clientCode => {
+                ClientDA.addClientCode$(ClientCodeRequestedEvent.aid, clientCode.seq);
+            })
+        )
     }
 
     handleClientLocationUpdated$(clientLocationUpdatedEvt){

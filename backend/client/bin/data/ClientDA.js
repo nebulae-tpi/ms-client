@@ -92,6 +92,12 @@ class ClientDA {
     return defer(() => collection.updateOne(query, { $push: { "favoritePlaces": favoritePlace } }) )
   }
 
+  static addClientCode$(userId, clientCode){
+    const collection = mongoDB.db.collection(CollectionName);    
+    const query = { _id: userId};
+    return defer(() => collection.updateOne(query, { $set: { "clientCode": clientCode } }) )
+  }
+
   static updateFavoritePlace$(clientId, favoritePlace){
     const collection = mongoDB.db.collection(CollectionName);    
     const query = { _id: clientId, "favoritePlaces.id": favoritePlace.id };
