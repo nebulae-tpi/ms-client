@@ -91,7 +91,19 @@ class ClientES {
     handleClientCodeRequested$(ClientCodeRequestedEvent){
         return CLientCodeDA.incrementAndGet$().pipe(
             mergeMap(clientCode => {
-                ClientDA.addClientCode$(ClientCodeRequestedEvent.aid, clientCode.seq);
+                return ClientDA.addClientCode$(ClientCodeRequestedEvent.aid, `CL${clientCode.seq}`).pipe(
+                    mergeMap(() => {
+                        return eventSourcing.eventStore.emitEvent$(
+                            new Event({
+                            eventType: "ClientCodeRegistered",
+                            eventTypeVersion: 1,
+                            aggregateType: "Client",
+                            aggregateId: ClientCodeRequestedEvent.aid,
+                            data: {clientCode: `CL${clientCode.seq}`},
+                            user: 'SYSTEM'
+                        }))
+                    })
+                );
             })
         )
     }
