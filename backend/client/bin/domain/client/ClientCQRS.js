@@ -306,7 +306,7 @@ class ClientCQRS {
           return ClientDA.linkSatellite$(authToken.clientId, args.satelliteId, satelliteFound.businessId).pipe(
             mergeMap(clientUpdated => {
               const attributes = {
-                clientId: client._id,
+                clientId: authToken.clientId,
                 businessId: satelliteFound.businessId
               };
               return ClientKeycloakDA.updateUserAttributes$(clientUpdated.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
