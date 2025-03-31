@@ -313,7 +313,7 @@ class ClientCQRS {
                   aggregateId: authToken.clientId,
                   data: {satelliteId: args.satelliteId, businessId: satelliteFound.businessId},
                   user: authToken.preferred_username
-                })).pipe(mapTo(data))
+                }))
             })
           );
         }),
