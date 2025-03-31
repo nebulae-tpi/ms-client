@@ -394,6 +394,7 @@ class ClientDA {
     const query = { businessId: businessId };
     query["generalInfo.name"] = { $regex: filterText, $options: "i" };
     query["satelliteInfo"] = { $exists: true };
+    console.log("QUERY SATELITE ===> ", query);
     return defer(() => collection.find(query).limit(10).toArray());
   }
 
