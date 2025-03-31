@@ -440,7 +440,7 @@ class ClientCQRS {
   clientSatellites$({ args }, authToken) {
     return RoleValidator.checkPermissions$(authToken.realm_access.roles, "Client", "getClientList", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
       .pipe(
-        mergeMap(() => ClientDA.getSatelliteClientList$(args.filterText, authToken.businessId || '')),
+        mergeMap(() => ClientDA.getSatelliteClientList$(args.filterText, (args.businessId || authToken.businessId) || '')),
         map(list => list.map(item => ({
           _id: item._id,
           businessId: item.businessId,

@@ -122,7 +122,7 @@ type Query {
    "Get the satellite linked to user"
    ClientLinkedSatellite(satelliteId: String!): ClientBasicSatelliteInfo @requireAuth
    "get filtered Satellites"
-   ClientSatellites(filterText: String!): [ClientBasicSatelliteInfo] @requireAuth
+   ClientSatellites(filterText: String!, businessId: String): [ClientBasicSatelliteInfo] @requireAuth
    "get the favoritePlaces of user"
    ClientFavoritePlaces: [ClientFavoritePlace]
    "get the favorite place"
