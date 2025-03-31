@@ -309,7 +309,7 @@ class ClientCQRS {
                 clientId: authToken.clientId,
                 businessId: satelliteFound.businessId
               };
-              return ClientKeycloakDA.updateUserAttributes$(clientUpdated.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
+              return ClientKeycloakDA.updateUserAttributes$(clientUpdated.auth.userKeycloakId, attributes)
             }),
             mergeMap(() => {
               return eventSourcing.eventStore.emitEvent$(
