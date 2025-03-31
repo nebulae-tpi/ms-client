@@ -303,7 +303,7 @@ class ClientCQRS {
           if (!satelliteFound) { throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description) }
         }),
         mergeMap(satelliteFound => {
-          return ClientDA.linkSatellite$(authToken.clientId, args.satelliteId. satelliteFound.businessId).pipe(
+          return ClientDA.linkSatellite$(authToken.clientId, args.satelliteId, satelliteFound.businessId).pipe(
             mergeMap(() => {
               return eventSourcing.eventStore.emitEvent$(
                 new Event({
