@@ -42,7 +42,6 @@ class ClientDA {
     if(businessId){
       query.businessId = businessId;
     }
-    console.log('Query: ', query);
 
     return defer(() => collection.findOne(query));
   }
@@ -384,9 +383,13 @@ class ClientDA {
     return this.getClientByFilter$(query);
   }
 
-  static linkSatellite$(clientId, satelliteId){
+  static linkSatellite$(clientId, satelliteId, businessId){
     const collection = mongoDB.db.collection(CollectionName);
-    return defer(() => collection.updateOne({ _id: clientId }, {$set: { satelliteId } }));
+    const update = {
+      satelliteId: satelliteId,
+      businessId: businessId
+    }
+    return defer(() => collection.updateOne({ _id: clientId }, {$set: update }));
   }
 
   static getSatelliteClientList$(filterText, businessId){

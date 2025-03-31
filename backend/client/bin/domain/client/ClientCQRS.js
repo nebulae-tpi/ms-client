@@ -297,22 +297,25 @@ class ClientCQRS {
     return RoleValidator.checkPermissions$(
       authToken.realm_access.roles, "Client", "linkSatellite$", PERMISSION_DENIED_ERROR_CODE, ["CLIENT"])
       .pipe(
-        mergeMap(() => ClientDA.getClient$(args.satelliteId, authToken.businessId || '')),
+        mergeMap(() => ClientDA.getClient$(args.satelliteId)),
         tap(satelliteFound => {
           if (!authToken.clientId) { throw new CustomError('Missing client ID in token', 'linkSatellite$', CLIENT_ID_MISSING.code, CLIENT_ID_MISSING.description) }
           if (!satelliteFound) { throw new CustomError('Client no found', 'linkSatellite$', CLIENT_NO_FOUND.code, CLIENT_NO_FOUND.description) }
         }),
-        mergeMap(() => ClientDA.linkSatellite$(authToken.clientId, args.satelliteId)),
-        mergeMap(data => {
-          return eventSourcing.eventStore.emitEvent$(
-            new Event({
-              eventType: "ClientSatelliteUpdated",
-              eventTypeVersion: 1,
-              aggregateType: "Client",
-              aggregateId: client._id,
-              data: {satelliteId: args.satelliteId},
-              user: authToken.preferred_username
-            })).pipe(mapTo(data))
+        mergeMap(satelliteFound => {
+          return ClientDA.linkSatellite$(authToken.clientId, args.satelliteId. satelliteFound.businessId).pipe(
+            mergeMap(() => {
+              return eventSourcing.eventStore.emitEvent$(
+                new Event({
+                  eventType: "ClientSatelliteIdUpdated",
+                  eventTypeVersion: 1,
+                  aggregateType: "Client",
+                  aggregateId: authToken.clientId,
+                  data: {satelliteId: args.satelliteId, businessId: satelliteFound.businessId},
+                  user: authToken.preferred_username
+                })).pipe(mapTo(data))
+            })
+          );
         }),
         map(() => ({ code: 200, message: `Satellite Linked successful` })),
         mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
