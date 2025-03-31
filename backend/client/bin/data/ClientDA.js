@@ -389,7 +389,7 @@ class ClientDA {
       satelliteId: satelliteId,
       businessId: businessId
     }
-    return defer(() => collection.findOneAndUpdate({ _id: clientId }, {$set: update }, ,{
+    return defer(() => collection.findOneAndUpdate({ _id: clientId }, {$set: update } ,{
       returnOriginal: false
     })).pipe(
       map(result => result && result.value ? result.value : undefined)
