@@ -304,6 +304,13 @@ class ClientCQRS {
         }),
         mergeMap(satelliteFound => {
           return ClientDA.linkSatellite$(authToken.clientId, args.satelliteId, satelliteFound.businessId).pipe(
+            mergeMap(clientUpdated => {
+              const attributes = {
+                clientId: client._id,
+                businessId: satelliteFound.businessId
+              };
+              return ClientKeycloakDA.updateUserAttributes$(clientUpdated.auth.userKeycloakId, attributes).pipe(mapTo(clientResult))
+            }),
             mergeMap(() => {
               return eventSourcing.eventStore.emitEvent$(
                 new Event({
@@ -314,7 +321,7 @@ class ClientCQRS {
                   data: {satelliteId: args.satelliteId, businessId: satelliteFound.businessId},
                   user: authToken.preferred_username
                 }))
-            })
+            })            
           );
         }),
         map(() => ({ code: 200, message: `Satellite Linked successful` })),
