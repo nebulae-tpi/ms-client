@@ -386,8 +386,10 @@ class ClientDA {
   static linkSatellite$(clientId, satelliteId, businessId){
     const collection = mongoDB.db.collection(CollectionName);
     const update = {
-      satelliteId: satelliteId,
-      businessId: businessId
+      satelliteId: satelliteId
+    }
+    if(businessId){
+      update.businessId = businessId;
     }
     return defer(() => collection.findOneAndUpdate({ _id: clientId }, {$set: update } ,{
       returnOriginal: false
