@@ -387,7 +387,7 @@ class ClientDA {
     const collection = mongoDB.db.collection(CollectionName);
     const update = {
       satelliteId: satelliteId
-    }
+    } 
     if(businessId){
       update.businessId = businessId;
     }
