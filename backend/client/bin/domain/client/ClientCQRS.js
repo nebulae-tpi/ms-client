@@ -217,14 +217,7 @@ class ClientCQRS {
       mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
       mergeMap(client => {
         if (client) {
-          if (client.businessId === businessId) {
-            return of({client, updated: false});
-          }
-          else { 
-            return ClientDA.updateClientBusinessId$(client._id, businessId).pipe(
-              map(newClient => ({client: newClient, updated: true}))
-            )
-          }
+          return of({client, updated: false});
         }
         
         else {
