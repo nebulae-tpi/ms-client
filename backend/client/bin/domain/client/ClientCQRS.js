@@ -199,6 +199,28 @@ class ClientCQRS {
     );
   }
 
+  findClientByUsername$({ root, args, jwt }, authToken) {
+    return RoleValidator.checkPermissions$(
+      authToken.realm_access.roles,
+      "Client",
+      "findClientByUsername$",
+      PERMISSION_DENIED_ERROR_CODE,
+      ["CLIENT"]
+    ).pipe(
+      mergeMap(roles => ClientValidatorHelper.checkClientValidateNewClient$().pipe(mapTo(roles))),
+      mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
+      map(client => {
+        if (client && client._id) {
+          return of({client, clientRegistered: true});
+        } else {
+          return of({client, clientRegistered: false});
+        }
+      }),
+      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      catchError(err => GraphqlResponseTools.handleError$(err))
+    );
+  }
+
 
   /**
   * Validate user logged from an identity provider

@@ -72,6 +72,16 @@ module.exports = {
           mergeMap(response => getResponseFromBackEnd$(response))
         ).toPromise();
     },
+    ClientByUsername: (root, args, context, info) => {
+      return RoleValidator.checkPermissions$(
+          context.authToken.realm_access.roles, 'ms-client', 'ClientByUsername',
+          USERS_PERMISSION_DENIED_ERROR_CODE, 'Permission denied', ['CLIENT'])
+        .pipe(
+          switchMapTo( broker.forwardAndGetReply$("Client", "clientgateway.graphql.query.ClientByUsername",
+          { root, args, jwt: context.encodedToken }, 2000)),
+          mergeMap(response => getResponseFromBackEnd$(response))
+        ).toPromise();
+    },
   },
   Mutation: {   
     AssociateDriverToClient: (root, args, context, info) => {

@@ -20,6 +20,7 @@ type ClientData{
    username: String
    "Client was updated"
    updated: Boolean
+   clientRegistered: Boolean
    "associated DriverId"
    referrerDriverCode: String
 }
@@ -125,6 +126,7 @@ type Query {
    ClientSatellites(filterText: String!, businessId: String): [ClientBasicSatelliteInfo] @requireAuth
    "get the favoritePlaces of user"
    ClientFavoritePlaces: [ClientFavoritePlace]
+   ClientByUsername(username: String): ClientData @requireAuth
    "get the favorite place"
    ClientFavoritePlace(id: String): ClientFavoritePlace
 }
