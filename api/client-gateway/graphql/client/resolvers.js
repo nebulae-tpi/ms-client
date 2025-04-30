@@ -79,7 +79,13 @@ module.exports = {
         .pipe(
           switchMapTo( broker.forwardAndGetReply$("Client", "clientgateway.graphql.query.ClientByUsername",
           { root, args, jwt: context.encodedToken }, 2000)),
-          mergeMap(response => getResponseFromBackEnd$(response))
+          mergeMap(response => {
+            return getResponseFromBackEnd$(response).pipe(
+              tap(resp => {
+                console.log('Response from ClientByUsername: ', resp);
+              })
+            )
+          })
         ).toPromise();
     },
   },
