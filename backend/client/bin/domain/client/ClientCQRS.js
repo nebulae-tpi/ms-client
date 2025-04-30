@@ -217,6 +217,7 @@ class ClientCQRS {
           updated: false,
           referrerDriverCode: (client || {}).referrerDriverCode
         };
+        console.log("RESULT ===> ", result)
         if (client && client._id) {
           result.clientRegistered = true;
           return of(result);
