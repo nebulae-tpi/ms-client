@@ -220,10 +220,10 @@ class ClientCQRS {
         console.log("RESULT ===> ", result)
         if (client && client._id) {
           result.clientRegistered = true;
-          return of(result);
+          return result;
         } else {
           result.clientRegistered = false;
-          return of(result);
+          return result;
         }
       }),
       mergeMap(r => {
