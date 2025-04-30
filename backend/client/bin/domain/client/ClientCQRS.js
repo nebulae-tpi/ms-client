@@ -210,10 +210,19 @@ class ClientCQRS {
       mergeMap(roles => ClientValidatorHelper.checkClientValidateNewClient$().pipe(mapTo(roles))),
       mergeMap(roles => ClientDA.getClientByUsername$(authToken.preferred_username)),
       map(client => {
+        const result = {
+          clientId: (client || {})._id,
+          name: ((client || {}).generalInfo || {}).name,
+          username: ((client || {}).auth || {}).username,
+          updated: false,
+          referrerDriverCode: (client || {}).referrerDriverCode
+        };
         if (client && client._id) {
-          return of({client, clientRegistered: true});
+          result.clientRegistered = true;
+          return of(result);
         } else {
-          return of({client, clientRegistered: false});
+          result.clientRegistered = false;
+          return of(result);
         }
       }),
       mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
