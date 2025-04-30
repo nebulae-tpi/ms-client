@@ -226,7 +226,13 @@ class ClientCQRS {
           return of(result);
         }
       }),
-      mergeMap(r => GraphqlResponseTools.buildSuccessResponse$(r)),
+      mergeMap(r => {
+        console.log("Previo al build ===> ", r);
+        return GraphqlResponseTools.buildSuccessResponse$(r)
+      }),
+      tap(r => {
+        console.log("Despues del build ===> ", r);
+      }),
       catchError(err => GraphqlResponseTools.handleError$(err))
     );
   }
