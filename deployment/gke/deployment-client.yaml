@@ -1,4 +1,4 @@
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: client
@@ -13,7 +13,7 @@ spec:
         app: client
     spec:      
       containers:
-      - image: DOCKERHUB/client.backend.client:0.0.122
+      - image: IMAGE_NAMESPACE/IMAGE_NAME:IMAGE_TAG
         name: client
         volumeMounts:
         - name: google-application-credentials
@@ -49,7 +49,6 @@ spec:
             configMapKeyRef:
               name: keycloak-jwt-public-key
               key: jwt_public_key
-          #value: -----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyGMYfhPX7A5kAaBh9smoyDhj7Ilv0YfsPygnkEUDu44teqPzZhNjoLnAyDED3J7AhGJpOHlSzfC+7jrXXbUVczTP7vhH1pa1RXX4TIhzqo5R9NNKhREK39s6gezsP6SbCfu1XvaT1TVPEPBHho8q3qyICWFtoWTtx1tkk99jFz6zFFeIU2sTVAuf9+q1bawuHY42yU66/iaBP3zEtqLjtl7OO9z8wnIlaHW8zo20taFPeQy5xbmUaVUfEwQ6zoJCcSU2W79r2gFPWSfsXCJ07nfZIl0aWnOV7tRJLkJWsOL6EgFIh3P2v9d/SmLEVpje7kiibVUFqMg7ipRrruMzdwIDAQAB\n-----END PUBLIC KEY-----
         # API - EMI-GATEWAY CONFIG
         - name: EMI-GATEWAY_REPLIES_TOPIC_SUBSCRIPTION
           value: emi-gateway-replies-topic-mbe-client
@@ -66,7 +65,6 @@ spec:
             configMapKeyRef:
               name: environment-variables
               key: keycloak-backend-base-url
-          #value: "https://tpi-dev.nebulae.com.co/auth"
         - name: KEYCLOAK_BACKEND_USER
           valueFrom:
             secretKeyRef:
