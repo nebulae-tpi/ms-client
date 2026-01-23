@@ -192,7 +192,7 @@ jobs:
             mkdir ~/nebulae/backend
             cp ~/nebulae/go/mbinit ~/nebulae/repo/backend/client/
             export DOCKERHUB_IMAGE=client.backend.client
-            export DOCKERHUB_TAG=0.0.122
+            export DOCKERHUB_TAG=0.0.123
             gitChanged backend/client || docker build  -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG -t $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:latest ~/nebulae/repo/backend/client/
             gitChanged backend/client || docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
             gitChanged backend/client || docker push $DOCKERHUB_NAMESPACE/$DOCKERHUB_IMAGE:$DOCKERHUB_TAG
@@ -220,26 +220,26 @@ jobs:
               gcloud --quiet config set project $GKE_PROJECT_DEV
               gcloud --quiet config set compute/zone $GKE_ZONE_DEV
               gcloud --quiet container clusters get-credentials $GKE_CLUSTER
-        - run:
-            name: Deploy emi FrontEnd
-            command: |
-              (ls ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo frontend not found
-              (ls ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/frontend-emi frontend-emi=$(< ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo frontend not found
-        - run:
-            name: Deploy emi-gateway API
-            command: |
-              (ls ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
-              (ls ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-emi-gateway api-emi-gateway=$(< ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
-        - run:
-            name: Deploy client-gateway API
-            command: |
-              (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
-              (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-client-gateway api-client-gateway=$(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
+        # - run:
+        #     name: Deploy emi FrontEnd
+        #     command: |
+        #       (ls ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo frontend not found
+        #       (ls ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/frontend-emi frontend-emi=$(< ~/nebulae/frontend/DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo frontend not found
+        # - run:
+        #     name: Deploy emi-gateway API
+        #     command: |
+        #       (ls ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
+        #       (ls ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-emi-gateway api-emi-gateway=$(< ~/nebulae/api/EMI_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
+        # - run:
+        #     name: Deploy client-gateway API
+        #     command: |
+        #       (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && echo docker image DIGEST to set $(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
+        #       (ls ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST && kubectl set image deployment/api-client-gateway api-client-gateway=$(< ~/nebulae/api-client/CLIENT_DOCKERHUB_GENERATED_IMAGE_DIGEST) ) || echo api not found
         - run:
             name: Deploy BackEnds 
             command: |
               for xi in $(ls ~/nebulae/repo/deployment/gke/*.y*ml); do sed -i s/DOCKERHUB/$DOCKERHUB_NAMESPACE/ $xi ; done
-              kubectl apply -f ~/nebulae/repo/deployment/gke/
+              kubectl apply -f ~/nebulae/repo/deployment/gke/deployment-client.yaml
 
 
 

@@ -13,7 +13,7 @@ spec:
         app: client
     spec:      
       containers:
-      - image: DOCKERHUB/client.backend.client:0.0.122
+      - image: DOCKERHUB/client.backend.client:0.0.123
         name: client
         volumeMounts:
         - name: google-application-credentials
@@ -25,7 +25,7 @@ spec:
         env:     
         # EVENT STORE CONFIG 
         - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /etc/GOOGLE_APPLICATION_CREDENTIALS/gcloud-service-key.json  
+          value: /etc/GOOGLE_APPLICATION_CREDENTIALS/gcloud-service-key.json
         - name: EVENT_STORE_BROKER_TYPE
           value: PUBSUB
         - name: EVENT_STORE_BROKER_EVENTS_TOPIC
@@ -33,7 +33,10 @@ spec:
         - name: EVENT_STORE_STORE_TYPE
           value: MONGO
         - name: EVENT_STORE_STORE_URL
-          value: mongodb://dbevents-0.dbevents:27017,dbevents-1.dbevents:27017,dbevents-2.dbevents:27017/test?replicaSet=rs0
+          valueFrom:
+            secretKeyRef:
+              key: usrl
+              name: dbevents-user
         - name: EVENT_STORE_STORE_AGGREGATES_DB_NAME
           value: Aggregates
         - name: EVENT_STORE_STORE_EVENTSTORE_DB_NAME
@@ -65,25 +68,29 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: environment-variables
-              key: keycloak-backend-base-url
-          #value: "https://tpi-dev.nebulae.com.co/auth"
+              key: keycloak-backend-base-url              
         - name: KEYCLOAK_BACKEND_USER
           valueFrom:
             secretKeyRef:
               name: keycloak
-              key: keycloak_backend_user
+              key: keycloak_backend_user              
         - name: KEYCLOAK_BACKEND_PASSWORD
           valueFrom:
             secretKeyRef:
               name: keycloak
-              key: keycloak_backend_password        
+              key: keycloak_backend_password              
         - name: KEYCLOAK_BACKEND_CLIENT_ID
           value: "admin-cli"
         - name: KEYCLOAK_BACKEND_REALM_NAME
           value: "TPI"        
-        
+
       volumes:
       - name: google-application-credentials
         secret:
           secretName: google-application-credentials
+          defaultMode: 420
+      - name: dbevents-user
+        secret:
+          defaultMode: 420
+          secretName: dbevents-user
       

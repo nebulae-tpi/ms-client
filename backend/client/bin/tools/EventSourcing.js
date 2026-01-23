@@ -1,7 +1,7 @@
 'use strict'
 
 const Rx = require('rxjs');
-const nebulaeES = require('@nebulae/event-store');
+const nebulaeES = require('@nebulae/event-store-tpi');
 const Event = nebulaeES.Event;
 const EventStore = nebulaeES.EventStore;
 

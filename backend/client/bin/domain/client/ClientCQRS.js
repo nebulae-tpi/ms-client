@@ -1,7 +1,7 @@
 "use strict";
 
 const uuidv4 = require("uuid/v4");
-const Event = require("@nebulae/event-store").Event;
+const Event = require("@nebulae/event-store-tpi").Event;
 const eventSourcing = require("../../tools/EventSourcing")();
 const ClientDA = require("../../data/ClientDA");
 const ClientValidatorHelper = require('./ClientValidatorHelper');

@@ -7,7 +7,7 @@ const ClientDA = require('../../data/ClientDA');
 const CLientCodeDA = require("../../data/CLientCodeDA");
 const MATERIALIZED_VIEW_TOPIC = "emi-gateway-materialized-view-updates";
 const eventSourcing = require("../../tools/EventSourcing")();
-const Event = require("@nebulae/event-store").Event;
+const Event = require("@nebulae/event-store-tpi").Event;
 
 /**
  * Singleton instance
