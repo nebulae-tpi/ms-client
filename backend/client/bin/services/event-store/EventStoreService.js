@@ -64,13 +64,13 @@ class EventStoreService {
     const handler = this.functionMap[eventType];
     const subscription =
       //MANDATORY:  AVOIDS ACK REGISTRY DUPLICATIONS
-      eventSourcing.eventStore.ensureAcknowledgeRegistry$(aggregateType).pipe(
-        mergeMap(() => eventSourcing.eventStore.getEventListener$(aggregateType, mbeKey, false)),
+      from(eventSourcing.eventStore.ensureAcknowledgeRegistry$(aggregateType).toPromise()).pipe(
+        mergeMap(() => from(eventSourcing.eventStore.getEventListener$(aggregateType, mbeKey, false).toPromise())),
         filter(evt => evt.et === eventType),
         mergeMap(evt => concat(
           handler.fn.call(handler.obj, evt),
           //MANDATORY:  ACKWOWLEDGE THIS EVENT WAS PROCESSED
-          eventSourcing.eventStore.acknowledgeEvent$(evt, mbeKey),
+          from(eventSourcing.eventStore.acknowledgeEvent$(evt, mbeKey).toPromise()),
         ))
       )
         .subscribe(
@@ -104,13 +104,13 @@ class EventStoreService {
   subscribeEventRetrieval$({ aggregateType, eventType }) {
     const handler = this.functionMap[eventType];
     //MANDATORY:  AVOIDS ACK REGISTRY DUPLICATIONS
-    return eventSourcing.eventStore.ensureAcknowledgeRegistry$(aggregateType).pipe(
-      switchMap(() => eventSourcing.eventStore.retrieveUnacknowledgedEvents$(aggregateType, mbeKey)),
+    return from(eventSourcing.eventStore.ensureAcknowledgeRegistry$(aggregateType).toPromise()).pipe(
+      switchMap(() => from(eventSourcing.eventStore.retrieveUnacknowledgedEvents$(aggregateType, mbeKey).toPromise())),
       filter(evt => evt.et === eventType),
       concatMap(evt => concat(
         handler.fn.call(handler.obj, evt),
         //MANDATORY:  ACKWOWLEDGE THIS EVENT WAS PROCESSED
-        eventSourcing.eventStore.acknowledgeEvent$(evt, mbeKey)
+        from(eventSourcing.eventStore.acknowledgeEvent$(evt, mbeKey).toPromise())
       ))
     );
   }
