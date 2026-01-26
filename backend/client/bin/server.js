@@ -18,7 +18,7 @@ const Rx = require('rxjs');
 
 const start = () => {
     Rx.concat(
-        eventSourcing.eventStore.start$(),
+        Rx.from(eventSourcing.eventStore.start$().toPromise()),
         eventStoreService.start$(),
         mongoDB.start$(),
         ClientDA.start$(),
